@@ -28,52 +28,39 @@
     "name": "Dashboard",
     "url": "https://dashboard.mintlify.com"
   },
+  "primaryTab": {
+    "name": "Channel Docs"
+  },
   "tabs": [
     {
-      "name": "API Reference",
+      "name": "Merchant Docs",
       "url": "api-reference"
-    }
-  ],
-  "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
-    },
-    {
-      "group": "Essentials",
-      "pages": ["essentials/markdown", "essentials/code", "essentials/images", "essentials/settings", "essentials/navigation"]
-    },
-    {
-      "group": "API Documentation",
-      "pages": ["api-reference/authentication"]
-    },
-    {
-      "group": "Endpoint Examples",
+      "group": "Welcome to Starlight's Docs",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/update",
-        "api-reference/endpoint/delete"
+        {
+          "group": "Concepts",
+          "pages":["Definition", "apps", "authentication", "catalog", "checkout"]
+        },
+        {
+          "group": "Guides",
+          "pages": ["quick start", "Sample App", "Utilizing Quick Checkout"]
+        },
+        {
+          "group": "API Reference",
+          "pages": ["login", "catalog", "orders & checkout", "events", "operations", "open API" ]
+        },
+        {
+          "group": "Help",
+          "pages": ["where i am", "support", "faq", "security", "changelog"]
+        }
       ]
     }
   ],
+
   "footerSocials": {
     "twitter": "https://twitter.com/mintlify",
     "github": "https://github.com/mintlify",
