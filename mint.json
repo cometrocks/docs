@@ -42,12 +42,35 @@
       "group": "Welcome to Starlight's Docs",
       "pages": [
         {
-          "group": "Concepts",
-          "pages":["Definition", "apps", "authentication", "catalog", "checkout", "test"]
+          "group": "\uD83D\uDCA1 Concepts",
+          "pages": ["concepts/definitions", "concepts/apps",
+            {
+              "group": "\uD83D\uDD12 Authentication",
+              "pages":["concepts/authentication/obtaining_ refresh _token", "concepts/authentication/refreshing_auth_token"]
+            },
+            {
+              "group": "\uD83D\uDC57 Catalog",
+            "pages":["concepts/catalog/offer_search", "concepts/catalog/offers", "concepts/catalog/by_id", "concepts/catalog/prod_search", "concepts/catalog/filter", "concepts/catalog/categories", "concepts/catalog/categories_search", "concepts/catalog/sku"]
+            },
+            {
+              "group": "\uD83D\uDED2 Checkout",
+              "pages":["concepts/checkout/carts", "concepts/checkout/cart_create", "concepts/checkout/cart_add", "concepts/checkout/cart_disc", "concepts/checkout/customer", "concepts/checkout/address",  "concepts/checkout/shipping", "concepts/checkout/payment", "concepts/checkout/price", "concepts/checkout/submit", "concepts/checkout/errors" ]
+            },
+            "concepts/discount", "concepts/commission", "concepts/currencies",  "concepts/platforms", "concepts/environments",
+            {
+              "group": "\uD83C\uDFEC Merchants",
+              "pages":["concepts/merchants/merchants","concepts/merchants/connected", "concepts/merchants/info", "concepts/merchants/parity" ]
+            },
+            "concepts/pagination",
+            {
+              "group": "\uD83D\uDCB3 Payments and Payouts",
+              "pages":["concepts/payments/checkout_apple","concepts/payments/checkout_stripe", "concepts/merchants/transaction"]
+            }
+          ]
         },
         {
-          "group": "Guides",
-          "pages": ["quick start", "Sample App", "Utilizing Quick Checkout"]
+          "group": "\uD83E\uDDED Guides",
+          "pages": ["Quick Start", "Violet Sample App — The Ultra Store", "Utilizing Quick Checkout," ]
         },
         {
           "group": "API Reference",
