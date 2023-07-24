@@ -34,10 +34,11 @@
   "tabs": [
     {
       "name": "Merchant Docs",
-      "url": "api-reference"
+      "url": "merchant"
     }
   ],
   "navigation": [
+
     {
       "group": "Welcome to Starlight's Docs",
       "pages": [
@@ -80,7 +81,13 @@
           "group": "Help",
           "pages": ["where i am", "support", "faq", "security", "changelog"]
         }
+
       ]
+    },
+
+    {
+      "group": "Merchant",
+      "pages": ["merchant/shopify","merchant/magento","merchant/bigcommerce","merchant/salesforce"]
     }
   ],
 
