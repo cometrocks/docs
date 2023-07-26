@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Distributed Commerce",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -40,32 +40,32 @@
   "navigation": [
 
     {
-      "group": "Welcome to Starlight's Docs",
+      "group": "Welcome to Comet Rocks' Docs",
       "pages": [
         {
-          "group": "\uD83D\uDCA1 Concepts",
-          "pages": ["concepts/definitions", "concepts/apps",
+          "group": "\uD83D\uDCA1 Resources",
+          "pages": ["resources/definitions", "resources/apps",
             {
               "group": "\uD83D\uDD12 Authentication",
-              "pages":["concepts/authentication/obtaining_ refresh _token", "concepts/authentication/refreshing_auth_token"]
+              "pages":["resources/authentication/obtaining_ refresh _token", "resources/authentication/refreshing_auth_token"]
             },
             {
               "group": "\uD83D\uDC57 Catalog",
-            "pages":["concepts/catalog/offer_search", "concepts/catalog/offers", "concepts/catalog/by_id", "concepts/catalog/prod_search", "concepts/catalog/filter", "concepts/catalog/categories", "concepts/catalog/categories_search", "concepts/catalog/sku"]
+            "pages":["resources/catalog/offer_search", "resources/catalog/offers", "resources/catalog/by_id", "resources/catalog/prod_search", "resources/catalog/filter", "resources/catalog/categories", "resources/catalog/categories_search", "resources/catalog/sku"]
             },
             {
               "group": "\uD83D\uDED2 Checkout",
-              "pages":["concepts/checkout/carts", "concepts/checkout/cart_create", "concepts/checkout/cart_add", "concepts/checkout/cart_disc", "concepts/checkout/customer", "concepts/checkout/address",  "concepts/checkout/shipping", "concepts/checkout/payment", "concepts/checkout/price", "concepts/checkout/submit", "concepts/checkout/errors" ]
+              "pages":["resources/checkout/carts", "resources/checkout/cart_create", "resources/checkout/cart_add", "resources/checkout/cart_disc", "resources/checkout/customer", "resources/checkout/address",  "resources/checkout/shipping", "resources/checkout/payment", "resources/checkout/price", "resources/checkout/submit", "resources/checkout/errors" ]
             },
-            "concepts/discount", "concepts/commission", "concepts/currencies",  "concepts/platforms", "concepts/environments",
+            "resources/discount", "resources/commission", "resources/currencies",  "resources/platforms", "resources/environments",
             {
               "group": "\uD83C\uDFEC Merchants",
-              "pages":["concepts/merchants/merchants","concepts/merchants/connected", "concepts/merchants/info", "concepts/merchants/parity" ]
+              "pages":["resources/merchants/merchants","resources/merchants/connected", "resources/merchants/info", "resources/merchants/parity" ]
             },
-            "concepts/pagination",
+            "resources/pagination",
             {
               "group": "\uD83D\uDCB3 Payments and Payouts",
-              "pages":["concepts/payments/checkout_apple","concepts/payments/checkout_stripe", "concepts/merchants/transaction"]
+              "pages":["resources/payments/checkout_apple","resources/payments/checkout_stripe", "resources/merchants/transaction"]
             }
           ]
         },
