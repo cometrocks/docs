@@ -1,17 +1,15 @@
----
-title: 'Create a Cart'
-description: 'Create a Cart content goes here'
-icon: 'text-size'
----
+## 1. Creating a cart
 
-## Titles
+Everything starts with the cart creation. The `cartCreate` mutation returns a `Cart` type ([definition here](https://gitlab.com/comet-rocks/backend-core/-/blob/main/apps/api/checkout/src/cart/cart.graphql#L1))
 
-Best used for section headers.
-
-```md
-## Titles
+```graphql
+mutation CartCreate {
+  cartCreate {
+    id
+  }
+}
 ```
 
-### Subtitles
+This mutation does not require any variables as input. 
 
-Best use to subsection headers.
+⚠️ For now, save the cart id locally to interact with the cart, in the near future we may add a cart connection to the `me` query
