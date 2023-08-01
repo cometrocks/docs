@@ -1,15 +1,40 @@
-## 1. Creating a cart
+---
+title: 'Create a cart'
+description: 'Everything starts with the cart creation'
+icon: 'text-size'
+---
 
-Everything starts with the cart creation. The `cartCreate` mutation returns a `Cart` type ([definition here](https://gitlab.com/comet-rocks/backend-core/-/blob/main/apps/api/checkout/src/cart/cart.graphql#L1))
+## Overview
+
+The [cartCreate](https://studio.apollographql.com/graph/CometAPI/variant/main/schema/reference/objects/Mutation?query=cartCreate#cartCreate) mutation returns the newly created [Cart](https://studio.apollographql.com/graph/CometAPI/variant/main/schema/reference/objects/Cart).
 
 ```graphql
-mutation CartCreate {
-  cartCreate {
+mutation CartCreate($input: CartCreateInput!) {
+  cartCreate(input: $input) {
     id
+    # Check the Cart type for its fields
   }
 }
 ```
 
-This mutation does not require any variables as input. 
+You are not required to, but you can provide `metadata` and `products` to the [cartCreate](https://studio.apollographql.com/graph/CometAPI/variant/main/schema/reference/objects/Mutation?query=cartCreate#cartCreate) mutation.
 
-⚠️ For now, save the cart id locally to interact with the cart, in the near future we may add a cart connection to the `me` query
+```json
+{
+  "input": {
+		"metadata":  {
+			"source": "instagram"
+		},
+    "products": [
+      {
+        "productId": "prd_ZJQYAR_-ypwOLKEz",
+        "quantity": 1
+      },
+      {
+        "productId": "prd_ZJQYAR_-ypwOLKE0",
+        "quantity": 1
+      }
+    ]
+  }
+}
+```

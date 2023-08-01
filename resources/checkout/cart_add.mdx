@@ -1,17 +1,17 @@
 ---
-title: 'Add Item to Cart'
-description: 'Add Item to Cart content goes here'
+title: 'Add products'
+description: 'Add the products you want to buy to the cart'
 icon: 'text-size'
 ---
 
-## Titles
+## Overview
 
-Best used for section headers.
+The [cartAddProducts]() mutation returns the updated [Cart]().
 
-```md
-## Titles
+```graphql
+mutation CartAddProducts {
+  cartAddProducts {
+    id
+  }
+}
 ```
-
-### Subtitles
-
-Best use to subsection headers.
