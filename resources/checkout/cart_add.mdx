@@ -1,17 +1,79 @@
 ---
-title: 'Add products'
-description: 'Add the products you want to buy to the cart'
+title: 'Add or remove products'
+description: 'Add or remove products as needed'
 icon: 'text-size'
 ---
 
-## Overview
+## Adding products to your cart
 
-The [cartAddProducts]() mutation returns the updated [Cart]().
+You can use the [cartAddProducts](https://studio.apollographql.com/graph/CometAPI/variant/main/schema/reference/objects/Mutation#cartAddProducts) function to add products to your cart. This function takes the products you want to add and includes them in your cart.
+
+After adding products, the function provides an updated cart [Cart](https://studio.apollographql.com/graph/CometAPI/variant/main/schema/reference/objects/Cart) as the result.
+
+Here is an example of how you can use the mutation to add products to your cart:
 
 ```graphql
-mutation CartAddProducts {
-  cartAddProducts {
+mutation CartAddProducts($cartId: ID!, $input: CartAddProductsInput!) {
+  cartAddProducts(id: $cartId, input: $input) {
     id
+    # Check the Cart type for its fields
+  }
+}
+```
+
+The quantity field indicates the number of products you want to add to the cart. For instance, let's say your cart already has 1 unit of the product with ID `prd_ZJQYAR_-ypwOLKEz`. The following JSON code will add 2 more units of that product, resulting in a total of 3 units:
+
+```json
+{
+  "input": {
+    "cartId": "cart_ZMe6Bb4GqqUe3BWV",
+    "products": [
+      {
+        "productId": "prd_ZJQYAR_-ypwOLKEz",
+        "quantity": 2
+      },
+      {
+        "productId": "prd_ZJQYAR_-ypwOLKE0",
+        "quantity": 3
+      }
+    ]
+  }
+}
+```
+
+## Removing products from cart
+
+To remove products from your cart, you can use the [cartRemoveProducts](https://studio.apollographql.com/graph/CometAPI/variant/main/schema/reference/objects/Mutation#cartRemoveProducts) mutation. This mutation lets you specify the products you want to remove from the cart.
+
+After removing the products, the function returns an updated cart [Cart](https://studio.apollographql.com/graph/CometAPI/variant/main/schema/reference/objects/Cart).
+
+Here is an example of how you can use the mutation to remove products from your cart:
+
+```graphql
+mutation CartRemoveProducts($cartId: ID!, $input: CartRemoveProductsInput!) {
+  cartRemoveProducts(id: $cartId, input: $input) {
+    id
+    # Check the Cart type for its fields
+  }
+}
+```
+
+The quantity field indicates the number of products you want to remove from the cart. For instance, if your cart contains 2 units of the product with ID `prd_ZJQYAR_-ypwOLKEz` and 3 units of the product with ID `prd_ZJQYAR_-ypwOLKE0`, the following JSON code will remove 1 unit of the first product and 2 units of the second product:
+
+```json
+{
+  "input": {
+    "cartId": "cart_ZMe6Bb4GqqUe3BWV",
+    "products": [
+      {
+        "productId": "prd_ZJQYAR_-ypwOLKEz",
+        "quantity": 1
+      },
+      {
+        "productId": "prd_ZJQYAR_-ypwOLKE0",
+        "quantity": 2
+      }
+    ]
   }
 }
 ```

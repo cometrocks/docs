@@ -19,12 +19,14 @@ mutation CartCreate($input: CartCreateInput!) {
 
 You are not required to, but you can provide `metadata` and `products` to the [cartCreate](https://studio.apollographql.com/graph/CometAPI/variant/main/schema/reference/objects/Mutation?query=cartCreate#cartCreate) mutation.
 
+The 'metadata' field doesn't have a set structure and can accept any correctly formatted JSON object.
+
 ```json
 {
   "input": {
-		"metadata":  {
-			"source": "instagram"
-		},
+    "metadata":  {
+      "source": "instagram"
+    },
     "products": [
       {
         "productId": "prd_ZJQYAR_-ypwOLKEz",
