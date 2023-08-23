@@ -39,7 +39,7 @@ query RetrieveCart($id: ID!) {
     }
 ```
 
-### `cartApplyShippingMethods`
+### Apply Shipping Methods to Cart
 
 You can use the [cartApplyShippingMethods](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartApplyShippingMethods) function to apply specific shipping methods to the bags in your cart. This function takes the desired shipping methods for each bag and updates the cart accordingly.
 
@@ -84,11 +84,11 @@ mutation ApplyShippingMethods($id: ID!, $input: CartApplyShippingMethodsInput!) 
   "input": {
     "bags": [
       {
-        "bagId": "bag_12345",
+        "bagId": "bag_ZOX6W0BvVdghMRZP",
         "shippingMethodId": "shippingMethod_12345"
       },
       {
-        "bagId": "bag_67890",
+        "bagId": "bag_ZOX6aEBvVdghMRZT",
         "shippingMethodId": "shippingMethod_67890"
       }
     ]
