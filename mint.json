@@ -55,7 +55,7 @@
             },
             {
               "group": "\uD83D\uDED2 Checkout",
-              "pages":["resources/checkout/carts", "resources/checkout/cart_create", "resources/checkout/cart_add", "resources/checkout/cart_disc", "resources/checkout/address",  "resources/checkout/shipping", "resources/checkout/payment", "resources/checkout/price", "resources/checkout/submit", "resources/checkout/errors" ]
+              "pages":["resources/checkout/carts", "resources/checkout/cart_create", "resources/checkout/cart_add", "resources/checkout/cart_disc", "resources/checkout/address",  "resources/checkout/shipping", "resources/checkout/payment", "resources/checkout/submit", "resources/checkout/errors" ]
             },
             "resources/discount", "resources/commission", "resources/currencies",  "resources/platforms", "resources/environments",
             {

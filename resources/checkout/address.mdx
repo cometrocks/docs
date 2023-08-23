@@ -19,9 +19,28 @@ mutation ApplyShippingAddress($id: ID!, $input: CartApplyShippingAddressInput!) 
 }
 ```
 
+#### Input Parameters
+
+##### CartApplyShippingAddressInput
+
+- `address`: An object of type `CartAddressInput` representing the shipping address details.
+- `useAsBillingAddress`: (Optional) A boolean indicating if the shipping address should also be used as the billing address.
+
+##### CartAddressInput
+- `firstName`: First name of the recipient.
+- `lastName`: Last name of the recipient.
+- `address1`: Primary address line.
+- `address2`: (Optional) Secondary address line.
+- `postalCode`: Postal code of the address.
+- `city`: City of the address.
+- `countryCode`: Country code of the address.
+- `regionCode`: (Optional) Region or state code of the address.
+- `phone`: Phone number of the recipient.
+- `email`: Email address of the recipient.
+
 **Example**:
 
-```
+```json
 {
   "id": "cart_ZMe6Bb4GqqUe3BWV",
   "input": {
@@ -56,9 +75,17 @@ mutation ApplyBillingAddress($id: ID!, $input: CartApplyBillingAddressInput!) {
 }
 ```
 
+#### Input Parameters
+
+##### CartApplyBillingAddressInput
+
+- `address`: An object of type `CartAddressInput` representing the billing address details.
+- `useAsShippingAddress`: (Optional) A boolean indicating if the billing address should also be used as the shipping address.
+
+
 **Example**:
 
-```
+```json
 {
   "id": "cart_ZMe6Bb4GqqUe3BWV",
   "input": {
@@ -76,27 +103,3 @@ mutation ApplyBillingAddress($id: ID!, $input: CartApplyBillingAddressInput!) {
   }
 }
 ```
-
-### Input Parameters
-
-#### CartApplyShippingAddressInput
-
-- `address`: An object of type `CartAddressInput` representing the shipping address details.
-- `useAsBillingAddress`: (Optional) A boolean indicating if the shipping address should also be used as the billing address.
-
-#### CartApplyBillingAddressInput
-
-- `address`: An object of type `CartAddressInput` representing the billing address details.
-- `useAsShippingAddress`: (Optional) A boolean indicating if the billing address should also be used as the shipping address.
-
-#### CartAddressInput
-- `firstName`: First name of the recipient.
-- `lastName`: Last name of the recipient.
-- `address1`: Primary address line.
-- `address2`: (Optional) Secondary address line.
-- `postalCode`: Postal code of the address.
-- `city`: City of the address.
-- `countryCode`: Country code of the address.
-- `regionCode`: (Optional) Region or state code of the address.
-- `phone`: Phone number of the recipient.
-- `email`: Email address of the recipient.
