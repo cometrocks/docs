@@ -4,14 +4,94 @@ description: 'Shipping methods are required for merchants to determine how to de
 icon: 'text-size'
 ---
 
-## Titles
+### Getting Shipping Methods from Cart
 
-Best used for section headers.
+You can use the [cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Query#cart) query to retrieve details about a specific cart, including available shipping methods for each bag in the cart.
 
-```md
-## Titles
+```graphql
+query RetrieveCart($id: ID!) {
+  cart(id: $id) {
+    id
+    bags {
+      id
+      availableShippingMethods {
+        id
+        name
+        description
+        price {
+          amount
+          currency
+        }
+      }
+    }
+    # Other fields of the Cart type can be queried here
+  }
+}
+```
+#### Input Parameters for `cart`
+
+- `id`: The ID of the cart you want to retrieve.
+
+**Example**:
+```json
+    {
+        "id": "cart_ZMe6Bb4GqqUe3BWV"
+    }
 ```
 
-### Subtitles
+### `cartApplyShippingMethods`
 
-Best use to subsection headers.
+You can use the [cartApplyShippingMethods](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartApplyShippingMethods) function to apply specific shipping methods to the bags in your cart. This function takes the desired shipping methods for each bag and updates the cart accordingly.
+
+After applying the shipping methods, the function provides an updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) as the result.
+
+```graphql
+mutation ApplyShippingMethods($id: ID!, $input: CartApplyShippingMethodsInput!) {
+  cartApplyShippingMethods(id: $id, input: $input) {
+    id
+    bags {
+      id
+      selectedShippingMethod {
+        id
+        name
+        description
+        price {
+          amount
+          currency
+        }
+      }
+    }
+    # Other fields of the Cart type can be queried here
+  }
+}
+```
+
+#### Input Parameters for `cartApplyShippingMethods`
+
+- `id`: The ID of the cart for which you want to apply the shipping methods.
+- `bags`: An array of objects of type `CartApplyShippingMethodInput` representing the desired shipping method for each bag.
+
+##### CartApplyShippingMethodInput
+
+- `bagId`: The ID of the bag for which you want to set the shipping method.
+- `shippingMethodId`: The ID of the desired shipping method for the bag.
+
+**Example**:
+
+```json
+{
+  "id": "cart_ZMe6Bb4GqqUe3BWV",
+  "input": {
+    "bags": [
+      {
+        "bagId": "bag_12345",
+        "shippingMethodId": "shippingMethod_12345"
+      },
+      {
+        "bagId": "bag_67890",
+        "shippingMethodId": "shippingMethod_67890"
+      }
+    ]
+  }
+}
+```
