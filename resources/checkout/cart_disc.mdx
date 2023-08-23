@@ -1,17 +1,53 @@
 ---
 title: 'Add Discount to Cart'
-description: 'Add Discount to Cart content goes here'
+description: 'Enhance your cart by applying coupon codes to specific bags'
 icon: 'text-size'
 ---
 
-## Titles
+## Overview
 
-Best used for section headers.
+The [cartApplyCoupons](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartApplyCoupons) mutation allows you to apply coupon codes to specific bags within a cart. The mutation returns the updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) with the applied coupons.
 
-```md
-## Titles
+```graphql
+mutation CartApplyCoupons($id: ID!, $input: CartApplyCouponsInput!) {
+  cartApplyCoupons(id: $id, input: $input) {
+    id
+    # Other fields of the Cart type can be queried here
+  }
+}
 ```
 
-### Subtitles
+### Input Parameters
 
-Best use to subsection headers.
+- `id`: The unique identifier of the cart to which you want to apply the coupons.
+- `input`: An object containing the details of the bags and the coupon codes you want to apply.
+
+#### CartApplyCouponsInput
+
+- `bags`: An array of `CartApplyCouponInput` objects, each representing a bag and the coupon codes to be applied to it.
+
+#### CartApplyCouponInput
+
+- `bagId`: The unique identifier of the bag.
+- `couponCodes`: An array of coupon codes to be applied to the specified bag.
+
+### Example
+
+```json
+{
+  "id": "cart_12345",
+  "input": {
+    "bags": [
+      {
+        "bagId": "bag_ZOX6W0BvVdghMRZP",
+        "couponCodes": ["COUPON10", "FREESHIP"]
+      },
+      {
+        "bagId": "bag_ZOX6aEBvVdghMRZT",
+        "couponCodes": ["NEWUSER5"]
+      }
+    ]
+  }
+}
+```
+In this example, the coupon codes "COUPON10" and "FREESHIP" are applied to the bag with ID "bag_ZOX6W0BvVdghMRZP", and the coupon code "NEWUSER5" is applied to the bag with ID "bag_ZOX6aEBvVdghMRZT".
