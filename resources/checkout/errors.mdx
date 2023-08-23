@@ -1,17 +1,107 @@
 ---
-title: 'Order Errors'
-description: 'Order Errors are errors that occur when attempting to interact...'
+title: 'Error Handling'
+description: 'Understanding and addressing errors during the checkout process.'
 icon: 'text-size'
 ---
 
-## Titles
+## Error Handling
 
-Best used for section headers.
+When interacting with the API, there are two primary types of errors you might encounter: Bag-specific errors and general GraphQL errors.
 
-```md
-## Titles
+### Bag-specific Errors
+
+Each bag in the cart can have its own set of errors, which are represented by the `BagError` type. These errors typically arise from operations like adding or removing products, completing an order, etc. If there's an issue on the shop system side when performing these operations, the corresponding error will be captured in `BagError`.
+
+#### BagError Fields
+
+- `code`: Represents the type of error. For instance, `PRODUCT_OUT_OF_STOCK` indicates that the product is no longer available.
+
+- `message`: A human-readable description of the error. This provides a brief explanation of the error, such as "not enough stock".
+
+- `additionalDetails`: This field provides more context about the error, especially useful when the error pertains to specific items or quantities. The content of `additionalDetails` varies based on the operation and the nature of the error.
+
+#### BagErrorCode
+
+The following are the error codes you might encounter:
+
+- `PRODUCT_OUT_OF_STOCK`: The product is no longer available.
+- `PRODUCT_QUANTITY_UNAVAILABLE`: The requested quantity of the product is not available.
+- `PRODUCT_INVALID`: The product is invalid or not recognized.
+- `INVALID_REQUEST`: The request made to the shop system was invalid.
+
+#### Example: Adding a Product
+
+Let's say you're trying to add a product to your cart using the `add product` API, but the product is out of stock:
+
+```graphql
+mutation AddProductToCart($cartId: ID!, $productId: ID!, $quantity: Int!) {
+  cartAddProduct(cartId: $cartId, productId: $productId, quantity: $quantity) {
+    id
+    bags {
+      id
+      errors {
+        code
+        message
+        additionalDetails
+      }
+    }
+  }
+}
 ```
 
-### Subtitles
+**Example Input**:
+```json
+{
+  "cartId": "cart_ZMe6Bb4GqqUe3BWV",
+  "productId": "prd_ZJQYAR_-ypwOLKEz",
+  "quantity": 1
+}
+```
 
-Best use to subsection headers.
+If the product is out of stock, the response might look like:
+
+```json
+{
+  "data": {
+    "cartAddProduct": {
+      "id": "cart_ZMe6Bb4GqqUe3BWV",
+      "bags": [
+        {
+          "id": "bag_12345",
+          "errors": [
+            {
+              "code": "PRODUCT_OUT_OF_STOCK",
+              "message": "The product is out of stock.",
+              "additionalDetails": {
+                "productId": "prd_ZJQYAR_-ypwOLKEz",
+                 "availableQuantity": 0,
+                 "requestedQuantity": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+### GraphQL Errors
+
+Apart from bag-specific errors, you might encounter general GraphQL errors. These errors are typically due to developer faults, such as invalid requests or internal server issues. GraphQL errors are returned in the standard GraphQL error format, which includes an `errors` array in the response.
+
+For instance, if you make an invalid request or if there's an internal error, you might receive a response like:
+
+```json
+{
+  "errors": [
+    {
+      "message": "Invalid input",
+      "locations": [{"line": 2, "column": 3}],
+      "path": ["cart"]
+    }
+  ]
+}
+```
+
+Always ensure to handle both bag-specific and general GraphQL errors appropriately in your application to provide a seamless user experience.
