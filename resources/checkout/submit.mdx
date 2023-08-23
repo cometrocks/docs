@@ -6,13 +6,11 @@ icon: 'text-size'
 
 ## Submit Cart
 
-### `orderSubmit`
-
 You can use the [orderSubmit](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#orderSubmit) function to finalize and submit your cart, which will then be converted into an order. This function takes the ID of the cart you want to submit.
 
 After submitting the cart, the function provides the resulting [Order](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Order) as the output.
 
-```
+```graphql
 mutation SubmitCart($id: ID!) {
   orderSubmit(id: $id) {
     id
