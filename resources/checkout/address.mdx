@@ -4,14 +4,56 @@ description: 'Apply shipping and billing addresses to cart'
 icon: 'text-size'
 ---
 
-## Titles
+### `cartApplyShippingAddress`
 
-Best used for section headers.
+The [cartApplyShippingAddress](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartApplyShippingAddress) allows you to apply a shipping address to a specific cart. Optionally, you can also use the shipping address as the billing address.
 
-```md
-## Titles
+After setting the shipping address, the function provides an updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) as the result.
+
+```graphql
+mutation ApplyShippingAddress($id: ID!, $input: CartApplyShippingAddressInput!) {
+  cartApplyShippingAddress(id: $id, input: $input) {
+    id
+    # Other fields of the Cart type can be queried here
+  }
+}
 ```
 
-### Subtitles
+### `cartApplyBillingAddress`
 
-Best use to subsection headers.
+The [cartApplyBillingAddress](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartApplyBillingAddress) lets you apply a billing address to a specific cart. Optionally, you can also use the billing address as the shipping address.
+
+After setting the billing address, the function provides an updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) as the result.
+
+```graphql
+mutation ApplyBillingAddress($id: ID!, $input: CartApplyBillingAddressInput!) {
+  cartApplyBillingAddress(id: $id, input: $input) {
+    id
+    # Other fields of the Cart type can be queried here
+  }
+}
+```
+
+### Input Parameters
+
+#### CartApplyShippingAddressInput
+
+- `address`: An object of type `CartAddressInput` representing the shipping address details.
+- `useAsBillingAddress`: (Optional) A boolean indicating if the shipping address should also be used as the billing address.
+
+#### CartApplyBillingAddressInput
+
+- `address`: An object of type `CartAddressInput` representing the billing address details.
+- `useAsShippingAddress`: (Optional) A boolean indicating if the billing address should also be used as the shipping address.
+
+#### CartAddressInput
+- `firstName`: First name of the recipient.
+- `lastName`: Last name of the recipient.
+- `address1`: Primary address line.
+- `address2`: (Optional) Secondary address line.
+- `postalCode`: Postal code of the address.
+- `city`: City of the address.
+- `countryCode`: Country code of the address.
+- `regionCode`: (Optional) Region or state code of the address.
+- `phone`: Phone number of the recipient.
+- `email`: Email address of the recipient.
