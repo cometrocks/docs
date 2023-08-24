@@ -45,10 +45,7 @@
         {
           "group": "\uD83D\uDCA1 Resources",
           "pages": ["resources/definitions", "resources/apps",
-            {
-              "group": "\uD83D\uDD12 Authentication and Authorization",
-              "pages":["resources/authentication/authentication"]
-            },
+            "resources/authentication/authentication",
             {
               "group": "\uD83D\uDC57 Catalog",
             "pages":["resources/catalog/offer_search", "resources/catalog/offers", "resources/catalog/by_id", "resources/catalog/prod_search", "resources/catalog/filter", "resources/catalog/categories", "resources/catalog/categories_search", "resources/catalog/sku"]
