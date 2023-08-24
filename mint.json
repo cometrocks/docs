@@ -46,8 +46,8 @@
           "group": "\uD83D\uDCA1 Resources",
           "pages": ["resources/definitions", "resources/apps",
             {
-              "group": "\uD83D\uDD12 Authentication",
-              "pages":["resources/authentication/obtaining_ refresh _token", "resources/authentication/refreshing_auth_token"]
+              "group": "\uD83D\uDD12 Authentication and Authorization",
+              "pages":["resources/authentication/authentication"]
             },
             {
               "group": "\uD83D\uDC57 Catalog",
@@ -57,7 +57,6 @@
               "group": "\uD83D\uDED2 Checkout",
               "pages":["resources/checkout/carts", "resources/checkout/cart_create", "resources/checkout/cart_add", "resources/checkout/cart_disc", "resources/checkout/address",  "resources/checkout/shipping", "resources/checkout/payment", "resources/checkout/submit", "resources/checkout/errors" ]
             },
-            "resources/platforms",
             "resources/pagination",
             {
               "group": "\uD83D\uDCB3 Payments and Payouts",
