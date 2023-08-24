@@ -1,4 +1,43 @@
 ---
 title: 'Shopify'
 ---
-This guide is coming soon.
+## Creating a Custom App for Comet Rocks
+
+To integrate your Shopify store with Comet Rocks via APIs , a custom app is essential. This guide will show you how to set up such an app to allow access to the Shopify Admin and Salesfront APIs, as well as how to define the necessary scopes.
+
+### Step 1: Creating the Custom App
+
+1. From your Shopify dashboard, navigate to Settings → Apps and sales channels → Develop Apps.
+2. Click the green Create an app button.
+3. In the modal that appears, enter an app name (ex. "Comet Rocks") and select the user in your system who should be the owner of this app. Typically, this is the default selected user.
+
+### Step 2: Configuring Admin API Permissions
+
+1. Navigate to the API Scopes tab in your new app settings.
+2. Here, specify the necessary scopes for the Comet Rocks app, including:
+    1. write_customers and read_customers
+    2. write_orders , read_orders ,write_draft_orders , read_draft_orders  and read_order_edits
+    3. read_returns
+    4. read_channels
+    5. read_price_rules , read_discounts
+    6. read_products , read_product_listings and read_product_feeds
+    7. read_shipping , read_markets , read_locales
+    8. read_fulfillments , read_inventory
+    9. read_custom_pixels , read_pixels , read_analytics , read_script_tags , read_reports
+    10. read_files  [if using shopify to store content files]
+    11. read_gdpr_data_request , read_legal_policies
+    12. read_translations
+3. Click Save to apply your changes.
+
+### Step 3: Configuring Salesfront API Permissions
+
+1. Return to your app settings page and select the Storefront API tab.
+2. Enable the Allow this app to access your storefront data using the Storefront API option.
+3. Define the necessary scopes for the Comet Rocks app, including:
+    1. unauthenticated_write_checkouts
+    2. unauthenticated_read_checkouts
+4. Click Save to apply your changes.
+
+
+Congratulations! Your custom app for Comet Rocks with access to both the Admin API and Salesfront API is now ready. Time to launch comet powered satellite and collab stores!
+
