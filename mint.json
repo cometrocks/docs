@@ -48,7 +48,7 @@
             "resources/authentication/authentication",
             {
               "group": "\uD83D\uDC57 Catalog",
-            "pages":[ "resources/catalog/by_id", "resources/catalog/prod_search", "resources/catalog/filter",  "resources/catalog/sku"]
+            "pages":[ "resources/catalog/by_id", "resources/catalog/prod_search", "resources/catalog/sku"]
             },
             {
               "group": "\uD83D\uDED2 Checkout",
