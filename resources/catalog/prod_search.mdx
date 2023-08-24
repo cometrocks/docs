@@ -1,5 +1,5 @@
 ---
-title: ':mag: Search for Products'
+title: '🔎 Search for Products'
 description: 'Discover products in the Comet API using a variety of filters to narrow down your search.'
 ---
 
@@ -63,39 +63,6 @@ If pagination is not provided, the default page size is 10 records. For more det
 The `productFind` query returns a `ProductConnection` type, which includes:
 
 - **pageInfo**: Information about the current page of results, including cursors, page indicators, and total count.
-- **nodes**: A list of products that match the search criteria.
-
-For a more detailed breakdown of the `Product` type and its associated fields, refer to the [Product Schema Documentation](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Product).
-
-
-
-
-
-
-
-
-
-
-
-
-The `productFind` query supports a variety of filters to refine your search:
-
-- **shopSystemEnvironmentId**: Filter products based on the shop system environment.
-- **name**: Search for products with a specific name or name pattern.
-- **type**: Filter products based on their type.
-- **variantOf**: Search for products that are variants of a specific product.
-- **priceMin**: Set a minimum price for the products in your search.
-- **priceMax**: Set a maximum price for the products in your search.
-
-### Pagination
-
-To retrieve products in manageable chunks, use the pagination parameters. If pagination is not provided, the default page size is 10 records. For more details on pagination, refer to the [Pagination Documentation](#link-to-pagination-documentation).
-
-### Product Results
-
-The `productFind` query returns a `ProductConnection` type, which includes:
-
-- **pageInfo**: Information about the current page of results.
 - **nodes**: A list of products that match the search criteria.
 
 For a more detailed breakdown of the `Product` type and its associated fields, refer to the [Product Schema Documentation](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Product).
