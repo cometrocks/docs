@@ -1,17 +1,46 @@
 ---
-title: 'Products by ID'
-description: 'Products by ID content goes here'
+title: 'Retrieve a Product by ID'
+description: 'Fetch detailed information about a specific product using its unique identifier in the Comet API.'
 icon: 'text-size'
 ---
 
-## Titles
+In the Comet API, you can fetch detailed information about a specific product using its unique identifier. This is particularly useful when you need in-depth details about a single product rather than a list.
 
-Best used for section headers.
+### Query
 
-```md
-## Titles
+To retrieve a product by its ID, use the `product` query:
+
+```graphql
+query GetProductByID($productID: ID!) {
+  product(id: $productID) {
+    id
+    sku
+    name
+    description
+    organizationId
+    shopSystemEnvironmentId
+    externalId
+    type
+    variantOf {
+      id
+      name
+    }
+    # ...
+  }
+}
 ```
 
-### Subtitles
+Replace `$productID` with the ID of the product you wish to retrieve.
 
-Best use to subsection headers.
+### Product Details
+
+The `product` query returns a comprehensive set of details about the product:
+
+- **Basic Information**: This includes the product's ID, SKU, name, and description.
+- **Organization and Shop System**: Details about the organization and shop system associated with the product.
+- **Variants and Attributes**: Information about the product's variants and their attributes.
+- **Pricing**: The prices associated with the product.
+- **Images**: Both original and public images of the product.
+- **Tags and Metadata**: Any tags associated with the product and additional metadata.
+
+For a more detailed breakdown of the `Product` type and its associated fields, refer to the [Product](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Product).
