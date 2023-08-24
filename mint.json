@@ -48,17 +48,13 @@
             "resources/authentication/authentication",
             {
               "group": "\uD83D\uDC57 Catalog",
-            "pages":["resources/catalog/offer_search", "resources/catalog/offers", "resources/catalog/by_id", "resources/catalog/prod_search", "resources/catalog/filter", "resources/catalog/categories", "resources/catalog/categories_search", "resources/catalog/sku"]
+            "pages":[ "resources/catalog/by_id", "resources/catalog/prod_search", "resources/catalog/filter", "resources/catalog/categories", "resources/catalog/categories_search", "resources/catalog/sku"]
             },
             {
               "group": "\uD83D\uDED2 Checkout",
               "pages":["resources/checkout/carts", "resources/checkout/cart_create", "resources/checkout/cart_add", "resources/checkout/cart_disc", "resources/checkout/address",  "resources/checkout/shipping", "resources/checkout/payment", "resources/checkout/submit", "resources/checkout/errors" ]
             },
-            "resources/pagination",
-            {
-              "group": "\uD83D\uDCB3 Payments and Payouts",
-              "pages":["resources/payments/checkout_apple","resources/payments/checkout_stripe", "resources/merchants/transaction"]
-            }
+            "resources/pagination"
           ]
         },
         {
