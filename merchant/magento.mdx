@@ -1,4 +1,67 @@
 ---
-title: 'Magento'
+title: 'Magento 2'
 ---
-This guide is coming soon.
+
+There are 2 ways to install our Magento 2 extension - through the composer (for those who purchased it from the Magento Marketplace) and manually, by copying files over to your server.
+
+## IF YOU PURCHASED OUR EXTENSION THROUGH THE MAGENTO MARKETPLACE:
+
+
+### Step 1: Update the Magento composer.json File
+
+Log in to your Magento server as the file system owner and navigate to the Magento root folder to install the module via Composer.
+
+Update the composer.json file from the command line interface (CLI) using:
+
+composer require cometrocks/integration
+
+
+### Step 2: Register the Extension and Clear Magento Cache/Deploy static content files/compile PHP files.
+
+
+Run the following commands to register the Magento 2 extension, compile code, and deploy static view files:
+
+php bin/magento setup:upgrade
+php bin/magento setup:di:compile
+php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
+php bin/magento cache:flush
+
+Please, note: On some servers, you will need to launch these commands without "php" at the beginning (like this: bin/magento setup:upgrade) and on some servers that have multiple PHP versions installed you might need to specify php version depending on your Magento version PHP requirements.
+Example: /usr/bin/php7.4 bin/magento setup:upgrade
+
+
+### Step 3: Log in to your Magento Admin panel and navigate to Stores - Configuration - COMETROCKS - Integration. From here simply press the "Generate" button to Generate API keys.
+
+
+## IF YOU DOWNLOADED OUR EXTENSION'S ZIP ARCHIVE:
+
+
+### Step 1: Extract archive.
+
+
+### Step 2: Log in to your Magento server as the file system owner via any SFTP client and navigate to the Magento root folder.
+
+
+### Step 3: Within the extracted archive open the app/ folder and copy code/ folder into the app/ folder on your server.
+
+
+### Step 4: Register the Extension and Clear Magento Cache/Deploy static content files/compile PHP files.
+
+
+Run the following commands to register the Magento 2 extension, compile code, and deploy static view files:
+
+php bin/magento setup:upgrade
+php bin/magento setup:di:compile
+php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
+php bin/magento cache:flush
+
+
+Please, note: On some servers, you will need to launch these commands without "php" at the beginning (like this: bin/magento setup:upgrade) and on some servers that have multiple PHP versions installed you might need to specify php version depending on your Magento version PHP requirements.
+Example: /usr/bin/php7.4 bin/magento setup:upgrade
+
+
+### Step 5: Log in to your Magento Admin panel and navigate to Stores - Configuration - COMETROCKS - Integration. From here simply press the "Generate" button to Generate API keys.
+
+
+
+Congratulations! Your Comet Rocks Integration is now fully installed and configured. Time to launch comet-powered satellite and collab stores!
