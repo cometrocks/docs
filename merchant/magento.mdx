@@ -15,6 +15,8 @@ Update the composer.json file from the command line interface (CLI) using:
 
 composer require cometrocks/integration
 
+![Composer](/images/Screenshot-2023-08-29-at-14.59.13.png)
+
 
 ### Step 2: Register the Extension and Clear Magento Cache/Deploy static content files/compile PHP files.
 
@@ -25,6 +27,8 @@ php bin/magento setup:upgrade
 php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
 php bin/magento cache:flush
+
+![Cache](/images/Screenshot-2023-08-29-at-15.54.57.png)
 
 Please, note: On some servers, you will need to launch these commands without "php" at the beginning (like this: bin/magento setup:upgrade) and on some servers that have multiple PHP versions installed you might need to specify php version depending on your Magento version PHP requirements.
 Example: /usr/bin/php7.4 bin/magento setup:upgrade
@@ -42,12 +46,14 @@ Log in to your Magento Admin panel and navigate to Stores - Configuration - COME
 
 ### Step 1: Extract archive.
 
+![Archive](/images/Screenshot-2023-08-29-at-15.12.09.png)
 
 ### Step 2: Log in to your Magento server as the file system owner via any SFTP client and navigate to the Magento root folder.
 
 
 ### Step 3: Within the extracted archive open the app/ folder and copy code/ folder into the app/ folder on your server.
 
+![Copying](/images/Screenshot-2023-08-29-at-15.13.49.png)
 
 ### Step 4: Register the Extension and Clear Magento Cache/Deploy static content files/compile PHP files.
 
@@ -59,13 +65,17 @@ php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
 php bin/magento cache:flush
 
+![Cache](/images/Screenshot-2023-08-29-at-15.54.57.png)
 
 Please, note: On some servers, you will need to launch these commands without "php" at the beginning (like this: bin/magento setup:upgrade) and on some servers that have multiple PHP versions installed you might need to specify php version depending on your Magento version PHP requirements.
 Example: /usr/bin/php7.4 bin/magento setup:upgrade
 
 
-### Step 5: Log in to your Magento Admin panel and navigate to Stores - Configuration - COMETROCKS - Integration. From here simply press the "Generate" button to Generate API keys.
+### Step 5: API Keys.
 
+Log in to your Magento Admin panel and navigate to Stores - Configuration - COMETROCKS - Integration. From here simply press the "Generate" button to Generate API keys.
+
+![Settings](/images/Screenshot-2023-08-29-at-15.25.56.png)
 
 
 Congratulations! Your Comet Rocks Integration is now fully installed and configured. Time to launch comet-powered satellite and collab stores!
