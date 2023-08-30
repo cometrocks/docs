@@ -9,11 +9,11 @@ There are 2 ways to install our Magento 2 extension - through the composer (for 
 
 ### Step 1: Update the Magento composer.json File
 
-Log in to your Magento server as the file system owner and navigate to the Magento root folder to install the module via Composer.
-
-Update the composer.json file from the command line interface (CLI) using:
-
-composer require cometrocks/integration
+  1. Log in to your Magento server as the file system owner and navigate to the Magento root folder to install the module via Composer.
+  
+  2. Update the composer.json file from the command line interface (CLI) using:
+  
+  `composer require cometrocks/integration`
 
 ![Composer](/images/Screenshot-2023-08-29-at-14.59.13.png)
 
@@ -23,10 +23,10 @@ composer require cometrocks/integration
 
 Run the following commands to register the Magento 2 extension, compile code, and deploy static view files:
 
-php bin/magento setup:upgrade
-php bin/magento setup:di:compile
-php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
-php bin/magento cache:flush
+- php bin/magento setup:upgrade
+- php bin/magento setup:di:compile
+- php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
+- php bin/magento cache:flush
 
 ![Cache](/images/Screenshot-2023-08-29-at-15.54.57.png)
 
@@ -68,10 +68,10 @@ Within the extracted archive open the app/ folder and copy code/ folder into the
 
 Run the following commands to register the Magento 2 extension, compile code, and deploy static view files:
 
-php bin/magento setup:upgrade
-php bin/magento setup:di:compile
-php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
-php bin/magento cache:flush
+- php bin/magento setup:upgrade
+- php bin/magento setup:di:compile
+- php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
+- php bin/magento cache:flush
 
 ![Cache](/images/Screenshot-2023-08-29-at-15.54.57.png)
 
@@ -86,4 +86,4 @@ Log in to your Magento Admin panel and navigate to Stores - Configuration - COME
 ![Settings](/images/Screenshot-2023-08-29-at-15.25.56.png)
 
 
-Congratulations! Your Comet Rocks Integration is now fully installed and configured. Time to launch comet-powered satellite and collab stores!
+Congratulations! Your Comet Rocks Integration is now fully installed and configured. Time to launch comet powered satellite and collab stores!
