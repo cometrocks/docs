@@ -1,4 +1,62 @@
 ---
 title: 'Salesforce'
 ---
-This guide is coming soon.
+#Comet-SFCC Integration Guide
+
+##Overview
+The Comet cartridge is responsible for retrieving data from the SFCC system in XML format and storing it temporarily in the impex location on the SFCC server. The connector then compresses the files and transfers them to the Comet WEBDAV location using SFCC backend jobs.
+
+##Features
+1. Full Catalog export
+2. Delta Catalog export
+3. Full Inventory export
+4. Delta Inventory export (for older SFCC versions)
+5. Full PriceBooks export
+6. Delta PriceBooks export (for older SFCC versions)
+7. Order Export
+8. Compress exported files
+9. Transfer to Comet remote location
+10. Clean temporary files in SFCC
+
+##Integration Steps
+Adding Cartridges in SFCC UX Studio
+In UX Studio, go to File > Import.
+Select Existing Projects in workspace and click Next.
+Select Select archive file and browse to the compressed cartridge file.
+Click Finish to import the cartridge.
+Link the cartridge to your active DigitalServer connection.
+Activating Cartridges in Business Manager
+Log into Business Manager.
+Go to Administration > Sites > Manage Sites.
+Select Manage the Business Manager site.
+In Cartridges add bc_comet.
+Click Apply.
+Importing Metadata
+Compress the comet-meta-import folder into a ZIP file.
+Go to Administration > Site Development > Site Import & Export.
+Select Import: Upload Archive > Local > Choose File.
+Upload the comet-meta-import.zip file.
+Select the archive and click Import.
+Configuring Custom Preferences
+In Business Manager, go to Administration > Global Preferences > Global Custom Preferences. Select the "Comet Configuration" group and edit as needed.
+
+Configuring Jobs
+The main Comet jobs are:
+
+Comet-Full-CatalogExport - Exports full catalog to XML.
+Comet-Delta-CatalogExport - Exports delta catalog changes to XML.
+Comet-Full-PriceBook-Export - Exports full price books to XML.
+Comet-Delta-PriceBook-Export - Exports delta price book changes to XML.
+Comet-Full-Inventory-Export - Exports full inventory lists to XML.
+Comet-Delta-Inventory-Export - Exports delta inventory changes to XML.
+Comet-Order-Export - Exports new orders to XML.
+See the documentation for details on configuring each job.
+
+Testing
+Run a job and verify the compressed XML file is uploaded to the Comet WebDAV location. Check logs for any errors.
+
+Additional Resources
+Comet Documentation
+Comet Support Email
+Comet GitHub
+Let me know if you would like me to modify or expand this integration documentation further.
