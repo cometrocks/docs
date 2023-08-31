@@ -2,12 +2,12 @@
 title: 'Magento 2'
 ---
 
-There are 2 ways to install our Magento 2 extension - through the composer (for those who purchased it from the Magento Marketplace) and manually, by copying files over to your server.
+There are two distinct methods for installing our Magento 2 extension: one involves utilizing Composer (primarily suitable for those who have procured it via the Magento Marketplace), while the alternative entails a manual process wherein you copy the essential files directly onto your server.
 
 ## MAGENTO MARKETPLACE
 
 
-### Step 1: Update the Magento composer.json File
+### Step 1: Update the Magento composer.json file
 
   1. Log in to your Magento server as the file system owner and navigate to the Magento root folder to install the module via Composer.
   
@@ -23,10 +23,10 @@ There are 2 ways to install our Magento 2 extension - through the composer (for 
 
 Run the following commands to register the Magento 2 extension, compile code, and deploy static view files:
 
-- php bin/magento setup:upgrade
-- php bin/magento setup:di:compile
-- php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
-- php bin/magento cache:flush
+    1. php bin/magento setup:upgrade
+    2. php bin/magento setup:di:compile
+    3. php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
+    4. php bin/magento cache:flush
 
 ![Cache](/images/Screenshot-2023-08-29-at-15.54.57.png)
 
@@ -68,10 +68,11 @@ Within the extracted archive open the app/ folder and copy code/ folder into the
 
 Run the following commands to register the Magento 2 extension, compile code, and deploy static view files:
 
-- php bin/magento setup:upgrade
-- php bin/magento setup:di:compile
-- php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
-- php bin/magento cache:flush
+    1. php bin/magento setup:upgrade
+    2. php bin/magento setup:di:compile
+    3. php bin/magento setup:static-content:deploy (if your Magento is in development mode - you might want to run: "php bin/magento setup:static-content:deploy -f" instead (without quotes))
+    4. php bin/magento cache:flush
+
 
 ![Cache](/images/Screenshot-2023-08-29-at-15.54.57.png)
 
