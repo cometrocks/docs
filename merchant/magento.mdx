@@ -18,10 +18,10 @@ There are two distinct methods for installing our Magento 2 extension: one invol
 ![Composer](/images/Screenshot-2023-08-29-at-14.59.13.png)
 
 
-### Step 2: Register the Extension and Clear Magento Cache/Deploy static content files/compile PHP files.
+### Step 2: Complete the Registration of the Extension and Perform Essential Magento Tasks: Clear Cache, Deploy Static Content Files, and Compile PHP Files.
 
 
-Run the following commands to register the Magento 2 extension, compile code, and deploy static view files:
+Execute the subsequent commands to successfully register the Magento 2 extension, compile the code, and deploy static view files:
 
     1. php bin/magento setup:upgrade
     2. php bin/magento setup:di:compile
@@ -30,13 +30,12 @@ Run the following commands to register the Magento 2 extension, compile code, an
 
 ![Cache](/images/Screenshot-2023-08-29-at-15.54.57.png)
 
-Please, note: On some servers, you will need to launch these commands without "php" at the beginning (like this: bin/magento setup:upgrade) and on some servers that have multiple PHP versions installed you might need to specify php version depending on your Magento version PHP requirements.
-Example: /usr/bin/php7.4 bin/magento setup:upgrade
+Important Note: Depending on your server configuration, you might need to execute these commands without the initial 'php' prefix, as shown here: bin/magento setup:upgrade. Additionally, on servers equipped with multiple PHP versions, it could be necessary to specify the appropriate PHP version, based on the PHP requirements of your specific Magento version. For instance: /usr/bin/php7.4 bin/magento setup:upgrade.
 
 
 ### Step 3: API keys.
 
-Log in to your Magento Admin panel and navigate to Stores - Configuration - COMETROCKS - Integration. From here simply press the "Generate" button to Generate API keys.
+Access your Magento Admin panel and proceed to Stores > Configuration > COMETROCKS > Integration. Within this section, effortlessly generate API keys by clicking the 'Generate' button.
 
 ![Settings](/images/Screenshot-2023-08-29-at-15.25.56.png)
 
@@ -48,25 +47,25 @@ Log in to your Magento Admin panel and navigate to Stores - Configuration - COME
 
 ### Step 1. Preparing files.
 
-Extract the archive you have downloaded from us.
+Unpack the archive you've received from our platform.
 
 ![Archive](/images/Screenshot-2023-08-29-at-15.12.09.png)
 
 ### Step 2. Opening files on the server.
 
-Log in to your Magento server as the file system owner via any SFTP client and navigate to the Magento root folder.
+Sign in to your Magento server as the file system owner using an SFTP client, then navigate to the root folder of your Magento installation.
 
 
 ### Step 3. Copying files.
 
-Within the extracted archive open the app/ folder and copy code/ folder into the app/ folder on your server.
+Once you've extracted the archive, access the 'app/' directory within it, and proceed to copy the 'code/' folder into the corresponding 'app/' directory on your server.
 
 ![Copying](/images/Screenshot-2023-08-29-at-15.13.49.png)
 
-### Step 4. Register the Extension and Clear Magento Cache/Deploy static content files/compile PHP files.
+### Step 4. Complete the Registration of the Extension and Perform Essential Magento Tasks: Clear Cache, Deploy Static Content Files, and Compile PHP Files.
 
 
-Run the following commands to register the Magento 2 extension, compile code, and deploy static view files:
+Execute the subsequent commands to successfully register the Magento 2 extension, compile the code, and deploy static view files:
 
     1. php bin/magento setup:upgrade
     2. php bin/magento setup:di:compile
@@ -76,13 +75,12 @@ Run the following commands to register the Magento 2 extension, compile code, an
 
 ![Cache](/images/Screenshot-2023-08-29-at-15.54.57.png)
 
-Please, note: On some servers, you will need to launch these commands without "php" at the beginning (like this: bin/magento setup:upgrade) and on some servers that have multiple PHP versions installed you might need to specify php version depending on your Magento version PHP requirements.
-Example: /usr/bin/php7.4 bin/magento setup:upgrade
+Important Note: Depending on your server configuration, you might need to execute these commands without the initial 'php' prefix, as shown here: bin/magento setup:upgrade. Additionally, on servers equipped with multiple PHP versions, it could be necessary to specify the appropriate PHP version, based on the PHP requirements of your specific Magento version. For instance: /usr/bin/php7.4 bin/magento setup:upgrade.
 
 
 ### Step 5: API Keys.
 
-Log in to your Magento Admin panel and navigate to Stores - Configuration - COMETROCKS - Integration. From here simply press the "Generate" button to Generate API keys.
+Access your Magento Admin panel and proceed to Stores > Configuration > COMETROCKS > Integration. Within this section, effortlessly generate API keys by clicking the 'Generate' button.
 
 ![Settings](/images/Screenshot-2023-08-29-at-15.25.56.png)
 
