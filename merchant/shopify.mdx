@@ -31,12 +31,12 @@ To integrate your Shopify store with Comet Rocks via APIs , a custom app is esse
     4. read_channels
     5. read_price_rules , read_discounts
     6. read_products , read_product_listings and read_product_feeds
-    7. read_shipping , read_markets , read_locales
+    7. read_shipping , read_markets
     8. read_fulfillments , read_inventory
     9. read_custom_pixels , read_pixels , read_analytics , read_script_tags , read_reports
     10. read_files  [if using shopify to store content files]
     11. read_gdpr_data_request , read_legal_policies
-    12. read_translations
+    12. read_locales, read_translations
 3. Click Save to apply your changes.
 
 ![AdminAPI](/images/Shopify4.png)
@@ -48,6 +48,9 @@ To integrate your Shopify store with Comet Rocks via APIs , a custom app is esse
 3. Define the necessary scopes for the Comet Rocks app, including:
     1. unauthenticated_write_checkouts
     2. unauthenticated_read_checkouts
+    3. unauthenticated_read_product_listings
+    4. unauthenticated_write_customers
+    5. unauthenticated_read_customers
 4. Click Save to apply your changes.
 
 ![StoreFrontAPI](/images/Shopify5.png)
