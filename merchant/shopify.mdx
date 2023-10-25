@@ -7,23 +7,26 @@ To integrate your Shopify store with Comet Rocks via APIs , a custom app is esse
 
 ### Step 1: Creating the Custom App
 
-1. From your Shopify dashboard, navigate to Settings → Apps and sales channels → Develop Apps.
+1. From your Shopify dashboard, navigate to Settings → App and sales channels → Develop Apps.
 
-![Apps](/images/Shopify1.png)
+![Apps](/images/shopify-1-app-and-sales-channel-settings.png)
 
-![DevelopApps](/images/Shopify2.png)
+![DevelopApps](/images/shopify-2-develop-apps.png)
 
 2. Click the green Create an app button.
 
-![CreateApp](/images/Shopify3.png)
+![CreateApp](/images/shopify-3-create-an-app.png)
 
 3. In the modal that appears, enter an app name (ex. "Comet Rocks") and select the user in your system who should be the owner of this app. Typically, this is the default selected user.
 
-![AppName](/images/Shopify6.png)
+![AppName](/images/shopify-4-create-an-app-modal.png)
 
 ### Step 2: Configuring Admin API Permissions
 
 1. Navigate to the API Scopes tab in your new app settings.
+
+![API Scope](/images/shopify-5-configure-api-scopes.png)
+
 2. Here, specify the necessary scopes for the Comet Rocks app, including:
     1. write_customers and read_customers
     2. write_orders , read_orders ,write_draft_orders , read_draft_orders  and read_order_edits
@@ -39,7 +42,7 @@ To integrate your Shopify store with Comet Rocks via APIs , a custom app is esse
     12. read_locales, read_translations
 3. Click Save to apply your changes.
 
-![AdminAPI](/images/Shopify4.png)
+![AdminAPI](/images/shopify-6-admin-api-scopes.png)
 
 ### Step 3: Configuring Storefront API Permissions
 
@@ -53,7 +56,7 @@ To integrate your Shopify store with Comet Rocks via APIs , a custom app is esse
     5. unauthenticated_read_customers
 4. Click Save to apply your changes.
 
-![StoreFrontAPI](/images/Shopify5.png)
+![StoreFrontAPI](/images/shopify-6-admin-api-scopes.png)
 
 ### Step 4: Submit API credentials in Comet Console
 
