@@ -1,73 +1,194 @@
 ---
 title: 'Shopify'
 ---
-## Creating a Custom App for Comet Rocks
+This is a guide on how to connect your Shopify online store to Comet Rocks. You
+will learn how to set up a store in Comet Rocks, how to create a custom app in
+Shopify, and submit API credentials to successfully connect your store.
 
-To integrate your Shopify store with Comet Rocks via APIs , a custom app is essential. This guide will show you how to set up such an app to allow access to the Shopify Admin and Salesfront APIs, as well as how to define the necessary scopes.
+## 1. Configure store details
 
-### Step 1: Creating the Custom App
+First, set up your Comet store and provide the details of your Shopify store.
 
-1. From your Shopify dashboard, navigate to Settings → App and sales channels → Develop Apps.
+1. Log in to
+   [https://console.comet.rocks/auth](https://console.comet.rocks/auth) and
+   click on **Store settings** from the Home Page or tabs on the left
 
-![Apps](/images/shopify-1-app-and-sales-channel-settings.png)
+![#1 Shopify_Step 1.png](/images/shopify/1_Shopify_Step_1.png)
 
-![DevelopApps](/images/shopify-2-develop-apps.png)
+2. In Store Settings, select **Shopify** as your platform.
 
-2. Click the green Create an app button.
+3. Open the **Store Details** toggle and submit the following details:
 
-![CreateApp](/images/shopify-3-create-an-app.png)
+   1. Make sure the _Store name_ and _Store type_ fields are correct
+   2. In _Store URL,_ add the public URL of your online store
 
-3. In the modal that appears, enter an app name (ex. "Comet Rocks") and select the user in your system who should be the owner of this app. Typically, this is the default selected user.
+4. Click **Save**
 
-![AppName](/images/shopify-4-create-an-app-modal.png)
+![#2_Shopify_Step 3_3. Save information.png](/images/shopify/2_Shopify_Step_3_3._Save_information.png)
 
-### Step 2: Configuring Admin API Permissions
+## 2. Create a custom app in Shopify
 
-1. Navigate to the API Scopes tab in your new app settings.
+Next, switch to your **Shopify store admin console,** where you will create a
+custom app and generate API credentials. To connect your store with Shopify, you
+will need to create an app with Shopify Admin API and Salesfront API
+permissions.
 
-![API Scope](/images/shopify-5-configure-api-scopes.png)
+### 2.1. Create the custom app
 
-2. Here, specify the necessary scopes for the Comet Rocks app, including:
-    1. write_customers and read_customers
-    2. write_orders , read_orders ,write_draft_orders , read_draft_orders  and read_order_edits
-    3. read_returns
-    4. read_channels
-    5. read_price_rules , read_discounts
-    6. read_products , read_product_listings and read_product_feeds
-    7. read_shipping , read_markets
-    8. read_fulfillments , read_inventory
-    9. read_custom_pixels , read_pixels , read_analytics , read_script_tags , read_reports
-    10. read_files  [if using shopify to store content files]
-    11. read_gdpr_data_request , read_legal_policies
-    12. read_locales, read_translations
-3. Click Save to apply your changes.
+1. From your Shopify main dashboard, navigate to **Settings**
 
-![AdminAPI](/images/shopify-6-admin-api-scopes.png)
+![#4_Shopify_Step 4_2. a. i..png](/images/shopify/4_Shopify_Step_4_2._a._i..png)
 
-### Step 3: Configuring Storefront API Permissions
+2. From Settings, navigate to → **Apps and sales channels**
 
-1. Return to your app settings page and select the Storefront API tab.
-2. Enable the Allow this app to access your storefront data using the Storefront API option.
-3. Define the necessary scopes for the Comet Rocks app, including:
-    1. unauthenticated_write_checkouts
-    2. unauthenticated_read_checkouts
-    3. unauthenticated_read_product_listings
-    4. unauthenticated_write_customers
-    5. unauthenticated_read_customers
-4. Click Save to apply your changes.
+![#5_Shopify_Step 4_2. a. ii..png](/images/shopify/5_Shopify_Step_4_2._a._ii..png)
 
-![StoreFrontAPI](/images/shopify-6-admin-api-scopes.png)
+3. Navigate to → **Develop Apps**
 
-### Step 4: Submit API credentials in Comet Console
+![#6_Shopify_Step 4_2. a. iii..png](/images/shopify/6_Shopify_Step_4_2._a._iii..png)
 
-1. Login to Comet Console and select store settings.
-2. Enter the following API Config
-    - `Admin API access token`
-    - `Store front API access token`
-    - `API Key`
-    - `API Secret Key`
-3. Click Save to apply your changes and wait for a confirmation.
-4. Once Comet can access your store APIs, you are all set.
+4. Click **Create an app**
+
+![#7_Shopify_Step 4_2. a. iv..png](/images/shopify/7_Shopify_Step_4_2._a._iv..png)
+
+5. In the modal that appears, enter an app name (ex. “Comet Rocks”) and select
+   the user in your system who should be the owner of this app. Typically, this
+   is the default selected user.
+
+![#8_Shopify_Step 4_2. a. v..png](/images/shopify/8_Shopify_Step_4_2._a._v..png)
+
+### 2.2. Configure Admin API access scopes
+
+Next, we will configure the Admin API access scopes of the custom app.
+
+1. In your app development settings, navigate to the **Configuration** tab, find
+   the **Admin API integration** section and click **Configure.**
+
+![#9_Shopify_Step 4_2. a. vi..png](/images/shopify/9_Shopify_Step_4_2._a._vi..png)
+
+2. Next, go to _Admin API access scopes_ and select the required scopes.
+
+{/* Here look for the list of keywords listed below to validate the relevant */}
+{/* necessary scopes - see example screenshot for “Orders”: */}
+
+![#10_Shopify_Step 4_2. b. ii..png](/images/shopify/10_Shopify_Step_4_2._b._ii..png)
+
+To successfully connect Comet to your Shopify store, find and select the
+following **28 access scopes**:
+
+- **Analytics:** `read_analytics`
+- **Channels:** `read_channels`
+- **Customers:** `write_customers` and `read_customers`
+- **Discounts:** `read_discounts`
+- **Files:** `read_files` [if using shopify to store content files]
+- **Fulfillments:** `read_fulfillments`
+- **GDPR:** `read_gdpr_data_request`
+- **Inventory:** `read_inventory`
+- **Legal:** `read_legal_policies`
+- **Locales:** `read_locales`
+- **Markets:** `read_markets`
+- **Orders:** `write_draft_orders`, `read_draft_orders`, `read_order_edits`,
+  `write_orders` and `read_orders`
+- **Pixels:** `read_custom_pixels` `read_pixels`
+- **Price:** `read_price_rules`
+- **Product:** `read_product_feeds`, `read_product_listings`, `read_products`
+- **Reports:** `read_reports`
+- **Returns:** `read_returns`
+- **Script:** `read_script_tags`
+- **Shipping:** `read_shipping`
+- **Translations:** `read_translations`
+
+3. Once completed, click **Save** to apply changes and see confirmation window
+
+![#11_Shopify_Step 4_2. b. iii..png](/images/shopify/11_Shopify_Step_4_2._b._iii..png)
+
+### 2.3. Configure Storefront API Access Scopes
+
+Next, we will configure the Storefront API access scopes for the custom
+
+1. Return to the **Configuration** tab in your app development settings. Find
+   the **Storefront API configuration** section and click **Configure**.
+
+![#11_Shopify_Step 4_2. c. i..png](/images/shopify/11_Shopify_Step_4_2._c._i..png)
+
+2. Here, find and select the following 5 access scopes:
+
+- **Checkout:** `unauthenticated_write_checkouts`,
+  `unauthenticated_read_checkouts`
+- **Customers:** `unauthenticated_write_customers`,
+  `unauthenticated_read_customers`
+- **Products:** `unauthenticated_read_product_listings`
+
+3. Click save to apply changes and see confirmation window
+
+![#12_Shopify_Step 4_2. c. iii..png](/images/shopify/12_Shopify_Step_4_2._c._iii..png)
+
+### 2.4. Install app
+
+Once the access scopes are configured, install the app to generate the API
+credentials. In your app development settings, click on **Install app** and
+confirm the modal.
+
+![#13_Shopify_Step 4_2. d..png](/images/shopify/13_Shopify_Step_4_2._d..png)
+
+You're now ready to connect your Shopify store to Comet.
+
+## 3. Submit API credentials in Comet
+
+Finally, it's time to submit the API credentials from Shopify, to connect your
+store to Comet.
+
+To get started, go back to **Store Settings** in Comet, and open the **Submit
+API credentials** toggle.
+
+### 3.1. API credentials
+
+First, submit the API credentials of your newly created app.
+
+1. In Shopify, navigate to the **API credentials** tab in your app development
+   settings.
+
+![#14_Shopify_Step 4_3..png](/images/shopify/14_Shopify_Step_4_3..png)
+
+2. Copy the following API credentials and paste them into Comet:
+   `Admin API access token`, `Storefront API access token`, `API key`, and
+   `API secret key`
+   - ⚠️ **Heads up:** The `Admin API access token` is sensitive, and it will
+     only be shown once. Make sure you're ready to paste it into Comet before
+     you reveal it.
+
+![#15_Shopify_Step 4_4. Move back to Comet API config.png](/images/shopify/15_Shopify_Step_4_4._Move_back_to_Comet_API_config.png)
+
+![#16_Shopify_Step 4_4. Move back to Comet API config.png](/images/shopify/16_Shopify_Step_4_4._Move_back_to_Comet_API_config_v2.png)
+
+### 3.2. API config
+
+Next, under the _API config_ section in Comet, provide the following credentials
+of your Shopify store.
+
+![#17_Shopify_Step 4_6..png](/images/shopify/17_Shopify_Step_4_5._a..png)
+
+1. **Base image URL:** Please leave the autofilled
+   “[https://cdn.shopify.com/](https://cdn.shopify.com/)” information unless you
+   are using a different CDN to serve product images
+2. **MyShopify URL:** Provide your MyShopify URL without the `https://` and
+   `.myshopify.com`. For example, if your URL is
+   `https://my-store.myshopify.com`, enter `my-store` into the field.
+
+   - If you have trouble finding your MyShopify URL, go to **Shopify ->
+     Settings** and it will be shown on the top left.
+     ![#17_Shopify_Step 4_5. a..png](/images/shopify/18_Shopify_MyShopify_URL.png)
+
+### 3.3. Submit credentials
+
+Finally, click on **Submit credentials** and wait for it a confirmation message.
+
+![#17_Shopify_Step 4_6..png](/images/shopify/17_Shopify_Step_4_6..png)
+
+🎉 Congratulations! You have successfully connected your Shopify store to Comet
+Rocks. Time to import your product catalog and create your first satellite
+stores.
+
 
 Congratulations! Your custom app for Comet Rocks with access to both the Admin API and Salesfront API is now ready. Time to launch comet powered satellite and collab stores!
 
