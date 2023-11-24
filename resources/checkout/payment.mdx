@@ -4,9 +4,9 @@ description: 'There are currently two methods for applying a guest payment metho
 icon: 'text-size'
 ---
 
-Before submitting your cart, you can use the [cartCreatePaymentIntent](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartCreatePaymentIntent) function. This payment intent tracks the total amount that needs to be paid. It will be updated when the user adds or removes products or when shipping methods are updated. The payment can be completed using Apple Pay, Google Pay, or the Stripe Link UI.
+Before submitting your cart, you can use the [cartCreatePaymentIntent](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartCreatePaymentIntent) mutation. This payment intent tracks the total amount that needs to be paid. It will be updated when the user adds or removes products or when shipping methods are updated. The payment can be completed using Apple Pay, Google Pay, or the Stripe Link UI.
 
-After creating the payment intent, the function provides the updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) with the associated payment intent details.
+After creating the payment intent, the response provides the updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) with the associated payment intent details.
 
 ```graphql
 mutation CreatePaymentIntent($id: ID!) {

@@ -41,39 +41,62 @@ The quantity field indicates the number of products you want to add to the cart.
 }
 ```
 
-## Removing products from cart
-
-To remove products from your cart, you can use the [cartRemoveProducts](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartRemoveProducts) mutation. This mutation lets you specify the products you want to remove from the cart.
-
-After removing the products, the function returns an updated cart [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart).
-
-Here is an example of how you can use the mutation to remove products from your cart:
+## Updating Line Items in the Cart
+To update line items in your cart, you can use the [cartLineUpdate](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartLineUpdate) mutation. This mutation allows you to modify the quantity of a specific line item in the cart. Here is an example of how to use this mutation:
 
 ```graphql
-mutation CartRemoveProducts($cartId: ID!, $input: CartRemoveProductsInput!) {
-  cartRemoveProducts(id: $cartId, input: $input) {
+mutation CartLineUpdate($id: ID!, $lineId: ID!, $quantity: Int!) {
+  cartLineUpdate(id: $id, lineId: $lineId, quantity: $quantity) {
     id
-    # Check the Cart type for its fields
+    lines {
+      id
+      quantity
+    }
+     # Check the Cart type for remaining fields
   }
 }
 ```
 
-The quantity field indicates the number of products you want to remove from the cart. For instance, if your cart contains 2 units of the product with ID `prd_ZJQYAR_-ypwOLKEz` and 3 units of the product with ID `prd_ZJQYAR_-ypwOLKE0`, the following JSON code will remove 1 unit of the first product and 2 units of the second product:
+To update a line item, you'll need to provide the following parameters:
 
+* $id: The ID of the cart you want to update.
+* $lineId: The ID of the specific line item within the cart.
+* $quantity: The new quantity you want to set for the line item.
+
+For example, suppose you have a cart with ID "cart_ZWCpKM_dQeQl3oke" and you want to update the quantity of a line item with ID "bagLine_ZWCpLc_dQeQl3okm" to 3 units. You can use the following arguments to the mutation:
 ```json
 {
-  "input": {
-    "cartId": "cart_ZMe6Bb4GqqUe3BWV",
-    "products": [
-      {
-        "productId": "prd_ZJQYAR_-ypwOLKEz",
-        "quantity": 1
-      },
-      {
-        "productId": "prd_ZJQYAR_-ypwOLKE0",
-        "quantity": 2
-      }
-    ]
+  "id": "cart_ZWCpKM_dQeQl3oke",
+  "lineId": "bagLine_ZWCpLc_dQeQl3okm",
+  "quantity": 3
+}
+```
+
+
+## Deleting Line Items from the Cart
+To remove line items from the cart, you can use the [cartLineDelete](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartLineDelete) mutation. This mutation allows you to delete a specific line item from the cart. Here is an example of how to use this mutation:
+
+```graphql
+mutation CartLineDelete($id: ID!, $lineId: ID!) {
+  cartLineDelete(id: $id, lineId: $lineId) {
+    id
+    lines {
+      id
+      quantity
+    }
+     # Check the Cart type for remaining fields
   }
+}
+```
+To delete a line item, you'll need to provide the following parameters:
+
+* $id: The ID of the cart from which you want to delete the line item.
+* $lineId: The ID of the specific line item you wish to remove from the cart.
+
+For example, suppose you have a cart with ID "cart_ZWCpKM_dQeQl3oke" and you want to delete a line item with ID "bagLine_ZWCpLc_dQeQl3okm". You can use the following arguments to the mutation:
+```json
+{
+  "id": "cart_ZWCpKM_dQeQl3oke",
+  "lineId": "bagLine_ZWCpLc_dQeQl3okm"
 }
 ```
