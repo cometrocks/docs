@@ -3,68 +3,503 @@ title: 'Salesforce'
 ---
 # Comet-SFCC Integration Guide
 
-## Overview
-The Comet cartridge is responsible for retrieving data from the SFCC system in XML format and storing it temporarily in the impex location on the SFCC server. The connector then compresses the files and transfers them to the Comet WEBDAV location using SFCC backend jobs.
+# Overview
 
-## Features
+The Comet cartridge is designed to streamline the process of retrieving data (Product, price books and inventory) from the Salesforce Commerce Cloud (SFCC) system in XML format. The cartridge uses out of the box export jobs which efficiently transfers the retrieved data to the Comet WEBDAV location by leveraging SFCC custom jobs, ensuring a smooth and automated data flow.
+
+# Supported Versions (Cartridge Compatibility)
+
+The Comet cartridge is versatile and compatible with both SFRA and SiteGenesis shops. It has been thoroughly tested with SFRA 7.0 (SFCC 24.3) and offers support for versions as early as 6.3 (Compatibility mode of SFCC 22.7). This wide range of compatibility ensures that the cartridge can be seamlessly integrated into various SFCC environments.
+
+# Integration Video
+
+We take pride in the exceptionally seamless integration process with Comet. Our team has worked diligently to ensure that the integration is not only swift but also incredibly straightforward. To showcase the ease of integration, we have prepared a video demonstration using SFRA. This video provides a clear visual representation of how effortlessly the Comet cartridge can be integrated into your SFCC system.
+
+
+[By watching the integration video,](https://www.loom.com/share/30b53ce523d8430387cc15d2031b1cc3?sid=26033ce9-c2bb-4ceb-9573-c6a7cc7b0ea1) you can gain a comprehensive understanding of the steps involved and witness firsthand how smoothly the Comet cartridge integrates with SFCC. This video serves as a valuable resource for developers and stakeholders alike, providing them with the confidence to proceed with the integration process.
+
+## Available features
+The Comet cartridge offers a comprehensive set of features to facilitate efficient data export from Salesforce Commerce Cloud (SFCC). These features include:
   1. Full Catalog export
   2. Delta Catalog export
   3. Full Inventory export
-  4. Delta Inventory export (for older SFCC versions)
+  4. Delta Inventory export 
   5. Full PriceBooks export
-  6. Delta PriceBooks export (for older SFCC versions)
-  7. Order Export
-  8. Compress exported files
-  9. Transfer to Comet remote location
-  10. Clean temporary files in SFCC
+  6. Delta PriceBooks export
+
+## Dataflow diagrams
+    ![dataflow.jpg](/images/salesforce/dataflow.png)
+
+## Integration Guide
+
+### Before you start
+Access Preparations
+Access Setup on Comet Dashboard
+Before proceeding with the integration, it is essential to ensure that the necessary SFCC access is properly set up to facilitate the configuration of your account on the [Comet portal](https://console.comet.rocks). 
+
+Please follow these steps to complete the access setup:
+#### 1. Store details
+Provide the store details:
+![store-details.png](/images/salesforce/store-details.png)
+
+  | Form Fields | meanings |
+  |----|----|
+  | Store Name: | Enter the name of your store as it should appear in the Comet system. This name will be used to identify your store throughout the integration process. |
+  | Storefront URL (Home page) | Provide the URL of your store’s home page. Please ensure that the Store Name and Storefront URL are accurate and properly formatted to avoid any connectivity issues during the integration process. ex: https://*z***-001.dx.commercecloud.salesforce.com/on/demandware.store/Sites-RefArch-Site|
+
+
+
+#### 2. Select your e-commerce platform
+Please choose your e-commerce platform from the following options:
+![ecommerce-platforms.png](/images/salesforce/ecommerce-platforms.png)
+#### 3. Configure catalog details
+To configure the integration between Salesforce Commerce Cloud (SFCC) and the Comet
+![configure-catalog.png](/images/salesforce/configure-catalog.png)
+
+  | Form Fields | meanings |
+  |----|----|
+  |Storefront Catalog ID| Enter the Storefront Catalog ID. Can be taken from Business Manager > Merchant Tools >  Products and Catalogs >  Catalogs|
+  |Base Catalog ID|Enter the Base Catalog ID. Can be obtained from Business Manager > Merchant Tools >  Products and Catalogs >  Catalogs|
+  |Assigned Price Books IDs | Enter all the qualified price books belongs to the site. Can be obtained from Business Manager > Merchant Tools >  Products and Catalogs >  Price Books|
+  |Assigned Inventory IDs|Enter all the qualified inventories belongs to the site. Can be obtained from Business Manager > Merchant Tools > Products and Catalogs > Inventory|
+  |Default Locale|en_US|
+
+#### 4. Add these credentials to Business Manager
+ Navigate to Merchant Tools > Site Preferences > Custom Site Preference > Comet Configurations and then paste the following values.
+ ![add-credentials.png](/images/salesforce/add-credentials.png)
+
+ Fields WebDAV URL, Brand Organization ID and Comet Parent Store ID will be automatically generated and prefilled. Please copy these details into SFCC's Custom preference. 
+
+  | Form Fields | meanings |
+  |----|----|
+  |WebDAV URL|This is the URL of Comet drop location where SFCC jobs will drop the exported FileSystem.|
+  |Brand Organization ID|Brand Organization ID will be created when a brand signup in Comet console.|
+  |Comet Parent Store Environment ID|Parent Store Environment ID will be created when a brand signup in Comet console.|
+  |App Client User ID|Generate Client User ID and store it in SFCC's Comet Custom preference|
+  |App Client Password|Generate Client Password and store it in SFCC's Comet Custom preference||
+
+
+#### 5. Submit API credentials
+These fields allow us to connect to your Salesforce app and display your content. More information about these fields can be found below:
+
+##### a. API Config
+![API-configs.png](/images/salesforce/API-configs.png)
+
+  | Form Fields: | meanings |
+  |----|----|
+  |Site ID:| Enter site id from SFCC (ex: SiteGenesis, RefArch)|
+  |App URL:| Enter app sfcc sandbox domain (ex: https://z***-001.dx.commercecloud.salesforce.com)|
+  |Base Image URL:| Enter product image URL from sfcc sandbox with protocal. 
+  
+  Please follow these steps to get the "Base Image URL" 
+  - Go to any PDP page in your sandbox's storefront 
+  - Copy the image url and remove everything after /images/.
+  - for ex : This is site Genesis image URL
+  
+  `https://*z****-001.dx.commercecloud.salesforce.com/on/demandware.static/-/Sites-apparel-catalog/default/dw2d53288c/images/large/PG.10235094.JJ2DHXX.PZ.jpg`
+  
+     The "Base Image URL" will be this for above URL
+  `https://*z****-001.dx.commercecloud.salesforce.com/on/demandware.static/-/Sites-apparel-catalog/default/dw2d53288c/images/ `
+
+
+##### b. OCAPI credentials
+![OCAPI-credentials.png](/images/salesforce/OCAPI-credentials.png)
+
+
+  |Form fields|meanings|
+  |----|----|
+  | Client ID: | Enter the unique identifier for your Salesforce Commerce Cloud account. This can be found in the [account manager settings](https://account.demandware.com/) under the “API Client” section |
+  | API Secret: | Provide the API secret associated with your above Client ID. This secret is used to authenticate your integration and should be kept confidential. You can generate a new API Client and secret in your Salesforce Commerce Cloud [account manager settings](https://account.demandware.com/). |
+  | Business Manager email: | Enter the email address associated with your Salesforce Commerce Cloud Business Manager account. This email will be used for communication (ex:trigger Comet jobs from Comet console) related to the integration. |
+  | Business Manager access key: | Provide the access key for your Business Manager account. This key grants access to the necessary APIs and resources required for the integration. You can generate a new access key in your Business Manager > Profile > Manage Access Keys > Agent User Login and OCAPI |
+
+##### c. SCAPI credentials
+![SCAPI-credentials.png](/images/salesforce/SCAPI-credentials.png)
+The following input fields are required for the Salesforce Commerce Cloud API (SCAPI) integration:
+
+  |Form fields|meanings|
+  |----|----|
+  |Organization ID|The unique identifier for your Salesforce Commerce Cloud organization. This can be found in the Administration >  Site Development >  Salesforce Commerce API Settings section. Ex: f_ecom_z***_001|
+  |Short Code|A unique code that identifies your Salesforce Commerce Cloud instance. It is typically a combination of alphabets and a numeric identifier. Ex: k*7**m78|
+  |Client ID|The client ID is used to authenticate your API requests. You can generate a client ID in your SLAS account using [this document.](https://developer.salesforce.com/docs/commerce/commerce-api/guide/authorization-for-shopper-apis.html) Please choose "default shopper scopes" while creating the API clientInformation.| 
+  |Client Secret|The client secret is a confidential key used to authenticate your API requests along with the client ID. It should be kept secure and never shared publicly. You can generate a client secret in the Account Manager under the "API Access" section.|
+  
+
+#### 6. Connect payment processor
+To enable secure and seamless payment transactions from comet satellite store, you need to integrate a payment processor. Please choose your favourite PSP out of given list.
+![select-psp.png](/images/salesforce/select-psp.png)
+
+Follow these steps to connect your chosen payment processor: 
+(Adyen's example below)
+**Submit credentials**
+![connect-psp.png](/images/salesforce/connect-psp.png)
+
+  |Form fields|meanings|
+  |----|----|
+  |Merchant account ID|Enter your adyen's merchant account ID. You can get the merchant ID after logging into [this link](https://ca-test.adyen.com/ca/ca/accountgroups/merchants.shtml)|
+  |API Key| A Adyen integration API key can be generated from the [Adyen link](https://ca-test.adyen.com/ca/ca/config/api_credentials_new.shtml)|
+  |Client Key| Generate a client key as well from "Client settings" while generating API key in above step|
+  |Select your enviournment| Select "Test" OR  "Live" based on the use case.
+
+**Configure Adyen Webhook**
+![Adyen-webhook-conf.png](/images/salesforce/Adyen-webhook-conf.png)
+|Form fields|meanings|
+  |----|----|
+  |Webhook URL|The Webhook URL is the endpoint where Adyen will send the event data when the specified event occurs. This will be prefilled and not editable field.|
+  |Event to listen to| These are the recommended events that you want to subscribe to and receive notifications for. We have to select these events in Adyen portal while [setting up](/merchant/salesforce#7-configure-adyen-webhook) the webhooks.|
+  |HMAC Key| The HMAC (Hash-based Message Authentication Code) key is a shared secret key used to authenticate and validate the integrity of the webhook messages sent from Adyen to your endpoint|
+
+**Note:** Add https://satellites.comet.rocks into "Add allowed origins" while generating API key in above step.
+
+#### 7. Configure Adyen Webhook
+
+**Create a Webhook on Adyen Portal**
+
+To set up a webhook on the Adyen portal, follow these steps:
+
+1. Log in to your Adyen account and navigate in the left sidebar.
+
+2. Click on **Webhooks** under the **Developers** category.
+
+3. Click on the **Add webhook** button to create a new webhook.
+4. Choose the **Standard webhook** from the **Recommended webhook** section.
+![adyen-standard-webhook.png](/images/salesforce/adyen-standard-webhook.png)
+![adyen-general.png](/images/salesforce/adyen-general.png)
+![adyen-server-configuration.png](/images/salesforce/adyen-server-configuration.png)
+5. Provide the following details for your webhook:
+  - **Description**: Enter a descriptive name for your webhook. ex: "Comet-your_Brand_name"
+  - **URL**: Specify the URL where Adyen should send the webhook notifications. Please copy the value from [here](/merchant/salesforce#6-connect-payment-processor).
+  - **Method**: Select **JSON** the method for the webhook requests.
+  - **Authentication**: If required, select the authentication method and provide the necessary credentials.
+  - **Generate HMAC Key**: Generate HMAC Key and add it in the [Comet console](/merchant/salesforce#6-connect-payment-processor).
+
+![adyen-hmac-key.png](/images/salesforce/adyen-hmac-key.png)
+
+
+6. In the **Subscriptions** section, select the events you want to receive notifications for. Please see the comet recommendation [here](/merchant/salesforce#6-connect-payment-processor).
+
+7. Review your webhook configuration and click on the **Save** button to create the webhook.
+
+8. Adyen will now send notifications to the specified URL whenever the selected events occur.
+
+> **Note:** Make sure your Salesforce Commerce Cloud integration is set up to handle the incoming webhook notifications from Adyen. You may need to configure the necessary endpoints and logic to process the received data.
+
+
 
 ## Integration Steps
 
-### Adding Cartridges in SFCC UX Studio
+### Adding the cartridge into the workspace
+To upload the cartridges into the SFCC server, you first need to add the cartridges in your IDE (Code workspace).
+#### Step 1: Set up the cartridge path
+Before the Comet functionality can become available, the cartridge needs to be added to the cartridge path of the BM. In order to do this, follow the following instructions:
+    1. 	Log into Business Manager.
+    2. 	Navigate to Administration > Sites > Manage Sites.
+    3. 	Go to 'Manage the Business Manager site'.
 
-  1. In UX Studio, go to File > Import.
-  2. Select Existing Projects in workspace and click Next.
-  3. Select Select archive file and browse to the compressed cartridge file.
-  4. Click Finish to import the cartridge.
-  5. Link the cartridge to your active DigitalServer connection.
+Job Cartridge: bc_comet (To export catalog and order)
+    1.  In the Cartridges input field add ‘bc_comet’.
+    2.  Click on the 'Apply' button.
 
-### Activating Cartridges in Business Manager
+Storefront cartridge:
+    1. Navigate to Administration > Sites > Manage Sites.
+    2. Select you site (ex: Administration >  Sites >  Manage Sites > [Your Site ID] – Settings
+    3. Add the cartridge name ‘int_comet_core’ in the front of the path.
 
-  1. Log into Business Manager.
-  2. Go to Administration > Sites > Manage Sites.
-  3. Select Manage the Business Manager site.
-  4. In Cartridges add bc_comet.
-  5. Click Apply.
 
-### Importing Metadata
-  1. Compress the comet-meta-import folder into a ZIP file.
-  2. Go to Administration > Site Development > Site Import & Export.
-  3. Select Import: Upload Archive > Local > Choose File.
-  4. Upload the comet-meta-import.zip file.
-  5. Select the archive and click Import.
+#### Step 2: Importing Metadata
 
-## Configuring Custom Preferences
+To enable the Comet integration, the following object structures (metadata) must be imported and configured in the Business Manager:
 
-In Business Manager, go to Administration > Global Preferences > Global Custom Preferences. Select the "Comet Configuration" group and edit as needed.
+> **Important**: If Adyen is already integrated in the SFCC site, then please skip the Adyen-specific metadata included in the provided metadata.
 
-## Configuring Jobs
+1. Locate the `metadata/comet-meta-import` folder within the cartridge bundle.
+2. Inside the `metadata` folder, compress the `comet-meta-import` folder to generate a `comet-meta-import.zip` file.
+3. Navigate to **Business Manager Menu** > **Administration** > **Site Development** > **Site Import & Export**.
+4. Under the **Import: Upload Archive** section, ensure that the radio button labeled "Local" is enabled. If not, click on the radio button to enable it.
+5. Click on the **Choose File** input field and select the `comet-meta-import.zip` file from the open dialog box.
+6. Click on the **Upload** button to initiate the upload process.
+7. Once the upload is complete, locate the `comet-meta-import.zip` file in the **Archives** list.
+8. Click on the radio button corresponding to `comet-meta-import.zip` and then click on the **Import** button.
+9. A confirmation box will appear, asking, "Are you sure that you want to import the selected archive?" Click on the **OK** button to proceed.
+10. Please provide the Comet WebDAV server credentials and OCAPI `client_id`.
 
-The main Comet jobs are:
+> **Note**: Currently, Comet utilizes OCAPI and SCAPI endpoints in the checkout flow. However, we plan to switch to completly SCAPI in our next release.
 
-- `Comet-Full-CatalogExport` - Exports full catalog to XML.
-- `Comet-Delta-CatalogExport` - Exports delta catalog changes to XML.
-- `Comet-Full-PriceBook-Export` - Exports full price books to XML.
-- `Comet-Delta-PriceBook-Export` - Exports delta price book changes to XML.
-- `Comet-Full-Inventory-Export` - Exports full inventory lists to XML.
-- `Comet-Delta-Inventory-Export` - Exports delta inventory changes to XML.
-- `Comet-Order-Export` - Exports new orders to XML.
+**Used OCAPI endpoints** 
 
-See the documentation for details on configuring each job.
 
-Testing
-Run a job and verify the compressed XML file is uploaded to the Comet WebDAV location. Check logs for any errors.
+  | **OCAPI** |  **Scope/Permissions** |  **API Path** | **Purpose** |
+  |----|----|----|----|
+  | Customer API |  read_attributes,  write_attributes | POST /customers/auth | Create shopper Token |
+  | Basket API| read_attributes,  write_attributes | POST /baskets | Create basket |
+  | |read_attributes, write_attributes | POST baskets/`{basketId}`/items | Add products     |
+  | |read_attributes, write_attributes | DELETE baskets/`{basket_id}`/items/`{item_id}` | Remove item from basket    |
+  | |read_attributes, write_attributes | PATCH baskets/`{basket_id}`/items/`{item_id}` | Update item quantity in the basket    |
+  | |read_attributes, write_attributes | DELETE /baskets/`{basketId}` | Delete the basket     |
+  | |read_attributes, write_attributes | POST /baskets/`{basketId}`/billing_address | Add Billing address    |
+  | |read_attributes, write_attributes | PUT /baskets/`{basket_id}`/customer | Add Shopper email to the basket     |
+  | |read_attributes, write_attributes | PUT /baskets/`{basketId}`/shipments/shipping_address) | Adding shipping address     |
+  | |read_attributes, write_attributes | POST /baskets/`{basket_id}`/coupons | Update basket with coupon    |
+  | |read_attributes, write_attributes | GET /baskets/`{basket_id}`/approaching_discounts | Get approaching discounts of a basket     |
+  | |read_attributes, write_attributes | DELETE /baskets/`{basket_id}`/coupons/`{coupon_item_id}` | Delete basket coupon    |
+  | |read_attributes, write_attributes | GET /baskets/\*/payment_methods | Get payment methods |    |
+  | |read_attributes, write_attributes | POST /baskets/`{basket_id}`/payment_instruments | Set Payment method and payment details     |
+  | Order API | read_attributes, write_attributes | POST /orders | Create Order |
+  | |read_attributes, write_attributes | PATCH /orders/`{order_no}`/payment_instruments/<br />`{payment_instrument_id}` | Updates payment instrument of order    |
+  | |read_attributes, write_attributes | PATCH /orders/`{order_no}` | Confirm Order     |
+  | Data API |    |    |    |
+  | Jobs API |read_attributes, write_attributes |  POST   /jobs/\*/executions | Execute the jobs |
+  | |read_attributes, write_attributes | POST /job_execution_search | Search job    |
 
-Additional Resources
-Please reach out to comet team to get access to the cartridge.
 
-This is a demo
+#### Step 3: Update custom preference
+In Business Manager, navigate to Merchant ToolsSite > Preferences Custom > Site Preference Groups. Custom preference groups with the ID “Comet Configuration” are available.
+![comet-custom-preference.png](/images/salesforce/comet-custom-preference.png)
+
+  |Comet Attributes|Purpose|
+  |----|----|
+  |Comet WebDAV URL|The Comet WebDAV URL is the endpoint provided by the Comet system for accessing and dropping files using the WebDAV protocol. The URL can be obtained on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
+  |Comet App Client id|The Comet App Client ID is a unique identifier assigned to the client application that is authorized to access the Comet system. This will be generated on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
+  |Comet App client password|The Comet App Client Password is the corresponding password associated with the Comet App Client ID. This will be generated on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
+  |Comet Brand Organization ID|The Comet Brand Organization ID represents the specific organization or brand within the Comet system that the integration is associated with. The ID can be obtained on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
+  |Comet Parent Store Environment Id|The Comet Parent Store Environment ID identifies the specific environment within the Salesforce Commerce Cloud where the integration is being set up. It helps in distinguishing between different environments, such as development, staging, or production OR Site A, Site B ..etc, and ensures that the integration is configured correctly for the intended environment.The ID can be obtained on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
+  |Start Order Number for Job|The Start Order Number for Job field is used to specify the order number from which the order export process should begin. This field is particularly useful in two scenarios: 1. When exporting orders for the first time, you can set the starting order number to ensure that all relevant orders are included in the export. 2. If a previous job fails, you can use this field to resume the export process from a specific order number, avoiding the need to start from the beginning.|
+  |Order Export Start Time (in minute)|The Order Export Start Time field allows you to specify the time, in minutes, from when the orders should be exported. This field is optional and provides an alternative way to determine the starting point for order export. It is useful in scenarios where you want to export orders based on a specific time frame rather than an order number. For example: - If you enter 1440 minutes, the system will export orders from one day before the current time. - If you enter 10080 minutes, the system will export orders from 7 days before the current time. Note: Either the Start Order Number or the Order Export Start Time should be provided to determine the starting point for order export.|
+  
+
+#### Step 4: Configure the jobs
+- Please follow the [instructions](/merchant/salesforce#1-comet-all-full-export-job) and configure the jobs.
+- Delta jobs: The Comet cartridge utilizes SFCC's default delta jobs. Ensure that the delta job feature is activated in the sandbox or instance where it is being employed. If not enabled, please reach out to SFCC support. If you are able to see this "Delta Exports" options at Administration >  Site Development >  Delta Exports, then its already enabled. Then, follow the [instructions](/merchant/salesforce#2-delta-price-books-export-job)
+
+> **Note**: The integration has been completed.
+
+## Integration Jobs Overview
+
+The integration cartridge mostly uses SFCC's out of the box jobs to export full and delta data. Comet requires the following SFCC catalog data for integration:
+
+- Base catalog
+- Storefront catalog
+- Inventory data
+- Pricebook data
+
+Navigate to Administration > Operations > Jobs, after successful metadata import a list of jobs with ‘Comet’ as prefix can be seen.
+The Comet cartridge provides two types of jobs to export SFCC catalog data and send it to the Comet WebDAV. Merchants can choose the job type that best suits their requirements and integration preferences.
+
+**Single Job**
+
+Alternatively, merchants can opt for a single job that encompasses all the necessary data exports. This job can be scheduled and executed as a single entity, simplifying the process for merchants who prefer a more streamlined approach.
+
+
+ **Multiple Jobs**
+
+In this approach, separate jobs are available for each component:
+
+- Base catalog job
+- Storefront catalog job
+- Inventory data job
+- Pricebook data job
+
+Each job can be scheduled and executed independently, allowing for more granular control over the data export process.
+
+### Single Job Setup
+
+#### 1. **COMET-All-Full-Export-Job** 
+This job is responsible for exporting all the necessary data from Salesforce Commerce Cloud (SFCC) and delivering the XML files to the designated Comet drop location.
+
+**Base catalog export job**
+* Step Job for Base Catalog
+    * Comet-Full-Catalog-Export-Base
+      - Configuration: 
+        * Enter the base catalog ID that needs to be exported. Ex: electronics-catalog
+        * Export File: `Comet/Catalogs/Full-Export/comet-full-cat-export-base`
+    * Comet-Full-CatalogExport-Compress-Base
+      - Configuration: 
+        * Select the site for which the integration has been done.
+        * Comet-Full-CatalogExport-UploadToComet-Base
+* Step Job for Storefront Catalog
+    * Comet-Full-Catalog-Export-Storefront
+      - Configuration: 
+        * Enter the base catalog ID that needs to be exported. Ex: storefront-catalog-en
+        * Export File: `Comet/Catalogs/Full-Export/comet-full-cat-export-storefront`
+    * Comet-Full-CatalogExport-Compress-Storefront
+      - Configuration: Select the site for which the integration has been done.
+    * Comet-Full-CatalogExport-UploadToComet-Storefront
+* Step Job for Price Books
+    * Comet-Full-PriceBook-Export
+      - Configuration: 
+        * Export File: `Comet/Catalogs/PriceBooks/Full-Export/comet-full-price-book`
+        * OverwriteExportFile flag should be set to true.
+        * DataUnits: Enter the pricebook Ids which required to be exported. Ex:
+        ```{
+          "export_data_units_configuration": {
+              "price_books": {
+                  "usd-sale-prices": true,
+                  "usd-list-prices": true
+              }
+            }
+        }
+    * Comet-Full-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
+      - Configuration: Select the site for which the integration has been done.
+    * Comet-Full-PriceBook-Export-UploadToComet-WebDav : Transfer the file to Comet remote location.
+
+> **Note:** Adding new promotional pricebooks:
+> - Go to jobID: COMET-All-Full-Export-Job, step job: Comet-Full-PriceBook-Export) include the new pricebook ID in field DataUnits.
+> - Enable delta export for that pricebook, Go to Administration >  Site Development >  Delta Exports and add new pricebook for delta job.
+
+* Step Job for Inventory export
+    * Comet-Full-Inventory-Export
+      - Configuration: 
+        * Export File: `Comet/Catalogs/Inventory/Full-Export/comet-full-inventory`
+        * OverwriteExportFile flag should be set to true.
+        * DataUnits: Enter the pricebook Ids which required to be exported. Ex:
+        ```{
+          "export_data_units_configuration": {
+              "price_books": {
+                "inventory": true
+              }
+            }
+        }
+    * Comet-Full-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
+      - Configuration: Select the site for which the integration has been done.
+    * Comet-Full-PriceBook-Export-UploadToComet-WebDav: Transfer the file to Comet remote location.
+
+### Multiple Jobs Setup
+#### 1. Full base catalog export job
+* Step Job for Base Catalog
+    * Comet-Full-Catalog-Export-Base
+      - Configuration: 
+        * Enter the base catalog ID that needs to be exported. Ex: electronics-catalog
+        * Export File: `Comet/Catalogs/Full-Export/comet-full-cat-export-base`
+    * Comet-Full-CatalogExport-Compress-Base
+      - Configuration: 
+        * Select the site for which the integration has been done.
+        * Comet-Full-CatalogExport-UploadToComet-Base
+#### 2. Full storefront catalog export job
+* Step Job for Storefront Catalog
+    * Comet-Full-Catalog-Export-Storefront
+      - Configuration: 
+        * Enter the base catalog ID that needs to be exported. Ex: storefront-catalog-en
+        * Export File: `Comet/Catalogs/Full-Export/comet-full-cat-export-storefront`
+    * Comet-Full-CatalogExport-Compress-Storefront
+      - Configuration: Select the site for which the integration has been done.
+    * Comet-Full-CatalogExport-UploadToComet-Storefront
+#### 3. Full pricebooks export job
+* Step Job for Price Books
+    * Comet-Full-PriceBook-Export
+      - Configuration: 
+        * Export File: `Comet/Catalogs/PriceBooks/Full-Export/comet-full-price-book`
+        * OverwriteExportFile flag should be set to true.
+        * DataUnits: Enter the pricebook Ids which required to be exported. Ex:
+        ```{
+          "export_data_units_configuration": {
+              "price_books": {
+                  "usd-sale-prices": true,
+                  "usd-list-prices": true
+              }
+            }
+        }
+    * Comet-Full-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
+      - Configuration: Select the site for which the integration has been done.
+    * Comet-Full-PriceBook-Export-UploadToComet-WebDav : Transfer the file to Comet remote location.
+
+> **Note:** Adding new promotional pricebooks:
+> - Go to jobID: COMET-All-Full-Export-Job, step job: Comet-Full-PriceBook-Export) include the new pricebook ID in field DataUnits.
+> - Enable delta export for that pricebook, Go to Administration >  Site Development >  Delta Exports and add new pricebook for delta job.
+
+#### 4. Full inventory export job
+* Step Job for Inventory export
+    * Comet-Full-Inventory-Export
+      - Configuration: 
+        * Export File: `Comet/Catalogs/Inventory/Full-Export/comet-full-inventory`
+        * OverwriteExportFile flag should be set to true.
+        * DataUnits: Enter the pricebook Ids which required to be exported. Ex:
+        ```{
+          "export_data_units_configuration": {
+              "price_books": {
+                "inventory": true
+              }
+            }
+        }
+    * Comet-Full-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
+      - Configuration: Select the site for which the integration has been done.
+    * Comet-Full-PriceBook-Export-UploadToComet-WebDav: Transfer the file to Comet remote location.
+
+### Common Jobs
+The following jobs are commonly required, regardless of the integration single or multiple job approach.
+#### 1. Delta catalog export job
+This job is responsible for exporting base and storefront delta data from Salesforce Commerce Cloud (SFCC) and delivering the XML files to the designated Comet drop location.
+
+**Comet-Delta-CatalogExport-catalog**
+* Step Job for Base Catalog
+    * Comet-Delta-CatalogExport-Base
+      - Configuration: 
+        * Enter the base catalog ID that needs to be exported. Ex: electronics-catalog
+        * Consumer: `Comet` 
+        * Export File: `Catalogs/Delta-Export/base1`
+        * MasterProductExport flag is set to true.
+    * Comet-Delta-CatalogExport-MoveTo-CometLocalDirCatBase : Moves the file into Comet local folder in SFCC.
+      - Configuration: 
+        * Select the site for which the integration has been done.
+        * Comet-Full-CatalogExport-UploadToComet-Base
+    * Comet-Delta-CatalogExport-UploadToComet-RemoteCatBase: Transfer the file to Comet remote location.
+* Step Job for Storefront Catalog
+    * Comet-Delta-CatalogExport-storefrontCatalog
+      - Configuration: 
+        * Enter the base catalog ID that needs to be exported. Ex: storefront-catalog-en
+        * Consumer: `Comet` 
+        * Export File: `Catalogs/Delta-Export/storefront`
+        * MasterProductExport flag is set to true.
+    * Comet-Delta-CatalogExport-MoveTo-CometLocalDirCatBase : Moves the file into Comet local folder in SFCC.
+      - Configuration: 
+        * Select the site for which the integration has been done.
+        * Comet-Full-CatalogExport-UploadToComet-Base
+    * Comet-Delta-CatalogExport-UploadToComet-RemoteCatBase: Transfer the file to Comet remote location.
+
+#### 2. Delta Price books export job
+This job uses an out of the box delta job of SFCC. We need to create a delta job in SFCC for a delta price book because as of now SFCC doesnt have a import & export for delta jobs.
+
+**Important Note:** while creating delta job for pricebook, please follow the following guidelines:
+
+* Name: Name should consist of “Site-ID/PriceBooks” Ex: “RefArch/PriceBooks” OR “sitegenesis/PriceBooks”.
+* Consumers: consumers always should be “Comet-Delta-Export”.
+* Select the PriceBooks which are assigned to that site.
+
+Please create a separate job for each site which you want to integrate with. Job schedule can be configured here, then press apply.
+Now, we will have to send this file to the Comet server. There are jobs in Administration > Operations > Jobs for this purpose. 
+
+*  Comet-Delta-PriceBook-Export : Step Job for pricebook export
+    * Comet-Delta-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
+      - Configuration: Select the site for which the integration has been done.
+    * Comet-Delta-PriceBook-Export-UploadToComet-WebDav: Transfer the file to Comet remote location.
+#### 3. Delta Inventory export job
+This job uses an out of the box delta job of SFCC. You can create a delta job in SFCC for a delta inventory export separately.
+
+**Important Note:** while creating delta job for Inventory, please follow the following guidelines:
+* Name: Name should consist of “Site-ID/Inventory” Ex: “RefArch/Inventory” OR SiteGenesis/Inventory.
+* Consumers: consumers always should be “Comet-Delta-Export”.
+* Select the inventory/inventories which are assigned to that site. 
+Please create a separate job for each site which you want to integrate with. Job schedule can be configured here, then press apply.
+Now, we will have to send this file to the Comet server. There are jobs in Administration > Operations > Jobs for this purpose.
+
+
+
+## Services
+Once a job has completed its execution, the `bc_comet.http.notification.webhook` service will be invoked. It will send a notification to the Comet backend, informing it about the job's completion status.
+If service fails then please write to Comet support (support@comet.rocks).
+
+## Testing
+The cartridge has been tested with Salesforce Commerce Cloud's Storefront Reference Architecture (SFRA) version 7.0 (Compatibility mode 24.3) and is compatible with versions down to 6.3 (Compatibility mode 22.7).
+
+To test the functionality of the cartridge, follow these steps:
+
+1. Run any of the Comet Jobs.
+2. Wait for the Job execution to complete.
+3. Check the Job status:
+   - If the Job ends with status "OK":
+     - Login to the remote WebDAV server using a third-party WebDAV client application.
+     - Verify that the ZIP file containing the XML has been successfully uploaded to the WebDAV server.
+   - If the Job ends with status "ERROR":
+     - Check the custom log for specific error messages.
+     - Correct the configurations as indicated by the log error messages.
+
+By following these testing instructions, you can ensure that the cartridge is functioning as expected and troubleshoot any issues that may arise during the process.
