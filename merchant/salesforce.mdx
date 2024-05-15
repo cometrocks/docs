@@ -20,12 +20,11 @@ We take pride in the exceptionally seamless integration process with Comet. Our 
 
 ## Available features
 The Comet cartridge offers a comprehensive set of features to facilitate efficient data export from Salesforce Commerce Cloud (SFCC). These features include:
-  1. Full Catalog export
-  2. Delta Catalog export
-  3. Full Inventory export
-  4. Delta Inventory export 
-  5. Full PriceBooks export
-  6. Delta PriceBooks export
+  1. Full & Delta Catalog export
+  2. Full & Delta Inventory export
+  3. Full & Delta PriceBooks export
+  4. Full & Delta Campaign & Promotion export
+  5. Headless stores (Comet Satellite Stores)
 
 ## Dataflow diagrams
     ![dataflow.jpg](/images/salesforce/dataflow.png)
@@ -89,7 +88,7 @@ These fields allow us to connect to your Salesforce app and display your content
   |----|----|
   |Site ID:| Enter site id from SFCC (ex: SiteGenesis, RefArch)|
   |App URL:| Enter app sfcc sandbox domain (ex: https://z***-001.dx.commercecloud.salesforce.com)|
-  |Base Image URL:| Enter product image URL from sfcc sandbox with protocal. 
+  |Base Image URL:| Enter product image URL from sfcc sandbox with protocol. 
   
   Please follow these steps to get the "Base Image URL" 
   - Go to any PDP page in your sandbox's storefront 
@@ -139,7 +138,7 @@ Follow these steps to connect your chosen payment processor:
   |Merchant account ID|Enter your adyen's merchant account ID. You can get the merchant ID after logging into [this link](https://ca-test.adyen.com/ca/ca/accountgroups/merchants.shtml)|
   |API Key| A Adyen integration API key can be generated from the [Adyen link](https://ca-test.adyen.com/ca/ca/config/api_credentials_new.shtml)|
   |Client Key| Generate a client key as well from "Client settings" while generating API key in above step|
-  |Select your enviournment| Select "Test" OR  "Live" based on the use case.
+  |Select your environment| Select "Test" OR  "Live" based on the use case.
 
 **Configure Adyen Webhook**
 ![Adyen-webhook-conf.png](/images/salesforce/Adyen-webhook-conf.png)
@@ -424,6 +423,17 @@ This job is responsible for exporting all the necessary data from Salesforce Com
       - Configuration: Select the site for which the integration has been done.
     * Comet-Full-PriceBook-Export-UploadToComet-WebDav: Transfer the file to Comet remote location.
 
+#### 4. Full Campaign and Promotion export job
+* Step Job for Campaign and Promotion export
+    * Comet-Full-Campaign-Promotion-Export
+      - Configuration: 
+        * Export File: `Comet/Promotions/Full-Export/comet-full-promo`
+        * OverwriteExportFile flag should be set to true.
+    * Comet-Full-CampPromo-Export-Compress-Base : Compress the generated file.
+      - Configuration: Select the site for which the integration has been done.
+    * Comet-Full-CampPromo-Export-UploadToComet-WebDav: Transfer the file to Comet remote location.
+      - Configuration: Select the site for which the integration has been done.
+
 ### Common Jobs
 The following jobs are commonly required, regardless of the integration single or multiple job approach.
 #### 1. Delta catalog export job
@@ -471,6 +481,8 @@ Now, we will have to send this file to the Comet server. There are jobs in Admin
     * Comet-Delta-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
       - Configuration: Select the site for which the integration has been done.
     * Comet-Delta-PriceBook-Export-UploadToComet-WebDav: Transfer the file to Comet remote location.
+      - Configuration: Select the site for which the integration has been done.
+
 #### 3. Delta Inventory export job
 This job uses an out of the box delta job of SFCC. You can create a delta job in SFCC for a delta inventory export separately.
 
