@@ -491,8 +491,19 @@ This job uses an out of the box delta job of SFCC. You can create a delta job in
 * Consumers: consumers always should be “Comet-Delta-Export”.
 * Select the inventory/inventories which are assigned to that site. 
 Please create a separate job for each site which you want to integrate with. Job schedule can be configured here, then press apply.
+
 Now, we will have to send this file to the Comet server. There are jobs in Administration > Operations > Jobs for this purpose.
 
+#### 4. Delta Campaign and Promotion export job
+This job uses an out of the box delta job of SFCC. You can create a delta job in SFCC for a delta Promotion export separately.
+
+**Important Note:** while creating delta job for Inventory, please follow the following guidelines:
+* Name: Name should consist of “Site-ID/Promotions Ex: “RefArch/Promotions OR SiteGenesis/Promotions.
+* Consumers: consumers always should be “Comet-Delta-Export”.
+* Select the Sites -> SiteGenesis -> Campaigns and Promotions from the checkbox. 
+Please create a separate delta job for each site which you want to integrate with. Job schedule can be configured here, then press apply.
+
+Now, we will have to send this file to the Comet server. There is a jobs in Administration > Operations > `Jobs Comet-Delta-CampPromo-Export` for this purpose. Please schedule it as per the need.
 
 
 ## Services
