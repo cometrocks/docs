@@ -63,22 +63,8 @@ To configure the integration between Salesforce Commerce Cloud (SFCC) and the Co
   |Assigned Inventory IDs|Enter all the qualified inventories belongs to the site. Can be obtained from Business Manager > Merchant Tools > Products and Catalogs > Inventory|
   |Default Locale|en_US|
 
-#### 4. Add these credentials to Business Manager
- Navigate to Merchant Tools > Site Preferences > Custom Site Preference > Comet Configurations and then paste the following values.
- ![add-credentials.png](/images/salesforce/add-credentials.png)
 
- Fields WebDAV URL, Brand Organization ID and Comet Parent Store ID will be automatically generated and prefilled. Please copy these details into SFCC's Custom preference. 
-
-  | Form Fields | meanings |
-  |----|----|
-  |WebDAV URL|This is the URL of Comet drop location where SFCC jobs will drop the exported FileSystem.|
-  |Brand Organization ID|Brand Organization ID will be created when a brand signup in Comet console.|
-  |Comet Parent Store Environment ID|Parent Store Environment ID will be created when a brand signup in Comet console.|
-  |App Client User ID|Generate Client User ID and store it in SFCC's Comet Custom preference|
-  |App Client Password|Generate Client Password and store it in SFCC's Comet Custom preference||
-
-
-#### 5. Submit API credentials
+#### 4. Submit API credentials
 These fields allow us to connect to your Salesforce app and display your content. More information about these fields can be found below:
 
 ##### a. API Config
@@ -122,7 +108,20 @@ The following input fields are required for the Salesforce Commerce Cloud API (S
   |Short Code|A unique code that identifies your Salesforce Commerce Cloud instance. It is typically a combination of alphabets and a numeric identifier. Ex: k*7**m78|
   |Client ID|The client ID is used to authenticate your API requests. You can generate a client ID in your SLAS account using [this document.](https://developer.salesforce.com/docs/commerce/commerce-api/guide/authorization-for-shopper-apis.html) Please choose "default shopper scopes" while creating the API clientInformation.| 
   |Client Secret|The client secret is a confidential key used to authenticate your API requests along with the client ID. It should be kept secure and never shared publicly. You can generate a client secret in the Account Manager under the "API Access" section.|
-  
+
+#### 4. Add these credentials to Business Manager
+ Navigate to Merchant Tools > Site Preferences > Custom Site Preference > Comet Configurations and then paste the following values.
+ ![add-credentials.png](/images/salesforce/add-credentials.png)
+
+ Fields WebDAV URL, Brand Organization ID and Comet Parent Store ID will be automatically generated and prefilled. Please copy these details into SFCC's Custom preference. 
+
+  | Form Fields | meanings |
+  |----|----|
+  |WebDAV URL|This is the URL of Comet drop location where SFCC jobs will drop the exported FileSystem.|
+  |Brand Organization ID|Brand Organization ID will be created when a brand signup in Comet console.|
+  |Comet Parent Store Environment ID|Parent Store Environment ID will be created when a brand signup in Comet console.|
+  |App Client User ID|Generate Client User ID and store it in SFCC's Comet Custom preference|
+  |App Client Password|Generate Client Password and store it in SFCC's Comet Custom preference||
 
 #### 6. Connect payment processor
 To enable secure and seamless payment transactions from comet satellite store, you need to integrate a payment processor. Please choose your favourite PSP out of given list.
@@ -323,6 +322,16 @@ This job is responsible for exporting all the necessary data from Salesforce Com
     * Comet-Full-CatalogExport-Compress-Storefront
       - Configuration: Select the site for which the integration has been done.
     * Comet-Full-CatalogExport-UploadToComet-Storefront
+* Step Job for Site Preferences
+    * Job to provide SitePreferences  which are assigned to the site.
+    * Comet-Export-Site-Preferences
+      - Configuration: Select the site for which the integration has been done.
+        * Export File: `Comet/Catalogs/SitePreferences/site-preferences`
+    * Comet-Site-Export-Filter-SitePreferences
+      - Configuration: Select the site for which the integration has been done.
+        * Export File: `Comet/Catalogs/SitePreferences/site-preferences`
+        * Include these preferences: `SitePriceBooks, SiteInventoryList`
+    * Comet-Site-Export-Upload-SitePreferences
 * Step Job for Price Books
     * Comet-Full-PriceBook-Export
       - Configuration: 
@@ -510,6 +519,28 @@ Now, we will have to send this file to the Comet server. There is a jobs in Admi
 Once a job has completed its execution, the `bc_comet.http.notification.webhook` service will be invoked. It will send a notification to the Comet backend, informing it about the job's completion status.
 If service fails then please write to Comet support (support@comet.rocks).
 
+## Tips
+* To enable PayPal Express support
+  1. Go to SFCC's BM “Administration > Global Preferences > Feature Switches“ and enable “Enable Salesforce Commerce API Hook Execution“ checkout. Save the page.
+  2. Add the scopes at SLAS: SLAS link can be found on BM at “Administration > Site Development > Salesforce Commerce API Settings”:
+		- sfcc.shopper-baskets-orders
+     - sfcc.shopper-baskets-orders.rw 
+  3. Go to Business Manager "Administration > Site Development > Open Commerce API Settings", select Shop API and Site. This section would already be there under the client ID, only update "put" method there. 
+
+        ```
+        {
+          "resource_id": "/orders/*",
+          "methods": ["get","patch", "put"],
+          "read_attributes": "(**)",
+          "write_attributes": "(**)"
+        }
+* Setup Comet Specific Promotions
+  1. Add the SCAPI scope “sfcc.shopper-context.rw“ of the SCAPI client ID from SLAS Admin UI.
+  2. Go to Administration > Global Preferences > Feature Switches and enable “Enable Shopper Context“ option. 
+  3. After above steps, add the customer group “CometRocks“ to the Campaign (in Business Manager) which need to be run on the Comet Store.
+
+
+
 ## Testing
 The cartridge has been tested with Salesforce Commerce Cloud's Storefront Reference Architecture (SFRA) version 7.0 (Compatibility mode 24.3) and is compatible with versions down to 6.3 (Compatibility mode 22.7).
 
@@ -525,4 +556,4 @@ To test the functionality of the cartridge, follow these steps:
      - Check the custom log for specific error messages.
      - Correct the configurations as indicated by the log error messages.
 
-By following these testing instructions, you can ensure that the cartridge is functioning as expected and troubleshoot any issues that may arise during the process.
+By following these testing instructions, you can ensure that the cartridge is functioning as expected and troubleshoot any issues that may arise during the process.!
