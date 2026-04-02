@@ -1,0 +1,104 @@
+---
+title: 'Apply addresses to cart'
+description: 'Apply shipping and billing addresses to cart'
+---
+
+### Apply Shipping Address
+
+The [cartApplyShippingAddress](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartApplyShippingAddress) allows you to apply a shipping address to a specific cart. Optionally, you can also use the shipping address as the billing address.
+
+After setting the shipping address, the function provides an updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) as the result.
+
+```graphql
+mutation ApplyShippingAddress($id: ID!, $input: CartApplyShippingAddressInput!) {
+  cartApplyShippingAddress(id: $id, input: $input) {
+    id
+    # Other fields of the Cart type can be queried here
+  }
+}
+```
+
+#### Input Parameters
+
+##### CartApplyShippingAddressInput
+
+- `address`: An object of type `CartAddressInput` representing the shipping address details.
+- `useAsBillingAddress`: (Optional) A boolean indicating if the shipping address should also be used as the billing address.
+
+##### CartAddressInput
+- `firstName`: First name of the recipient.
+- `lastName`: Last name of the recipient.
+- `address1`: Primary address line.
+- `address2`: (Optional) Secondary address line.
+- `postalCode`: Postal code of the address.
+- `city`: City of the address.
+- `countryCode`: Country code of the address.
+- `regionCode`: (Optional) Region or state code of the address.
+- `phone`: Phone number of the recipient.
+- `email`: Email address of the recipient.
+
+**Example**:
+
+```json
+{
+  "id": "cart_ZMe6Bb4GqqUe3BWV",
+  "input": {
+    "address": {
+      "address1": "123 Main St",
+      "postalCode": "12345",
+      "city": "Sample City",
+      "countryCode": "US",
+      "firstName": "John",
+      "lastName": "Doe",
+      "phone": "123-456-7890",
+      "email": "john.doe@example.com"
+    },
+    "useAsBillingAddress": true
+  }
+}
+```
+
+
+### Apply Billing Address
+
+The [cartApplyBillingAddress](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#cartApplyBillingAddress) lets you apply a billing address to a specific cart. Optionally, you can also use the billing address as the shipping address.
+
+After setting the billing address, the function provides an updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) as the result.
+
+```graphql
+mutation ApplyBillingAddress($id: ID!, $input: CartApplyBillingAddressInput!) {
+  cartApplyBillingAddress(id: $id, input: $input) {
+    id
+    # Other fields of the Cart type can be queried here
+  }
+}
+```
+
+#### Input Parameters
+
+##### CartApplyBillingAddressInput
+
+- `address`: An object of type `CartAddressInput` representing the billing address details.
+- `useAsShippingAddress`: (Optional) A boolean indicating if the billing address should also be used as the shipping address.
+
+
+**Example**:
+
+```json
+{
+  "id": "cart_ZMe6Bb4GqqUe3BWV",
+  "input": {
+    "address": {
+      "address1": "456 Secondary St",
+      "postalCode": "67890",
+      "city": "Another City",
+      "countryCode": "US",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "phone": "987-654-3210",
+      "email": "jane.smith@example.com"
+    },
+    "useAsShippingAddress": false
+  }
+}
+```

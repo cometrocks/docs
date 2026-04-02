@@ -1,34 +1,57 @@
-# Mintlify Starter Kit
+# Comet Rocks Docs
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+Developer documentation for [comet.rocks](https://comet.rocks) — headless ecommerce infrastructure for brands.
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+Built with [VitePress](https://vitepress.dev) and deployed to GitHub Pages.
 
-### 👩‍💻 Development
+## Local development
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
-
-```
-pnpm i -g mintlify
+```bash
+npm install
+npm run docs:dev
 ```
 
-Run the following command at the root of your documentation (where mint.json is)
+Docs will be available at `http://localhost:5173`.
+
+## Build
+
+```bash
+npm run docs:build
+```
+
+Output is in `.vitepress/dist/`.
+
+## Deployment
+
+Docs are deployed via **Vercel** (same platform as `console.comet.rocks`).
+
+To set up deployment:
+1. Connect the `cometrocks/docs` repo on [vercel.com/new](https://vercel.com/new)
+2. Set **Framework preset** to `Other`
+3. Set **Build command** to `npm run docs:build`
+4. Set **Output directory** to `.vitepress/dist`
+5. Deploy — Vercel will auto-deploy on every push to `main`
+
+No GitHub Actions workflow required.
+
+## Structure
 
 ```
-mintlify dev
+.
+├── index.md                        # Homepage
+├── quickstart.md                   # Shopify connector quickstart
+├── tutorial.md                     # Campaign storefront tutorial
+├── resources/
+│   ├── apps.md                     # App model overview
+│   ├── authentication/             # Auth & API keys
+│   ├── catalog/                    # Product catalog queries
+│   ├── checkout/                   # Cart & checkout flow
+│   └── pagination.md               # Pagination
+├── merchant/
+│   ├── shopify.md                  # Shopify setup guide
+│   ├── magento.md                  # Magento 2 setup guide
+│   ├── bigcommerce.md              # BigCommerce setup guide
+│   └── salesforce.md               # SFCC setup guide
+└── .vitepress/
+    └── config.mts                  # Site config & navigation
 ```
-
-### 😎 Publishing Changes
-
-Changes will be deployed to production automatically after pushing to the default branch.
-
-You can also preview changes using PRs, which generates a preview link of the docs.
-
-#### Troubleshooting
-
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`

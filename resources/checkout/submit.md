@@ -1,0 +1,37 @@
+---
+title: 'Submit Cart'
+description: 'When you cart is ready for submission you can request confirmation from the shopper and submit the order.'
+---
+
+## Submit Cart
+
+You can use the [orderSubmit](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Mutation#orderSubmit) function to finalize and submit your cart, which will then be converted into an order. This function takes the ID of the cart you want to submit.
+
+After submitting the cart, the function provides the resulting [Order](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Order) as the output.
+
+```graphql
+mutation SubmitCart($id: ID!) {
+  orderSubmit(id: $id) {
+    id
+    # Query the fields you need from Order type
+  }
+}
+```
+
+**Example**:
+
+```json
+{
+    "id": "cart_ZMe6Bb4GqqUe3BWV"
+}
+```
+
+#### Input Parameters for `orderSubmit`
+
+- `id`: The ID of the cart you want to submit.
+
+### Types
+
+#### Order
+
+- Contains details about the finalized order, including items, addresses, payment details, and other relevant information. You can refer to the [Order](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Order) type in the schema for a complete list of fields and their descriptions.
