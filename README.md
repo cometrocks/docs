@@ -23,14 +23,21 @@ Output is in `.vitepress/dist/`.
 
 ## Deployment
 
-Docs are deployed via **Vercel** (same platform as `console.comet.rocks`).
+Docs deploy via **Vercel** (same platform as `comet.rocks` and `console.comet.rocks`).
+Build settings are committed in [`vercel.json`](./vercel.json) (`framework: vitepress`,
+build `npm run docs:build`, output `.vitepress/dist`), so no manual config is needed.
 
-To set up deployment:
-1. Connect the `cometrocks/docs` repo on [vercel.com/new](https://vercel.com/new)
-2. Set **Framework preset** to `Other`
-3. Set **Build command** to `npm run docs:build`
-4. Set **Output directory** to `.vitepress/dist`
-5. Deploy — Vercel will auto-deploy on every push to `main`
+### First-time setup / cutover from Mintlify
+
+`docs.comet.rocks` was previously hosted on **Mintlify**. To finish moving it here:
+
+1. **Import the repo** on [vercel.com/new](https://vercel.com/new) → select `cometrocks/docs`.
+   Vercel reads `vercel.json` automatically; just click Deploy. It auto-deploys on every push to `main`.
+2. **Disconnect Mintlify**: remove the Mintlify GitHub app from `cometrocks/docs` and cancel the
+   Mintlify subscription. (The old "Mintlify Deployment" check fails now that `mint.json` is gone —
+   that's expected; the migration removed it.)
+3. **Move the domain**: remove `docs.comet.rocks` from Mintlify, add it as a domain on this Vercel
+   project, and update the DNS record to point at Vercel.
 
 No GitHub Actions workflow required.
 
