@@ -178,7 +178,9 @@ To set up a webhook on the Adyen portal, follow these steps:
 
 8. Adyen will now send notifications to the specified URL whenever the selected events occur.
 
-> **Note:** Make sure your Salesforce Commerce Cloud integration is set up to handle the incoming webhook notifications from Adyen. You may need to configure the necessary endpoints and logic to process the received data.
+::: info Note
+Make sure your Salesforce Commerce Cloud integration is set up to handle the incoming webhook notifications from Adyen. You may need to configure the necessary endpoints and logic to process the received data.
+:::
 
 
 
@@ -336,14 +338,16 @@ This job is responsible for exporting all the necessary data from Salesforce Com
         * Export File: `Comet/Catalogs/PriceBooks/Full-Export/comet-full-price-book`
         * OverwriteExportFile flag should be set to true.
         * DataUnits: Enter the pricebook Ids which required to be exported. Ex:
-        ```{
+        ```json
+        {
           "export_data_units_configuration": {
-              "price_books": {
-                  "usd-sale-prices": true,
-                  "usd-list-prices": true
-              }
+            "price_books": {
+              "usd-sale-prices": true,
+              "usd-list-prices": true
             }
+          }
         }
+        ```
     * Comet-Full-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
       - Configuration: Select the site for which the integration has been done.
     * Comet-Full-PriceBook-Export-UploadToComet-WebDav : Transfer the file to Comet remote location.
@@ -358,13 +362,15 @@ This job is responsible for exporting all the necessary data from Salesforce Com
         * Export File: `Comet/Catalogs/Inventory/Full-Export/comet-full-inventory`
         * OverwriteExportFile flag should be set to true.
         * DataUnits: Enter the pricebook Ids which required to be exported. Ex:
-        ```{
+        ```json
+        {
           "export_data_units_configuration": {
-              "price_books": {
-                "inventory": true
-              }
+            "price_books": {
+              "inventory": true
             }
+          }
         }
+        ```
     * Comet-Full-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
       - Configuration: Select the site for which the integration has been done.
     * Comet-Full-PriceBook-Export-UploadToComet-WebDav: Transfer the file to Comet remote location.
@@ -396,14 +402,16 @@ This job is responsible for exporting all the necessary data from Salesforce Com
         * Export File: `Comet/Catalogs/PriceBooks/Full-Export/comet-full-price-book`
         * OverwriteExportFile flag should be set to true.
         * DataUnits: Enter the pricebook Ids which required to be exported. Ex:
-        ```{
+        ```json
+        {
           "export_data_units_configuration": {
-              "price_books": {
-                  "usd-sale-prices": true,
-                  "usd-list-prices": true
-              }
+            "price_books": {
+              "usd-sale-prices": true,
+              "usd-list-prices": true
             }
+          }
         }
+        ```
     * Comet-Full-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
       - Configuration: Select the site for which the integration has been done.
     * Comet-Full-PriceBook-Export-UploadToComet-WebDav : Transfer the file to Comet remote location.
@@ -419,13 +427,15 @@ This job is responsible for exporting all the necessary data from Salesforce Com
         * Export File: `Comet/Catalogs/Inventory/Full-Export/comet-full-inventory`
         * OverwriteExportFile flag should be set to true.
         * DataUnits: Enter the pricebook Ids which required to be exported. Ex:
-        ```{
+        ```json
+        {
           "export_data_units_configuration": {
-              "price_books": {
-                "inventory": true
-              }
+            "price_books": {
+              "inventory": true
             }
+          }
         }
+        ```
     * Comet-Full-PriceBook-Export-MoveTo-CometLocalDir : Moves the file into Comet local folder in SFCC.
       - Configuration: Select the site for which the integration has been done.
     * Comet-Full-PriceBook-Export-UploadToComet-WebDav: Transfer the file to Comet remote location.

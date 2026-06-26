@@ -1,15 +1,15 @@
 ---
-title: "Tutorial: Launch your first campaign storefront"
-description: Build a complete campaign storefront connected to your Shopify catalog — from API setup to live storefront — in 10 minutes.
+title: "Tutorial: Launch your first Checkout Store"
+description: Build a complete Checkout Store connected to your Shopify catalog — from API setup to live storefront — in 10 minutes.
 ---
 
-# Tutorial: Launch your first campaign storefront
+# Tutorial: Launch your first Checkout Store
 
-In this tutorial you'll build a working campaign storefront backed by your Shopify catalog. We'll use Comet's GraphQL API to:
+In this tutorial you'll build a working Checkout Store (also called a micro-store) backed by your Shopify catalog. We'll use Comet's GraphQL API to:
 
 1. Fetch products for a campaign collection
 2. Create a checkout flow
-3. Launch it as a satellite storefront via the Comet console
+3. Launch it as a Checkout Store via the Comet console
 
 **Prerequisites:** Complete the [Quick Start](/quickstart) first — you need a connected Shopify store and a working API key.
 
@@ -17,7 +17,7 @@ In this tutorial you'll build a working campaign storefront backed by your Shopi
 
 ## Overview
 
-A **campaign storefront** in Comet is a standalone, URL-addressable store page designed for a specific campaign (product launch, seasonal sale, social commerce drop). It:
+A **Checkout Store** in Comet is a standalone, URL-addressable store page designed for a specific campaign (product launch, seasonal sale, social commerce drop). It:
 
 - Pulls products from your existing Shopify catalog
 - Has its own URL (e.g. `your-brand.satellites.comet.rocks/summer-launch`)
@@ -36,28 +36,28 @@ First, identify the products you want to feature. Use tags or a collection ID fr
 query GetCampaignProducts($organizationId: ID!, $collectionId: String!) {
   productFind(
     organizationId: $organizationId
-    filter: { externalCollectionId: $collectionId }
+    filters: { externalCollectionId: $collectionId }
     pagination: { first: 20 }
   ) {
-    edges {
-      node {
+    nodes {
+      id
+      name
+      description
+      sku
+      externalId
+      type
+      variantOf {
         id
         name
-        description
-        sku
-        externalId
-        type
-        variantOf {
-          id
-          name
-        }
       }
     }
   }
 }
 ```
 
-> **Tip:** `externalId` is the Shopify product GID. Use this to cross-reference with Shopify Admin.
+::: tip
+`externalId` is the Shopify product GID. Use this to cross-reference with Shopify Admin.
+:::
 
 ---
 
@@ -198,7 +198,7 @@ On success, Comet places the order in Shopify. The `externalOrderId` is the Shop
 
 ---
 
-## Part 3: Launch on a satellite storefront
+## Part 3: Launch your Checkout Store
 
 Now publish this campaign as a live URL using the Comet console.
 
@@ -219,7 +219,7 @@ Your storefront is now live. Share the URL in ads, email, or social posts.
 
 - **Custom domain:** Point a subdomain (e.g. `launch.yourbrand.com`) to `satellites.comet.rocks` via CNAME
 - **Styling:** The satellite storefront supports custom CSS and logo upload from the console
-- **Discount codes:** Use [cartApplyCoupons](/resources/checkout/cart_disc) to support promo codes
+- **Discount codes:** Use [`cartApplyCoupons`](/resources/checkout/cart_disc) to support promo codes
 - **Analytics:** Each storefront tracks conversion events — view them in the console under **Analytics**
 - **Multi-merchant campaigns:** Add products from multiple connected stores to the same cart
 

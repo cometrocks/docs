@@ -1,5 +1,5 @@
 ---
-title: '📃 Pagination'
+title: 'Pagination'
 description: 'Efficiently navigate and retrieve data in manageable chunks using Comet API’s pagination mechanism.'
 ---
 When dealing with extensive datasets, it's essential to retrieve data in manageable chunks or "pages". This mechanism, known as pagination, ensures efficient data retrieval and improved performance.

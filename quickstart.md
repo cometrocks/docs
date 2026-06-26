@@ -22,9 +22,13 @@ An **App** in Comet is the entity that holds your API credentials and connects t
 2. From the dashboard, click **Apps** in the left sidebar
 3. Click **Create New App**
 4. Give your app a name (e.g. `my-shopify-store`) and click **Create**
-5. Copy your **API Key** — you'll need it in the next step
+5. Copy your **API Key** — it is shown only once, so save it now. You'll need it in the next step.
 
-> **Keep your API key secret.** Never expose it in client-side code or public repositories.
+::: warning
+Keep your API key secret. Never expose it in client-side code or public repositories.
+:::
+
+You can also mint a key programmatically with the `appClientGenerate` mutation.
 
 ---
 
@@ -49,16 +53,18 @@ Comet will perform an initial catalog sync. This takes 30–60 seconds for small
 
 ## Step 3: Make your first API call
 
-The Comet GraphQL endpoint is:
+Comet exposes a single GraphQL endpoint (Apollo Federation) — there is no REST API. Your endpoint is shown in the console and is:
 
 ```
-https://apollo-runtime-router-dmn3-production.up.railway.app/
+https://api.comet.rocks/graphql
 ```
+
+Authenticate with your API key via the `x-api-key` header. (JWTs are also supported via `Authorization: Bearer <token>`.)
 
 ### Test authentication
 
 ```bash
-curl -X POST https://apollo-runtime-router-dmn3-production.up.railway.app/ \
+curl -X POST https://api.comet.rocks/graphql \
   -H "Content-Type: application/json" \
   -H "x-api-key: YOUR_API_KEY" \
   -d '{"query": "{ __typename }"}'
@@ -79,14 +85,12 @@ query GetProducts($organizationId: ID!) {
     organizationId: $organizationId
     pagination: { first: 10 }
   ) {
-    edges {
-      node {
-        id
-        name
-        sku
-        description
-        type
-      }
+    nodes {
+      id
+      name
+      sku
+      description
+      type
     }
     pageInfo {
       hasNextPage
@@ -97,16 +101,18 @@ query GetProducts($organizationId: ID!) {
 ```
 
 ```bash
-curl -X POST https://apollo-runtime-router-dmn3-production.up.railway.app/ \
+curl -X POST https://api.comet.rocks/graphql \
   -H "Content-Type: application/json" \
   -H "x-api-key: YOUR_API_KEY" \
   -d '{
-    "query": "query GetProducts($organizationId: ID!) { productFind(organizationId: $organizationId pagination: { first: 10 }) { edges { node { id name sku } } } }",
+    "query": "query GetProducts($organizationId: ID!) { productFind(organizationId: $organizationId pagination: { first: 10 }) { nodes { id name sku } } }",
     "variables": { "organizationId": "YOUR_ORG_ID" }
   }'
 ```
 
-> Find your `organizationId` in the Comet console under **Settings → Organization**.
+::: tip
+Find your `organizationId` in the Comet console under **Settings → Organization**.
+:::
 
 ---
 
@@ -149,7 +155,7 @@ mutation AddProduct($cartId: ID!, $productId: ID!) {
 
 ## Next steps
 
-- [Tutorial: Launch your first campaign storefront](/tutorial) — build a full end-to-end flow
+- [Tutorial: Launch your first Checkout Store](/tutorial) — build a full end-to-end flow
 - [Catalog API reference](/resources/catalog/prod_search) — full product search, filtering, and pagination
 - [Checkout flow](/resources/checkout/carts) — cart → addresses → shipping → payment → submit
-- [Apollo Studio schema explorer](https://studio.apollographql.com/public/CometAPI/variant/main) — interactive schema browser
+- [API Explorer](https://console.comet.rocks) — browse the live schema in the dashboard

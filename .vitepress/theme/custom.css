@@ -1,0 +1,81 @@
+/**
+ * Comet Rocks — VitePress brand theme
+ * Brand tokens mirrored from frontend-core apps/website comet.css:
+ *   pink #F05596 · deep pink #C42A6E · cyan #31BCFF
+ *   signature gradient: linear-gradient(100deg, #F05596 0%, #558DF9 52%, #31BCFF 100%)
+ *   display: Bricolage Grotesque · mono: JetBrains Mono
+ */
+
+:root {
+  /* Brand palette → VitePress brand slots */
+  --comet-pink: #f05596;
+  --comet-pink-deep: #c42a6e;
+  --comet-blue: #558df9;
+  --comet-cyan: #31bcff;
+  --comet-signature: linear-gradient(100deg, #f05596 0%, #558df9 52%, #31bcff 100%);
+
+  --vp-c-brand-1: var(--comet-pink-deep); /* links / active text — AA on light */
+  --vp-c-brand-2: var(--comet-pink);      /* hover */
+  --vp-c-brand-3: var(--comet-pink);      /* solid button background */
+  --vp-c-brand-soft: rgba(240, 85, 150, 0.14);
+
+  /* Typography */
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+.dark {
+  --vp-c-brand-1: #f472a9; /* lighter pink for contrast on dark */
+  --vp-c-brand-2: var(--comet-pink);
+  --vp-c-brand-3: var(--comet-pink);
+  --vp-c-brand-soft: rgba(240, 85, 150, 0.18);
+
+  /* Match the site's dark palette */
+  --vp-c-bg: #080b14;
+  --vp-c-bg-alt: #0f1422;
+  --vp-c-bg-soft: #161c2c;
+}
+
+/* Hero: signature gradient on the product name + brand CTA */
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: var(--comet-signature);
+
+  --vp-home-hero-image-background-image: var(--comet-signature);
+  --vp-home-hero-image-filter: blur(56px);
+
+  --vp-button-brand-bg: var(--comet-pink);
+  --vp-button-brand-hover-bg: #f470a9;
+  --vp-button-brand-active-bg: var(--comet-pink-deep);
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-hover-border: transparent;
+}
+
+/* Display font on headings + hero text */
+.VPHero .name,
+.VPHero .text,
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.VPFeature .title {
+  font-family: 'Bricolage Grotesque', 'SF Pro Display', system-ui, sans-serif;
+  letter-spacing: -0.015em;
+}
+
+/* A touch of brand on the top nav + active sidebar item */
+.VPNavBar .VPNavBarTitle .text {
+  background: var(--comet-signature);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-weight: 700;
+}
+
+.VPSidebarItem.is-active > .item .text {
+  font-weight: 600;
+}
+
+/* Inline code + fences in brand mono */
+.vp-doc code {
+  font-family: var(--vp-font-family-mono);
+}
