@@ -33,7 +33,7 @@ export default defineConfig({
   ],
 
   themeConfig: {
-    logo: '/logo/dark.svg',
+    logo: { light: '/logo/light.svg', dark: '/logo/dark.svg', alt: 'Comet Rocks' },
     siteTitle: 'Comet Rocks Docs',
 
     nav: [

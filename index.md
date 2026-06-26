@@ -5,9 +5,6 @@ hero:
   name: "Comet Rocks"
   text: "Headless Ecommerce Infrastructure"
   tagline: Launch Checkout Stores, connect any shop system, and deliver unified checkout — all through a single GraphQL API.
-  image:
-    src: /logo/dark.svg
-    alt: Comet Rocks
   actions:
     - theme: brand
       text: Quick Start
@@ -20,16 +17,16 @@ hero:
       link: https://console.comet.rocks
 
 features:
-  - icon: 🛍️
+  - icon: { src: /icons/catalog.svg, width: 28, height: 28 }
     title: Unified Catalog API
     details: Query products, variants, and inventory across Shopify, Magento, and Salesforce Commerce Cloud through a single GraphQL schema.
-  - icon: 🛒
+  - icon: { src: /icons/checkout.svg, width: 28, height: 28 }
     title: Federated Checkout
     details: Multi-merchant carts, real-time shipping rates, discount codes, Stripe payment intents, and order submission — all in one API.
-  - icon: 🚀
+  - icon: { src: /icons/storefront.svg, width: 28, height: 28 }
     title: Checkout Stores
     details: Launch campaign storefronts for product drops, seasonal moments, and social commerce in minutes. Powered by Comet's satellite storefront infrastructure.
-  - icon: 🔌
+  - icon: { src: /icons/connect.svg, width: 28, height: 28 }
     title: Any Shop System
     details: Connect Shopify, Magento 2, or SFCC. Comet normalizes catalog, inventory, and checkout into a consistent API contract. (BigCommerce is on the roadmap.)
 ---

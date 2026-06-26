@@ -134,4 +134,4 @@ Finally, click on **Submit credentials** and wait for a confirmation message.
 
 ![#20\_Shopify\_Step 4\_6. Click submit your credentials to apply your changes.png](/images/shopify/20_Shopify_Step_4_6._Click_submit_your_credentials_to_apply_your_changes.png)
 
-🎉 Congratulations! You have successfully connected your Shopify store to Comet Rocks. Time to import your products catalog and create your first satellite stores.
+Congratulations! You have successfully connected your Shopify store to Comet Rocks. Time to import your products catalog and create your first satellite stores.
