@@ -1,0 +1,39 @@
+# Comet Rocks Developer Docs
+
+> Comet Rocks is headless ecommerce infrastructure. It federates catalog, cart, and checkout across Shopify, Magento, and Salesforce Commerce Cloud into a single Apollo Federation GraphQL API, and powers Checkout Stores (campaign storefronts, also called micro-stores). The API is GraphQL only — there is no REST API. Authentication is via an `x-api-key` header or a JWT bearer token. Pagination uses Relay-style cursor connections.
+
+## Getting Started
+
+- [Introduction](https://docs.comet.rocks/): What Comet is, the platform, and the GraphQL API.
+- [Quick Start](https://docs.comet.rocks/quickstart): Connect a Shopify store and make your first API call.
+- [Tutorial](https://docs.comet.rocks/tutorial): Launch a full Checkout Store end-to-end.
+
+## Publisher API
+
+- [Apps](https://docs.comet.rocks/resources/apps): The App model and how API keys are minted (dashboard or `appClientGenerate`).
+- [Authentication](https://docs.comet.rocks/resources/authentication/authentication): API keys (`x-api-key`) and JWT tokens (`Authorization: Bearer`, RSA-signed, 12h).
+- [Search Products](https://docs.comet.rocks/resources/catalog/prod_search): The `productFind` query with filters and pagination.
+- [Product by ID](https://docs.comet.rocks/resources/catalog/by_id): Fetch a single product by id.
+- [Product by SKU](https://docs.comet.rocks/resources/catalog/sku): Fetch a product by SKU.
+- [Carts & Bags](https://docs.comet.rocks/resources/checkout/carts): Cart model overview.
+- [Create Cart](https://docs.comet.rocks/resources/checkout/cart_create): Start a cart.
+- [Add / Remove Products](https://docs.comet.rocks/resources/checkout/cart_add): Mutate cart line items.
+- [Apply Discount](https://docs.comet.rocks/resources/checkout/cart_disc): Apply discount codes.
+- [Apply Addresses](https://docs.comet.rocks/resources/checkout/address): Set shipping/billing addresses.
+- [Shipping Methods](https://docs.comet.rocks/resources/checkout/shipping): Retrieve and select shipping.
+- [Payment Intent](https://docs.comet.rocks/resources/checkout/payment): Create a Stripe payment intent.
+- [Submit Cart](https://docs.comet.rocks/resources/checkout/submit): Submit the cart and place the order.
+- [Error Handling](https://docs.comet.rocks/resources/checkout/errors): Checkout error model.
+- [Pagination](https://docs.comet.rocks/resources/pagination): Relay cursor connections (`first/after/last/before`, `PageInfo`, `nodes`).
+
+## Merchant Guides
+
+- [Shopify](https://docs.comet.rocks/merchant/shopify): Connect a Shopify store.
+- [Magento 2](https://docs.comet.rocks/merchant/magento): Connect a Magento 2 store.
+- [Salesforce Commerce Cloud](https://docs.comet.rocks/merchant/salesforce): Connect an SFCC store.
+- [BigCommerce (planned)](https://docs.comet.rocks/merchant/bigcommerce): Roadmap — not yet available.
+
+## Related
+
+- [Comet Help Center](https://comet.rocks/help): Operator/no-code guides, billing, and store management.
+- [Dashboard](https://console.comet.rocks): Create apps, mint API keys, and explore the schema.

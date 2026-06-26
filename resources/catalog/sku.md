@@ -1,5 +1,5 @@
 ---
-title: '👕  Retrieve a Product by SKU'
+title: 'Retrieve a Product by SKU'
 description: 'Fetch detailed information about a specific product using its SKU in the Comet API.'
 ---
 

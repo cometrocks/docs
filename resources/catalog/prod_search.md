@@ -1,5 +1,5 @@
 ---
-title: '🔎  Search for Products'
+title: 'Search for Products'
 description: 'Discover products in the Comet API using a variety of filters to narrow down your search.'
 ---
 
@@ -56,7 +56,7 @@ To retrieve products in manageable chunks, use the pagination parameters:
 - **last**: The number of records to retrieve before the specified cursor.
 - **before**: The cursor to start retrieving records before.
 
-If pagination is not provided, the default page size is 10 records. For more details on pagination, refer to the [Pagination Documentation](#).
+If pagination is not provided, the default page size is 10 records. For more details on pagination, refer to the [Pagination Documentation](/resources/pagination).
 
 ### Product Results
 

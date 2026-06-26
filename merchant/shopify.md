@@ -110,9 +110,9 @@ First, submit the API credentials of your newly created app.
    `Admin API access token`, `Storefront API access token`, `API key`, and
    `API secret key`![Untitled](/images/shopify/Untitled_12.png)![#18\_Shopify\_Step 4\_2. Move to Shopify store admin.png](/images/shopify/18_Shopify_Step_4_2._Move_to_Shopify_store_admin.png)
 
-   * ⚠️ **Heads up:** The `Admin API access token` is sensitive, and it will
-     only be shown once. Make sure you're ready to paste it into Comet before
-     you reveal it.
+::: warning Heads up
+The `Admin API access token` is sensitive, and it will only be shown once. Make sure you're ready to paste it into Comet before you reveal it.
+:::
 
 ### 3.2. API config
 
