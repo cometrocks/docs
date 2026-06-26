@@ -19,7 +19,8 @@
   --vp-c-brand-3: var(--comet-pink);      /* solid button background */
   --vp-c-brand-soft: rgba(240, 85, 150, 0.14);
 
-  /* Typography */
+  /* Typography — body uses the marketing site's system stack; mono is JetBrains Mono */
+  --vp-font-family-base: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, system-ui, sans-serif;
   --vp-font-family-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 }
 
