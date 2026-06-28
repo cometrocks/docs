@@ -525,7 +525,7 @@ Now, we will have to send this file to the Comet server. There is a jobs in Admi
 
 ## Services
 Once a job has completed its execution, the `bc_comet.http.notification.webhook` service will be invoked. It will send a notification to the Comet backend, informing it about the job's completion status.
-If service fails then please write to Comet support (support@comet.rocks).
+If service fails then please [contact Comet support](/support) (or email support@comet.rocks).
 
 ## Tips
 * To enable PayPal Express support

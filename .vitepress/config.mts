@@ -40,6 +40,7 @@ export default defineConfig({
       { text: 'Publisher Docs', link: '/' },
       { text: 'Merchant Guides', link: '/merchant/shopify' },
       { text: 'Help Center', link: 'https://comet.rocks/help', target: '_blank' },
+      { text: 'Support', link: '/support' },
       { text: 'Dashboard', link: 'https://console.comet.rocks', target: '_blank' },
     ],
 
@@ -51,6 +52,7 @@ export default defineConfig({
             { text: 'Introduction', link: '/' },
             { text: 'Quick Start', link: '/quickstart' },
             { text: 'Tutorial: First Checkout Store', link: '/tutorial' },
+            { text: 'Contact Support', link: '/support' },
           ],
         },
         {
@@ -94,6 +96,7 @@ export default defineConfig({
             { text: 'Magento 2', link: '/merchant/magento' },
             { text: 'Salesforce Commerce Cloud', link: '/merchant/salesforce' },
             { text: 'BigCommerce (planned)', link: '/merchant/bigcommerce' },
+            { text: 'Contact Support', link: '/support' },
           ],
         },
       ],
@@ -112,7 +115,7 @@ export default defineConfig({
 
     footer: {
       message:
-        'Comet Rocks — Headless Ecommerce Infrastructure · <a href="https://comet.rocks">comet.rocks</a> · <a href="https://comet.rocks/help">Help Center</a>',
+        'Comet Rocks — Headless Ecommerce Infrastructure · <a href="https://comet.rocks">comet.rocks</a> · <a href="https://comet.rocks/help">Help Center</a> · <a href="/support">Support</a>',
       copyright: 'Copyright © Comet Rocks',
     },
 
