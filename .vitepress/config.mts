@@ -28,7 +28,7 @@ export default defineConfig({
     ],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'Comet Rocks Developer Docs' }],
-    ['meta', { property: 'og:description', content: 'Headless ecommerce infrastructure — GraphQL API reference, guides, and merchant integrations.' }],
+    ['meta', { property: 'og:description', content: 'Headless ecommerce infrastructure — GraphQL and scoped creator-publishing API guides.' }],
     ['meta', { property: 'og:url', content: HOSTNAME }],
   ],
 
@@ -85,6 +85,14 @@ export default defineConfig({
               ],
             },
             { text: 'Pagination', link: '/resources/pagination' },
+          ],
+        },
+        {
+          text: 'Creator Publishing',
+          items: [
+            { text: 'Overview', link: '/resources/creator-publishing/overview' },
+            { text: 'API Reference', link: '/resources/creator-publishing/api' },
+            { text: 'Klyfton Integration', link: '/resources/creator-publishing/klyfton' },
           ],
         },
       ],

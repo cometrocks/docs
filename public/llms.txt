@@ -1,6 +1,6 @@
 # Comet Rocks Developer Docs
 
-> Comet Rocks is headless ecommerce infrastructure. It federates catalog, cart, and checkout across Shopify, Magento, and Salesforce Commerce Cloud into a single Apollo Federation GraphQL API, and powers Checkout Stores (campaign storefronts, also called micro-stores). The API is GraphQL only — there is no REST API. Authentication is via an `x-api-key` header or a JWT bearer token. Pagination uses Relay-style cursor connections.
+> Comet Rocks is headless ecommerce infrastructure. It federates catalog, cart, and checkout across Shopify, Magento, and Salesforce Commerce Cloud into an Apollo Federation GraphQL API, and powers Checkout Stores (campaign storefronts, also called micro-stores). A separate, scoped REST creator-publishing API exists for approved server integrations. It is default-disabled; public pages require separately provisioned hosts/routes and current creator activation. GraphQL authentication uses an `x-api-key` header or JWT bearer token. Pagination uses Relay-style cursor connections.
 
 ## Getting Started
 
@@ -25,6 +25,12 @@
 - [Submit Cart](https://docs.comet.rocks/resources/checkout/submit): Submit the cart and place the order.
 - [Error Handling](https://docs.comet.rocks/resources/checkout/errors): Checkout error model.
 - [Pagination](https://docs.comet.rocks/resources/pagination): Relay cursor connections (`first/after/last/before`, `PageInfo`, `nodes`).
+
+## Creator Publishing
+
+- [Overview](https://docs.comet.rocks/resources/creator-publishing/overview): Default-disabled, server-to-server REST page editing and publishing; v1 Header/Links remains compatible and v2 exposes the richer canonical palette through capability discovery.
+- [API Reference](https://docs.comet.rocks/resources/creator-publishing/api): REST route and schema reference. Download the [OpenAPI document](https://docs.comet.rocks/openapi/creator-publishing.json).
+- [Klyfton Integration](https://docs.comet.rocks/resources/creator-publishing/klyfton): Klyfton's Rust backend BFF boundary and workspace integration.
 
 ## Merchant Guides
 

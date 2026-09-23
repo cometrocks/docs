@@ -51,6 +51,7 @@ No GitHub Actions workflow required.
 ├── resources/
 │   ├── apps.md                     # App model overview
 │   ├── authentication/             # Auth & API keys
+│   ├── creator-publishing/         # Scoped creator-publishing REST integration
 │   ├── catalog/                    # Product catalog queries
 │   ├── checkout/                   # Cart & checkout flow
 │   └── pagination.md               # Pagination

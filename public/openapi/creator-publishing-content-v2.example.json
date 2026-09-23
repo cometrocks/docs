@@ -1,0 +1,207 @@
+{
+  "schemaVersion": 2,
+  "settings": {
+    "defaultLocale": "en",
+    "colors": {
+      "selectedPalette": "creator",
+      "palettes": [
+        {
+          "name": "creator",
+          "brandColor": "#7046e8",
+          "textPrimaryColor": "#191526",
+          "textSecondaryColor": "#645d75",
+          "backgroundPrimaryColor": "#faf8ff",
+          "backgroundAccentColor": "#eee8ff",
+          "buttonTextColor": "#ffffff",
+          "buttonBackgroundColor": "#7046e8"
+        }
+      ]
+    },
+    "typography": {
+      "fontFamily": "system-ui, sans-serif",
+      "fontWeight": 400
+    },
+    "buttons": {
+      "radius": 16,
+      "type": "primary",
+      "borderWidth": 1
+    },
+    "tokens": {
+      "tokensVersion": 1,
+      "spacing": {
+        "sectionGapPx": 16
+      },
+      "radiusScale": {
+        "lgPx": 16
+      }
+    }
+  },
+  "sections": [
+    {
+      "id": "profile",
+      "type": "creator-hero",
+      "showSection": true,
+      "config": {
+        "presentation": "profile",
+        "media": {
+          "type": "image",
+          "url": "https://images.example.com/hero.jpg",
+          "alt": "Creator workspace"
+        },
+        "avatar": {
+          "type": "image",
+          "url": "https://images.example.com/avatar.jpg",
+          "alt": "Creator"
+        },
+        "handle": "alex",
+        "displayName": "Alex Morgan",
+        "quoteLocales": {
+          "en": "Ideas for a creative life."
+        },
+        "socialLinks": [
+          {
+            "id": "instagram",
+            "label": "Instagram",
+            "url": "https://instagram.com/example"
+          }
+        ],
+        "partnerships": [
+          "Creative Studio"
+        ]
+      }
+    },
+    {
+      "id": "links",
+      "type": "links",
+      "showSection": true,
+      "heading": "Explore",
+      "appearance": "solid",
+      "theme": {
+        "mode": "custom",
+        "linkColor": "#7046e8"
+      },
+      "links": [
+        {
+          "id": "guide",
+          "label": "My creative guide",
+          "sub": "Start here",
+          "url": "example.com/guide",
+          "icon": "book",
+          "iconColor": "buttonTextColor",
+          "featured": true
+        }
+      ]
+    },
+    {
+      "id": "story",
+      "type": "content",
+      "showSection": true,
+      "config": {
+        "content": {
+          "en": {
+            "blocks": [
+              {
+                "id": "story-p",
+                "type": "paragraph",
+                "data": {
+                  "text": "Make space for <strong>creative work</strong> and <mark style=\"background-color: #ffee88; color: #000000;\">new ideas</mark>."
+                },
+                "tunes": {
+                  "align": "left"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "gallery",
+      "type": "media",
+      "showSection": true,
+      "layout": "grid",
+      "singleAspect": "square",
+      "slides": [
+        {
+          "id": "work",
+          "media": {
+            "type": "image",
+            "url": "https://images.example.com/work.jpg",
+            "alt": "Recent work"
+          },
+          "captionLocales": {
+            "en": "Recent work"
+          }
+        }
+      ]
+    },
+    {
+      "id": "faq",
+      "type": "accordions",
+      "showSection": true,
+      "expandFirst": true,
+      "items": [
+        {
+          "id": "contact",
+          "title": {
+            "en": "How can we collaborate?"
+          },
+          "text": {
+            "en": {
+              "blocks": [
+                {
+                  "id": "contact-p",
+                  "type": "paragraph",
+                  "data": {
+                    "text": "Visit my <a href=\"https://example.com/contact\">contact page</a>."
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "reviews",
+      "type": "testimonials",
+      "showSection": true,
+      "config": {
+        "layout": "grid",
+        "testimonials": [
+          {
+            "id": "review-one",
+            "rating": "5",
+            "title": {
+              "en": "Thoughtful and practical"
+            },
+            "description": {
+              "en": "A useful guide for my next project."
+            },
+            "customerName": "Jordan",
+            "customerInfo": "Reader"
+          }
+        ]
+      }
+    },
+    {
+      "id": "announcement",
+      "type": "banner",
+      "showSection": true,
+      "textAnimation": "none",
+      "text": {
+        "en": {
+          "blocks": [
+            {
+              "id": "announcement-p",
+              "type": "paragraph",
+              "data": {
+                "text": "New guide available now"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

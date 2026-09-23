@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Comet Rocks"
   text: "Headless Ecommerce Infrastructure"
-  tagline: Launch Checkout Stores, connect any shop system, and deliver unified checkout — all through a single GraphQL API.
+  tagline: Launch Checkout Stores, connect any shop system, and deliver unified checkout through GraphQL.
   actions:
     - theme: brand
       text: Quick Start
@@ -42,7 +42,7 @@ Launch campaign-specific storefronts (also called micro-stores) for product laun
 
 ### The API
 
-All of Comet's infrastructure is exposed through an **Apollo Federation** GraphQL API:
+Comet's catalog, cart, and checkout interface is an **Apollo Federation** GraphQL API:
 
 ```
 Brand Touchpoints → Apollo Router → Subgraphs → Shop System Connectors
@@ -52,7 +52,7 @@ Brand Touchpoints → Apollo Router → Subgraphs → Shop System Connectors
 - **Auth:** API key (`x-api-key` header) or JWT bearer token (`Authorization: Bearer …`)
 - **Schema explorer:** the **API Explorer** in the [dashboard](https://console.comet.rocks)
 
-It is GraphQL only — there is no REST API.
+For approved creator integrations, Comet also provides a separate, scoped REST creator-publishing interface. It is default-disabled; its separately authorized public-reader capability requires operator-provisioned hosts/routes and current creator activation. See [Creator Publishing](/resources/creator-publishing/overview) for the current boundary.
 
 ### Next steps
 
@@ -60,6 +60,7 @@ It is GraphQL only — there is no REST API.
 - [Tutorial](/tutorial) — Launch a full Checkout Store end-to-end
 - [Apps](/resources/apps) — Understand the App model before building
 - [Authentication](/resources/authentication/authentication) — API keys and JWT tokens
+- [Creator Publishing](/resources/creator-publishing/overview) — Server-to-server page editing and publishing
 
 ::: tip Looking for the operator help center?
 These are the **developer** docs. For the no-code builder, billing, and store-management guides, see the [Comet Help Center](https://comet.rocks/help).
