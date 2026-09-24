@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Comet Creator Publishing API",
-    "version": "2026-09-23",
-    "description": "Server-to-server partner page authoring API, alongside the existing Publisher GraphQL API. Implementation defaults disabled; obtain the approved environment origin, IAM APP_CLIENT credential and scoped grant from Comet. Do not send Authorization headers or browser credentials. This spec covers authoring and event polling; public reader/operator endpoints and signup delivery are outside its scope. Content schema versions 1 and 2 are supported; the outer response envelope remains schemaVersion 1."
+    "version": "2026-09-24",
+    "description": "Server-to-server partner page authoring and creator media API, alongside the existing Publisher GraphQL API. Implementation defaults disabled; obtain the approved environment origin, IAM APP_CLIENT credential and scoped grant from Comet. Do not send Authorization headers or browser credentials. This spec covers authoring, media upload/library, deletion and event polling; public reader/operator endpoints and signup delivery are outside its scope. Content schema versions 1 and 2 are supported; the outer response envelope remains schemaVersion 1."
   },
   "servers": [
     {
@@ -473,6 +473,86 @@
             }
           }
         }
+      },
+      "delete": {
+        "operationId": "deleteCreatorPage",
+        "tags": [
+          "Creator publishing"
+        ],
+        "summary": "Delete a page using exact reviewed versions",
+        "description": "Requires page:edit and, when expectedActiveRevision is nonnull, page:publish. Comet compares all three expected values with current state, so a false null cannot bypass publish authority. Retains a tombstone/history, clears the active publication, increments publicationVersion and emits page.deleted. Deleted pages disappear from author/public reads and page lists. Uploaded media and workspace are retained; no restore endpoint. Retry an unknown outcome with the identical key and body.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/partnerId"
+          },
+          {
+            "$ref": "#/components/parameters/externalCreatorId"
+          },
+          {
+            "$ref": "#/components/parameters/GrantGeneration"
+          },
+          {
+            "$ref": "#/components/parameters/pageId"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeletionReceipt"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "x-required-capability": "page:edit; additionally page:publish when expectedActiveRevision is nonnull",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeletePage"
+              }
+            }
+          }
+        }
       }
     },
     "/v1/partners/{partnerId}/creators/{externalCreatorId}/pages/{pageId}/preview": {
@@ -869,6 +949,172 @@
           }
         },
         "x-required-capability": "events:read"
+      }
+    },
+    "/v1/partners/{partnerId}/creators/{externalCreatorId}/media": {
+      "get": {
+        "operationId": "listCreatorMedia",
+        "tags": [
+          "Creator publishing"
+        ],
+        "summary": "List ready creator media",
+        "description": "Requires page:read and configured media. Only ready assets in the current verified binding are returned, newest ready timestamp first with descending ID as tiebreaker. Does not browse legacy organization-wide media.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/partnerId"
+          },
+          {
+            "$ref": "#/components/parameters/externalCreatorId"
+          },
+          {
+            "$ref": "#/components/parameters/GrantGeneration"
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 88,
+              "pattern": "^[0-9]{1,16}_upload_[a-f0-9]{64}$",
+              "description": "Opaque ready-time/upload-ID cursor. Use the exact nextCursor; server also validates its timestamp."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 24
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "x-required-capability": "page:read"
+      },
+      "post": {
+        "operationId": "uploadCreatorMedia",
+        "tags": [
+          "Creator publishing"
+        ],
+        "summary": "Upload a creator image or video",
+        "description": "Requires page:edit and configured media. JSON proxy upload: JPEG/PNG/WebP <=5 MiB; MP4/WebM <=20 MiB decoded. Only this route permits 28 MiB JSON. Preserve original key and bytes after unknown outcomes. UPLOAD_IN_PROGRESS means retry the same command after the active lease (60 seconds image / 150 seconds video). Current authority is checked again before finalization and replay. Cancellation cannot guarantee rollback of provider upload.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/partnerId"
+          },
+          {
+            "$ref": "#/components/parameters/externalCreatorId"
+          },
+          {
+            "$ref": "#/components/parameters/GrantGeneration"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful operation. POST operations use HTTP 201, including idempotent retries.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaUploaded"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "413": {
+            "$ref": "#/components/responses/413"
+          },
+          "422": {
+            "$ref": "#/components/responses/422"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "x-required-capability": "page:edit",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaUpload"
+              }
+            }
+          }
+        },
+        "x-max-body-bytes": 29360128
       }
     }
   },
@@ -3996,6 +4242,9 @@
           },
           "preferredContentVersion": {
             "const": 2
+          },
+          "media": {
+            "$ref": "#/components/schemas/MediaCapabilities"
           }
         },
         "required": [
@@ -4028,7 +4277,7 @@
           },
           "eventType": {
             "type": "string",
-            "description": "Examples: creator.bound, page.published, page.unpublished, authoring-grant.revoked, creator.suspended, creator.reactivated, page.route-renamed."
+            "description": "Examples: creator.bound, page.published, page.unpublished, authoring-grant.revoked, creator.suspended, creator.reactivated, page.route-renamed. Also page.deleted for durable page tombstones."
           },
           "occurredAt": {
             "type": "string",
@@ -4065,6 +4314,268 @@
           "aggregateRevision",
           "operationId",
           "payload"
+        ],
+        "additionalProperties": false
+      },
+      "MediaCapabilities": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "upload": {
+            "type": "boolean"
+          },
+          "maxBytes": {
+            "type": "integer",
+            "const": 5242880
+          },
+          "maxVideoBytes": {
+            "type": "integer",
+            "const": 20971520
+          },
+          "mimeTypes": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+                "video/mp4",
+                "video/webm"
+              ]
+            }
+          }
+        },
+        "required": [
+          "enabled",
+          "upload",
+          "maxBytes",
+          "mimeTypes"
+        ],
+        "additionalProperties": false,
+        "description": "Optional capability for compatibility with earlier services. maxBytes is the decoded image bound. maxVideoBytes is additive: clients must not offer video without the advertised video bound and MIME type. upload requires configured media and current page:edit."
+      },
+      "MediaUpload": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "const": 1
+          },
+          "fileName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180,
+            "pattern": "^(?=.*\\S)[^/\\\\\\u0000-\\u001f\\u007f-\\u009f]+$",
+            "description": "Nonblank filename, at most 180 Unicode code points; no path separators or control characters."
+          },
+          "mimeType": {
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "video/mp4",
+              "video/webm"
+            ]
+          },
+          "dataBase64": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 27962028,
+            "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$",
+            "contentEncoding": "base64",
+            "description": "Canonical base64, no data: prefix. Server checks canonical padding bits, decoded size and MIME/container match. 5 MiB images / 20 MiB videos; HTTP JSON body ceiling 28 MiB."
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "fileName",
+          "mimeType",
+          "dataBase64"
+        ],
+        "additionalProperties": false
+      },
+      "MediaAsset": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^upload_[a-f0-9]{64}$"
+          },
+          "publicId": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "thumbnailUrl": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "fileName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180,
+            "pattern": "^(?=.*\\S)[^/\\\\\\u0000-\\u001f\\u007f-\\u009f]+$",
+            "description": "Nonblank filename, at most 180 Unicode code points; no path separators or control characters."
+          },
+          "mimeType": {
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "video/mp4",
+              "video/webm"
+            ]
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50000
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50000
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 20971520
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "publicId",
+          "url",
+          "thumbnailUrl",
+          "fileName",
+          "mimeType",
+          "width",
+          "height",
+          "bytes",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "MediaList": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "const": 1
+          },
+          "items": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/MediaAsset"
+            }
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 88,
+                "pattern": "^[0-9]{1,16}_upload_[a-f0-9]{64}$",
+                "description": "Opaque ready-time/upload-ID cursor. Use the exact nextCursor; server also validates its timestamp."
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "items",
+          "nextCursor"
+        ],
+        "additionalProperties": false
+      },
+      "MediaUploaded": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "const": 1
+          },
+          "asset": {
+            "$ref": "#/components/schemas/MediaAsset"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "asset"
+        ],
+        "additionalProperties": false
+      },
+      "DeletePage": {
+        "type": "object",
+        "properties": {
+          "expectedDraftVersion": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "expectedPublicationVersion": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "expectedActiveRevision": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,128}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "expectedDraftVersion",
+          "expectedPublicationVersion",
+          "expectedActiveRevision"
+        ],
+        "additionalProperties": false
+      },
+      "DeletionReceipt": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "const": 1
+          },
+          "pageId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          "deleted": {
+            "type": "boolean",
+            "const": true
+          },
+          "publicationVersion": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "pageId",
+          "deleted",
+          "publicationVersion"
         ],
         "additionalProperties": false
       }
@@ -4143,7 +4654,7 @@
         }
       },
       "409": {
-        "description": "VERSION_CONFLICT, PREVIEW_CONFLICT, IDEMPOTENCY_CONFLICT or another binding/state conflict.",
+        "description": "VERSION_CONFLICT, PREVIEW_CONFLICT, IDEMPOTENCY_CONFLICT, BINDING_CONFLICT or UPLOAD_IN_PROGRESS (retry the same media command after its active lease).",
         "headers": {
           "Cache-Control": {
             "schema": {
@@ -4161,7 +4672,7 @@
         }
       },
       "413": {
-        "description": "Payload exceeds 256 KiB. Ingress parser failures may use a different envelope.",
+        "description": "Request exceeds the route limit: 256 KiB normally, 28 MiB JSON for POST media; decoded media limit is 5 MiB for images and 20 MiB for videos. Ingress parser failures may use a different envelope.",
         "headers": {
           "Cache-Control": {
             "schema": {
@@ -4197,7 +4708,7 @@
         }
       },
       "503": {
-        "description": "FEATURE_DISABLED or AUTHORITY_UNAVAILABLE.",
+        "description": "FEATURE_DISABLED, AUTHORITY_UNAVAILABLE or MEDIA_UNAVAILABLE (unconfigured media or provider failure).",
         "headers": {
           "Cache-Control": {
             "schema": {
@@ -4218,12 +4729,13 @@
   },
   "x-source": {
     "repository": "https://github.com/cometrocks/backend-core",
-    "revision": "26c866375c33ff496b652fa672cc8eba71360657",
+    "revision": "1f595395d54980e4565df93ec3cf8a071ff66007",
     "files": [
       "apps/api/organizations/src/creatorPublishing/creatorPublishing.http.ts",
       "apps/api/organizations/src/creatorPublishing/creatorPublishing.store.ts",
       "apps/api/organizations/src/creatorPublishing/creatorPublishing.contract.ts",
-      "apps/api/organizations/src/creatorPublishing/generated/creator-publishing-v2.ts"
+      "apps/api/organizations/src/creatorPublishing/generated/creator-publishing-v2.ts",
+      "apps/api/organizations/src/creatorPublishing/creatorPublishing.media.ts"
     ],
     "contentV2Schema": "Extracted from publishingContentCapabilitiesV2.jsonSchema; refs rebased to the ContentV2 component. Semantic refinements remain server-authoritative."
   }

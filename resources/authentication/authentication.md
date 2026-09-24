@@ -34,9 +34,7 @@ The returned `accessToken` is an RSA-signed JWT and expires in 12 hours (`expire
 Authorization: Bearer YOUR_JWT_TOKEN
 ```
 
-::: info
-A device-code / MCP "agent" authorization flow is **Coming soon** — it is not shipped yet. For GraphQL, use API keys or `tokenCreate` JWTs.
-:::
+These examples document direct GraphQL access. Agent and application integrations may have their own authorization flow; do not infer their rollout status or credentials from this page.
 
 ## Creator-publishing REST authorization
 

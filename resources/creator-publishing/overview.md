@@ -3,11 +3,15 @@ title: 'Creator Publishing'
 description: 'A scoped, server-to-server REST API for creator page editing and publishing.'
 ---
 
+# Creator Publishing
+
 ## Availability and scope
 
 Creator Publishing is a separate REST interface for approved integrations that edit and publish creator pages. It is **default-disabled**; these docs do not establish live environment activation. Activation requires reviewed operator provisioning, verified IAM app ownership, a replica-set data environment, and the required server configuration. Public hosting additionally requires verified host ownership and registered routes.
 
 The content contract has two versions. Version 1 supports the original canonical **Header** and **Links** sections and remains backward compatible. Version 2 is the preferred contract and adds a canonical palette of Creator Hero, Links, Content, Media, Accordions, Testimonials, Banner, and legacy Header sections, plus snapshotted theme settings. Read `GET /capabilities` and use its content-version descriptors rather than assuming editor support.
+
+The current integration also supports a creator-scoped [image/video library and uploads](/resources/creator-publishing/media), and version-checked [page deletion](/resources/creator-publishing/api#delete-a-page). Deleting a page removes its current availability while retaining history and media.
 
 Creator Publishing includes an independently authorized public reader and route model, but this does not by itself activate a domain or make pages live. A public URL is available only after a host and route are operator-provisioned and the page is published under the creator's current activation.
 

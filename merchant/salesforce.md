@@ -142,7 +142,7 @@ Follow these steps to connect your chosen payment processor:
 |Form fields|meanings|
   |----|----|
   |Webhook URL|The Webhook URL is the endpoint where Adyen will send the event data when the specified event occurs. This will be prefilled and not editable field.|
-  |Event to listen to| These are the recommended events that you want to subscribe to and receive notifications for. We have to select these events in Adyen portal while [setting up](/merchant/salesforce#7-configure-adyen-webhook) the webhooks.|
+  |Event to listen to| These are the recommended events that you want to subscribe to and receive notifications for. We have to select these events in Adyen portal while [setting up](/merchant/salesforce#_7-configure-adyen-webhook) the webhooks.|
   |HMAC Key| The HMAC (Hash-based Message Authentication Code) key is a shared secret key used to authenticate and validate the integrity of the webhook messages sent from Adyen to your endpoint|
 
 **Note:** Add https://satellites.comet.rocks into "Add allowed origins" while generating API key in above step.
@@ -164,15 +164,15 @@ To set up a webhook on the Adyen portal, follow these steps:
 ![adyen-server-configuration.png](/images/salesforce/adyen-server-configuration.png)
 5. Provide the following details for your webhook:
   - **Description**: Enter a descriptive name for your webhook. ex: "Comet-your_Brand_name"
-  - **URL**: Specify the URL where Adyen should send the webhook notifications. Please copy the value from [here](/merchant/salesforce#6-connect-payment-processor).
+  - **URL**: Specify the URL where Adyen should send the webhook notifications. Please copy the value from [here](/merchant/salesforce#_6-connect-payment-processor).
   - **Method**: Select **JSON** the method for the webhook requests.
   - **Authentication**: If required, select the authentication method and provide the necessary credentials.
-  - **Generate HMAC Key**: Generate HMAC Key and add it in the [Comet console](/merchant/salesforce#6-connect-payment-processor).
+  - **Generate HMAC Key**: Generate HMAC Key and add it in the [Comet console](/merchant/salesforce#_6-connect-payment-processor).
 
 ![adyen-hmac-key.png](/images/salesforce/adyen-hmac-key.png)
 
 
-6. In the **Subscriptions** section, select the events you want to receive notifications for. Please see the comet recommendation [here](/merchant/salesforce#6-connect-payment-processor).
+6. In the **Subscriptions** section, select the events you want to receive notifications for. Please see the comet recommendation [here](/merchant/salesforce#_6-connect-payment-processor).
 
 7. Review your webhook configuration and click on the **Save** button to create the webhook.
 
@@ -256,18 +256,18 @@ In Business Manager, navigate to Merchant ToolsSite > Preferences Custom > Site 
 
   |Comet Attributes|Purpose|
   |----|----|
-  |Comet WebDAV URL|The Comet WebDAV URL is the endpoint provided by the Comet system for accessing and dropping files using the WebDAV protocol. The URL can be obtained on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
-  |Comet App Client id|The Comet App Client ID is a unique identifier assigned to the client application that is authorized to access the Comet system. This will be generated on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
-  |Comet App client password|The Comet App Client Password is the corresponding password associated with the Comet App Client ID. This will be generated on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
-  |Comet Brand Organization ID|The Comet Brand Organization ID represents the specific organization or brand within the Comet system that the integration is associated with. The ID can be obtained on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
-  |Comet Parent Store Environment Id|The Comet Parent Store Environment ID identifies the specific environment within the Salesforce Commerce Cloud where the integration is being set up. It helps in distinguishing between different environments, such as development, staging, or production OR Site A, Site B ..etc, and ensures that the integration is configured correctly for the intended environment.The ID can be obtained on [this step](/merchant/salesforce#4-add-these-credentials-to-business-manager)|
+  |Comet WebDAV URL|The Comet WebDAV URL is the endpoint provided by the Comet system for accessing and dropping files using the WebDAV protocol. The URL can be obtained on [this step](/merchant/salesforce#_4-add-these-credentials-to-business-manager)|
+  |Comet App Client id|The Comet App Client ID is a unique identifier assigned to the client application that is authorized to access the Comet system. This will be generated on [this step](/merchant/salesforce#_4-add-these-credentials-to-business-manager)|
+  |Comet App client password|The Comet App Client Password is the corresponding password associated with the Comet App Client ID. This will be generated on [this step](/merchant/salesforce#_4-add-these-credentials-to-business-manager)|
+  |Comet Brand Organization ID|The Comet Brand Organization ID represents the specific organization or brand within the Comet system that the integration is associated with. The ID can be obtained on [this step](/merchant/salesforce#_4-add-these-credentials-to-business-manager)|
+  |Comet Parent Store Environment Id|The Comet Parent Store Environment ID identifies the specific environment within the Salesforce Commerce Cloud where the integration is being set up. It helps in distinguishing between different environments, such as development, staging, or production OR Site A, Site B ..etc, and ensures that the integration is configured correctly for the intended environment.The ID can be obtained on [this step](/merchant/salesforce#_4-add-these-credentials-to-business-manager)|
   |Start Order Number for Job|The Start Order Number for Job field is used to specify the order number from which the order export process should begin. This field is particularly useful in two scenarios: 1. When exporting orders for the first time, you can set the starting order number to ensure that all relevant orders are included in the export. 2. If a previous job fails, you can use this field to resume the export process from a specific order number, avoiding the need to start from the beginning.|
   |Order Export Start Time (in minute)|The Order Export Start Time field allows you to specify the time, in minutes, from when the orders should be exported. This field is optional and provides an alternative way to determine the starting point for order export. It is useful in scenarios where you want to export orders based on a specific time frame rather than an order number. For example: - If you enter 1440 minutes, the system will export orders from one day before the current time. - If you enter 10080 minutes, the system will export orders from 7 days before the current time. Note: Either the Start Order Number or the Order Export Start Time should be provided to determine the starting point for order export.|
   
 
 #### Step 4: Configure the jobs
-- Please follow the [instructions](/merchant/salesforce#1-comet-all-full-export-job) and configure the jobs.
-- Delta jobs: The Comet cartridge utilizes SFCC's default delta jobs. Ensure that the delta job feature is activated in the sandbox or instance where it is being employed. If not enabled, please reach out to SFCC support. If you are able to see this "Delta Exports" options at Administration >  Site Development >  Delta Exports, then its already enabled. Then, follow the [instructions](/merchant/salesforce#2-delta-price-books-export-job)
+- Please follow the [instructions](/merchant/salesforce#_1-comet-all-full-export-job) and configure the jobs.
+- Delta jobs: The Comet cartridge utilizes SFCC's default delta jobs. Ensure that the delta job feature is activated in the sandbox or instance where it is being employed. If not enabled, please reach out to SFCC support. If you are able to see this "Delta Exports" options at Administration >  Site Development >  Delta Exports, then its already enabled. Then, follow the [instructions](/merchant/salesforce#_2-delta-price-books-export-job)
 
 > **Note**: The integration has been completed.
 

@@ -7,7 +7,7 @@ description: 'Versioned content, request and response schemas, authorization, an
 
 [Download OpenAPI 3.1](/openapi/creator-publishing.json). Import this document into an OpenAPI-compatible client or viewer. It describes the **Comet server-to-server authoring API**, including content versions 1 and 2. Klyfton's browser-facing API has its own [integration guide](/resources/creator-publishing/klyfton).
 
-This reference is checked against backend revision `26c866375c33ff496b652fa672cc8eba71360657` on 2026-09-23. The API defaults disabled. Obtain the approved environment origin and scoped access from Comet before making requests; the OpenAPI server is a reserved placeholder, not a live deployment. Public-renderer reader endpoints and operator commands are separate from this authoring specification.
+This reference is checked against backend revision `1f595395d54980e4565df93ec3cf8a071ff66007` on 2026-09-24. It includes page deletion and the creator media library/upload routes. The API defaults disabled. Obtain the approved environment origin and scoped access from Comet before making requests; the OpenAPI server is a reserved placeholder, not a live deployment. Public-renderer reader endpoints and operator commands are separate from this authoring specification.
 
 ## Authentication and scope
 
@@ -21,8 +21,8 @@ Base path, appended to your approved Comet origin:
 | --- | --- | --- |
 | `x-api-key` | Every authoring/event request | Server-held IAM `APP_CLIENT` key. |
 | `x-grant-generation` | Every authoring/event request | Current operator-provisioned grant generation. |
-| `Idempotency-Key` | Every PUT/POST | Unique command key, 1–128 ASCII letters, digits, underscores or hyphens. |
-| `Content-Type: application/json` | Requests with a JSON body | Bodies are limited to 256 KiB. |
+| `Idempotency-Key` | Every PUT/POST/DELETE | Unique command key, 1–128 ASCII letters, digits, underscores or hyphens. |
+| `Content-Type: application/json` | Requests with a JSON body | Normally 256 KiB; POST `/media` alone permits 28 MiB JSON. |
 
 Do not send an `Authorization` header: these routes reject it, including GraphQL JWTs. App authentication alone does not grant access. Comet checks the current grant's principal, environment, partner, creator relationship, generation, expiry and required capability on each request, including retries. The environment comes from server configuration.
 
@@ -30,16 +30,19 @@ Grant provisioning and creator onboarding are operator prerequisites. `PUT` on t
 
 ## Endpoints
 
-All paths below are relative to the base path. GET and PUT return **200** on success; POST returns **201**, including successful idempotent replays. Responses use `Cache-Control: no-store`.
+All paths below are relative to the base path. GET, PUT and DELETE return **200** on success; POST returns **201**, including successful idempotent replays. Responses use `Cache-Control: no-store`.
 
 | Method | Path | Capability | Result |
 | --- | --- | --- | --- |
 | PUT | Base path | `creator:bind` | `{schemaVersion, realm, creatorId, identityId}`; no request body needed. |
 | GET | `/capabilities` | `page:read` | Current grant and supported content descriptors. |
+| GET | `/media?cursor=…&limit=24` | `page:read` | Ready creator assets: `{schemaVersion, items, nextCursor}`. |
+| POST | `/media` | `page:edit` | Upload an image/video: `{schemaVersion, asset}`. |
 | GET | `/pages?after=…&limit=20` | `page:read` | `{schemaVersion, pages, nextCursor}`. |
 | POST | `/pages` | `page:edit` | New draft from `{content}`. |
 | GET | `/pages/{pageId}` | `page:read` | Current draft, versions, digest and `publicUrl`. |
 | PUT | `/pages/{pageId}` | `page:edit` | Updated draft from `{expectedDraftVersion, content}`. |
+| DELETE | `/pages/{pageId}` | `page:edit`; also `page:publish` when published | Tombstone the page after checking all expected versions. |
 | GET | `/pages/{pageId}/preview?draftVersion=N` | `page:read` | Exact current saved draft and digest; stale versions conflict. |
 | POST | `/pages/{pageId}/publish` | `page:publish` | Publication receipt for the exact reviewed draft. |
 | POST | `/pages/{pageId}/unpublish` | `page:publish` | Receipt after clearing the active publication. |
@@ -58,6 +61,7 @@ The outer API response stays `schemaVersion: 1`. The nested **content** has its 
 - `content`: the original v1 Header/Links descriptor for compatibility.
 - `contentVersions`: descriptors for v1 and v2. The v2 descriptor includes structural `jsonSchema`.
 - `preferredContentVersion: 2`.
+- `media`: provider availability, upload permission, accepted MIME types and decoded image/video size limits. This additive descriptor may be absent on older backends; see [Media uploads](/resources/creator-publishing/media).
 
 **Version 1** preserves `{schemaVersion: 1, sections}` with basic Header and Links. It allows up to 30 sections, 50 links per section, 10 locales, 500 UTF-16 code units per text field, and 2,048 per URL. Section and link-row IDs must be unique in their respective lists. Unsupported fields are rejected.
 
@@ -110,6 +114,24 @@ Publication returns `schemaVersion`, `pageId`, `draftVersion`, the incremented `
 
 POST `/unpublish` with `expectedDraftVersion`, `expectedActiveRevision` and `expectedPublicationVersion` from current state; omit `digest`. It clears the active revision and increments the publication version while retaining immutable history. The separate publication version prevents an old command from succeeding after a publish/unpublish cycle.
 
+## Delete a page
+
+DELETE `/pages/{pageId}` with an `Idempotency-Key` and exactly these body fields from the latest reviewed state:
+
+```json
+{
+  "expectedDraftVersion": 1,
+  "expectedPublicationVersion": 0,
+  "expectedActiveRevision": null
+}
+```
+
+Deletion always requires `page:edit`. If the expected active revision is nonnull, it also requires `page:publish`. The server checks all three values against the current page; supplying a false null cannot bypass publication permission. Unlike unpublish, the delete body does not accept `digest`.
+
+The 200 response is `{schemaVersion:1, pageId, deleted:true, publicationVersion}`. Comet increments the publication version, clears the active revision, persists a tombstone and emits `page.deleted`. The page disappears from page lists, authoring reads and public reads; retained revisions are no longer available through the current-revision endpoint. History and uploaded media remain. Deletion does not remove the creator workspace, and there is no restore endpoint.
+
+After an unknown outcome, retry the identical key and body. Current permissions are rechecked even when returning a stored deletion receipt.
+
 ## Public URLs
 
 Only the authorized **GET page** response includes `publicUrl`. It is a canonical HTTPS URL or null. Creation, save, preview, publication receipts and page lists do not include it. A URL requires an active operator-registered host/route and an eligible current publication under the creator's current activation. Reread after mutations instead of treating an idempotently replayed receipt as current state.
@@ -132,14 +154,16 @@ Application errors use `{"schemaVersion":1,"code":"VERSION_CONFLICT"}`. Ingress 
 | 401 | `UNAUTHENTICATED` | Check the app credential and remove unsupported Authorization headers. |
 | 403 | `FORBIDDEN` | Check the current scoped grant and creator authority. |
 | 404 | `NOT_FOUND` | Resource is absent or unavailable within this scope. |
-| 409 | `VERSION_CONFLICT`, `PREVIEW_CONFLICT`, `IDEMPOTENCY_CONFLICT`, `BINDING_CONFLICT` | Reconcile current state or resolve command identity. |
-| 413 | `PAYLOAD_TOO_LARGE` | Reduce the request below 256 KiB. |
+| 409 | `VERSION_CONFLICT`, `PREVIEW_CONFLICT`, `IDEMPOTENCY_CONFLICT`, `BINDING_CONFLICT`, `UPLOAD_IN_PROGRESS` | Reconcile current state; an upload in progress needs the same command retried after its lease. |
+| 413 | `PAYLOAD_TOO_LARGE` | Page commands: 256 KiB. Media: 5 MiB decoded images / 20 MiB videos, with a 28 MiB JSON ceiling. |
 | 422 | `CONTENT_NOT_READY` | Correct publication readiness, then save and preview again. |
-| 503 | `FEATURE_DISABLED`, `AUTHORITY_UNAVAILABLE` | Confirm activation or wait for authority recovery; retain the original key for an uncertain write. |
+| 503 | `FEATURE_DISABLED`, `AUTHORITY_UNAVAILABLE`, `MEDIA_UNAVAILABLE` | Confirm activation/provider configuration or wait for recovery; retain the original key for an uncertain write. |
 
 ## Publication and lifecycle events
 
 `GET /events?after=N` returns a raw JSON array ordered by realm-local `sequence`. Each event contains `_id`, `schemaVersion`, `bindingId`, `sequence`, `eventType`, `occurredAt`, `realm`, `aggregateId`, `aggregateRevision`, `operationId` and `payload`.
+
+`page.deleted` uses the incremented publication version as `aggregateRevision`; its payload contains `draftVersion` and `previousRevisionId`. Treat it as removal from current page views, not as proof that retained history or media were erased.
 
 Persist processed event IDs and the cursor atomically with the consumer's updates. Continue from the last processed sequence; there is no server acknowledgement route. A separate current `events:read` grant can retrieve terminal lifecycle events for a suspended/deleted creator without granting page access. Revoking the only event credential requires operator recovery.
 

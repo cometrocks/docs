@@ -30,7 +30,8 @@
 
 - [Overview](https://docs.comet.rocks/resources/creator-publishing/overview): Default-disabled, server-to-server REST page editing and publishing; v1 Header/Links remains compatible and v2 exposes the richer canonical palette through capability discovery.
 - [API Reference](https://docs.comet.rocks/resources/creator-publishing/api): REST route and schema reference. Download the [OpenAPI document](https://docs.comet.rocks/openapi/creator-publishing.json).
-- [Klyfton Integration](https://docs.comet.rocks/resources/creator-publishing/klyfton): Klyfton's Rust backend BFF boundary and workspace integration.
+- [Media Uploads](https://docs.comet.rocks/resources/creator-publishing/media): Creator-scoped image/video uploads and ready-asset library; 5 MiB images, 20 MiB videos, route-specific request limits and retries.
+- [Klyfton Integration](https://docs.comet.rocks/resources/creator-publishing/klyfton): Klyfton's existing Rust backend, shared v2 editor, media picker and confirmed page deletion; rollout remains separately verified.
 
 ## Merchant Guides
 

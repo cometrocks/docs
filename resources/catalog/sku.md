@@ -14,8 +14,12 @@ query GetProductBySKU($shopSystemEnvironmentId: ID!, $sku: String!) {
   productBySku(shopSystemEnvironmentId: $shopSystemEnvironmentId, sku: $sku) {
     id
     sku
-    name
-    description
+    name {
+      default { text }
+    }
+    description {
+      default { text }
+    }
     # Other product fields as needed
   }
 }

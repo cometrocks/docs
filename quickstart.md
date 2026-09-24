@@ -53,7 +53,7 @@ Comet will perform an initial catalog sync. This takes 30–60 seconds for small
 
 ## Step 3: Make your first API call
 
-Comet exposes a single GraphQL endpoint (Apollo Federation) — there is no REST API. Your endpoint is shown in the console and is:
+Comet exposes a GraphQL endpoint. Your endpoint is shown in the console and is:
 
 ```
 https://api.comet.rocks/graphql
@@ -87,9 +87,13 @@ query GetProducts($organizationId: ID!) {
   ) {
     nodes {
       id
-      name
+      name {
+        default { text }
+      }
       sku
-      description
+      description {
+        default { text }
+      }
       type
     }
     pageInfo {
@@ -105,7 +109,7 @@ curl -X POST https://api.comet.rocks/graphql \
   -H "Content-Type: application/json" \
   -H "x-api-key: YOUR_API_KEY" \
   -d '{
-    "query": "query GetProducts($organizationId: ID!) { productFind(organizationId: $organizationId pagination: { first: 10 }) { nodes { id name sku } } }",
+    "query": "query GetProducts($organizationId: ID!) { productFind(organizationId: $organizationId pagination: { first: 10 }) { nodes { id name { default { text } } sku } } }",
     "variables": { "organizationId": "YOUR_ORG_ID" }
   }'
 ```
@@ -121,9 +125,7 @@ Find your `organizationId` in the Comet console under **Settings → Organizatio
 ```graphql
 # 1. Create a cart
 mutation CreateCart {
-  cartCreate(input: {
-    organizationId: "YOUR_ORG_ID"
-  }) {
+  cartCreate {
     id
     bags {
       id
@@ -135,15 +137,16 @@ mutation CreateCart {
 ```graphql
 # 2. Add a product to the cart
 mutation AddProduct($cartId: ID!, $productId: ID!) {
-  cartAddProducts(input: {
-    cartId: $cartId
+  cartAddProducts(id: $cartId, input: {
     products: [{ productId: $productId, quantity: 1 }]
   }) {
     id
     bags {
       id
-      products {
-        productId
+      lines {
+        product {
+          id
+        }
         quantity
       }
     }
@@ -155,7 +158,7 @@ mutation AddProduct($cartId: ID!, $productId: ID!) {
 
 ## Next steps
 
-- [Tutorial: Launch your first Checkout Store](/tutorial) — build a full end-to-end flow
+- [Tutorial: Launch your first micro-store](/tutorial) — build a full end-to-end flow
 - [Catalog API reference](/resources/catalog/prod_search) — full product search, filtering, and pagination
 - [Checkout flow](/resources/checkout/carts) — cart → addresses → shipping → payment → submit
 - [API Explorer](https://console.comet.rocks) — browse the live schema in the dashboard

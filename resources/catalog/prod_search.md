@@ -22,7 +22,9 @@ query SearchProducts($organizationId: ID!, $filters: ProductFindFilters, $pagina
     }
     nodes {
       id
-      name
+      name {
+        default { text }
+      }
       type
       # Other product fields as needed
     }
@@ -41,8 +43,10 @@ Replace `$organizationId`, `$filters`, and `$pagination` with the appropriate va
 The `productFind` query supports a variety of filters to refine your search:
 
 - **shopSystemEnvironmentId**: Filter products based on the shop system environment.
+- **parentStoreEnvironmentId**: Filter products based on the parent store environment.
 - **name**: Search for products with a specific name or name pattern.
-- **type**: Filter products based on their type.
+- **inStock**: Filter products by sale availability.
+- **type** or **types**: Filter products based on their type. `type` is deprecated; prefer `types`.
 - **variantOf**: Search for products that are variants of a specific product.
 - **priceMin**: Set a minimum price for the products in your search.
 - **priceMax**: Set a maximum price for the products in your search.
