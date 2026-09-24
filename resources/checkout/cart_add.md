@@ -24,8 +24,8 @@ The quantity field indicates the number of products you want to add to the cart.
 
 ```json
 {
+  "cartId": "cart_ZMe6Bb4GqqUe3BWV",
   "input": {
-    "cartId": "cart_ZMe6Bb4GqqUe3BWV",
     "products": [
       {
         "productId": "prd_ZJQYAR_-ypwOLKEz",

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
+import { getSupportTimingDecision } from '../supportTiming'
 
 /**
  * Support request form embedded in the developer docs.
  *
  * Submits cross-origin to the marketing site's contact endpoint
- * (`/api/contact` with `type: 'support'`), which emails the support inbox and
- * confirms to the requester. The endpoint allows CORS from *.comet.rocks.
+ * (`/api/contact` with `type: 'support'`). The endpoint allows CORS from
+ * *.comet.rocks.
  */
 const ENDPOINT =
   (import.meta.env?.VITE_SUPPORT_ENDPOINT as string | undefined) ||
@@ -55,7 +56,17 @@ function validate(): boolean {
 }
 
 async function submit() {
+  if (isLoading.value) return
+
   serverError.value = ''
+  const elapsedMs = Date.now() - mountedAt.value
+  const timing = getSupportTimingDecision(elapsedMs)
+  if (!timing.canSubmit) {
+    serverError.value = timing.message || 'Please try again.'
+    if (timing.shouldResetTimer) mountedAt.value = Date.now()
+    return
+  }
+
   if (!validate()) return
   isLoading.value = true
   try {
@@ -71,7 +82,7 @@ async function submit() {
         message: form.message.trim(),
         _source: 'docs',
         _hp: honeypot.value,
-        _t: String(Date.now() - mountedAt.value),
+        _t: String(elapsedMs),
       }),
     })
     if (!res.ok) {
@@ -91,10 +102,10 @@ async function submit() {
 <template>
   <div class="sf-wrap">
     <div v-if="isSuccess" class="sf-done">
-      <strong>Request received.</strong>
+      <strong>Request submitted.</strong>
       <p>
-        Thanks — we’ve emailed you a confirmation and the team will reply within
-        one business day.
+        Thanks — your request was submitted. If you do not receive a
+        confirmation or reply, email support@comet.rocks.
       </p>
     </div>
 

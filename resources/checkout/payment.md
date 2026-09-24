@@ -8,13 +8,14 @@ Before submitting your cart, you can use the [cartCreatePaymentIntent](https://s
 After creating the payment intent, the response provides the updated [Cart](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/Cart) with the associated payment intent details.
 
 ```graphql
-mutation CreatePaymentIntent($id: ID!) {
-  cartCreatePaymentIntent(id: $id) {
+mutation CreatePaymentIntent($id: ID!, $locale: Locale!, $countryCode: CountryCode!) {
+  cartCreatePaymentIntent(id: $id, locale: $locale, countryCode: $countryCode) {
     id
     paymentIntent {
       id
-      clientSecret
       externalId
+      provider
+      additionalDetails
     }
     # Other fields of the Cart type can be queried here
   }
@@ -24,12 +25,16 @@ mutation CreatePaymentIntent($id: ID!) {
 #### Input Parameters for `cartCreatePaymentIntent`
 
 - `id`: The ID of the cart for which you want to create a payment intent.
+- `locale`: The shopper locale.
+- `countryCode`: The shopper country code.
 
 **Example**:
 
 ```json
 {
-  "id": "cart_ZMe6Bb4GqqUe3BWV"
+  "id": "cart_ZMe6Bb4GqqUe3BWV",
+  "locale": "en",
+  "countryCode": "US"
 }
 ```
 
@@ -43,7 +48,8 @@ mutation CreatePaymentIntent($id: ID!) {
 
 - Contains details about the payment intent:
 - `id`: The unique identifier for the payment intent.
-- `clientSecret`: A secret string used to complete the payment on the client side.
 - `externalId`: An external identifier for the payment intent, typically provided by the payment gateway.
+- `provider`: The configured payment provider.
+- `additionalDetails`: Provider-specific data used by the client payment flow. The deprecated `clientSecret` field has moved here.
 
 You can refer to the [PaymentIntent](https://studio.apollographql.com/public/CometAPI/variant/main/schema/reference/objects/PaymentIntent) type in the schema for more details.

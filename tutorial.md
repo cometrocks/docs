@@ -1,15 +1,15 @@
 ---
-title: "Tutorial: Launch your first Checkout Store"
-description: Build a complete Checkout Store connected to your Shopify catalog — from API setup to live storefront — in 10 minutes.
+title: "Tutorial: Launch your first micro-store"
+description: Build a complete micro-store connected to your Shopify catalog — from API setup to live storefront — in 10 minutes.
 ---
 
-# Tutorial: Launch your first Checkout Store
+# Tutorial: Launch your first micro-store
 
-In this tutorial you'll build a working Checkout Store (also called a micro-store) backed by your Shopify catalog. We'll use Comet's GraphQL API to:
+In this tutorial you'll build a working micro-store backed by your Shopify catalog. We'll use Comet's GraphQL API to:
 
 1. Fetch products for a campaign collection
 2. Create a checkout flow
-3. Launch it as a Checkout Store via the Comet console
+3. Launch it as a micro-store via the Comet console
 
 **Prerequisites:** Complete the [Quick Start](/quickstart) first — you need a connected Shopify store and a working API key.
 
@@ -17,7 +17,7 @@ In this tutorial you'll build a working Checkout Store (also called a micro-stor
 
 ## Overview
 
-A **Checkout Store** in Comet is a standalone, URL-addressable store page designed for a specific campaign (product launch, seasonal sale, social commerce drop). It:
+A **micro-store** in Comet is a standalone, URL-addressable store page designed for a specific campaign (product launch, seasonal sale, social commerce drop). It:
 
 - Pulls products from your existing Shopify catalog
 - Has its own URL (e.g. `your-brand.satellites.comet.rocks/summer-launch`)
@@ -28,27 +28,32 @@ A **Checkout Store** in Comet is a standalone, URL-addressable store page design
 
 ## Part 1: Select your campaign products
 
-First, identify the products you want to feature. Use tags or a collection ID from Shopify.
+First, identify the product IDs you want to feature. The Publisher GraphQL API can list and filter products by the fields supported by `ProductFindFilters`; it does not expose a collection-ID filter.
 
-### Query products by collection
+### Query products
 
 ```graphql
-query GetCampaignProducts($organizationId: ID!, $collectionId: String!) {
+query GetCampaignProducts($organizationId: ID!) {
   productFind(
     organizationId: $organizationId
-    filters: { externalCollectionId: $collectionId }
     pagination: { first: 20 }
   ) {
     nodes {
       id
-      name
-      description
+      name {
+        default { text }
+      }
+      description {
+        default { text }
+      }
       sku
       externalId
       type
       variantOf {
         id
-        name
+        name {
+          default { text }
+        }
       }
     }
   }
@@ -56,29 +61,30 @@ query GetCampaignProducts($organizationId: ID!, $collectionId: String!) {
 ```
 
 ::: tip
-`externalId` is the Shopify product GID. Use this to cross-reference with Shopify Admin.
+Use the returned `id` values in the cart mutations below.
 :::
 
 ---
 
 ## Part 2: Build the checkout flow
 
-A complete checkout in Comet follows this sequence:
+The cart and order API sequence is:
 
 ```
 cartCreate → cartAddProducts → cartApplyShippingAddress
-  → cartGetShippingMethods → cartCreatePaymentIntent → orderSubmit
+  → cart → cartApplyShippingMethods → cartCreatePaymentIntent
+  → cartPaymentIntentConfirm (when required by the provider) → orderSubmit
 ```
 
 ### 1. Create a cart
 
 ```graphql
-mutation CreateCart($orgId: ID!) {
-  cartCreate(input: { organizationId: $orgId }) {
+mutation CreateCart {
+  cartCreate {
     id
     bags {
       id
-      merchantId
+      externalId
     }
   }
 }
@@ -88,24 +94,23 @@ mutation CreateCart($orgId: ID!) {
 
 ```graphql
 mutation AddProducts($cartId: ID!, $productId: ID!) {
-  cartAddProducts(input: {
-    cartId: $cartId
+  cartAddProducts(id: $cartId, input: {
     products: [{ productId: $productId, quantity: 1 }]
   }) {
     id
     bags {
       id
-      products {
-        productId
-        quantity
-        price {
-          amount
-          currencyCode
+      lines {
+        product {
+          id
         }
+        quantity
       }
-      subtotal {
-        amount
-        currencyCode
+      totals {
+        subTotal {
+          amount
+          currency
+        }
       }
     }
   }
@@ -116,17 +121,16 @@ mutation AddProducts($cartId: ID!, $productId: ID!) {
 
 ```graphql
 mutation SetAddress($cartId: ID!) {
-  cartApplyShippingAddress(input: {
-    cartId: $cartId
-    useSameForBilling: true
+  cartApplyShippingAddress(id: $cartId, input: {
+    useAsBillingAddress: true
     address: {
       firstName: "Jane"
       lastName: "Doe"
       address1: "123 Main St"
       city: "New York"
-      province: "NY"
-      country: "US"
-      zip: "10001"
+      regionCode: "NY"
+      countryCode: "US"
+      postalCode: "10001"
       phone: "+1 212 555 0100"
     }
   }) {
@@ -134,10 +138,10 @@ mutation SetAddress($cartId: ID!) {
     bags {
       availableShippingMethods {
         id
-        title
+        name
         price {
           amount
-          currencyCode
+          currency
         }
       }
     }
@@ -151,14 +155,15 @@ Take the `id` of your chosen shipping method from the response above:
 
 ```graphql
 mutation SetShipping($cartId: ID!, $bagId: ID!, $methodId: ID!) {
-  cartApplyShippingMethods(input: {
-    cartId: $cartId
-    shippingMethods: [{ bagId: $bagId, shippingMethodId: $methodId }]
+  cartApplyShippingMethods(id: $cartId, input: {
+    bags: [{ bagId: $bagId, shippingMethodId: $methodId }]
   }) {
     id
-    total {
-      amount
-      currencyCode
+    totals {
+      total {
+        amount
+        currency
+      }
     }
   }
 }
@@ -167,38 +172,54 @@ mutation SetShipping($cartId: ID!, $bagId: ID!, $methodId: ID!) {
 ### 5. Create payment intent
 
 ```graphql
-mutation CreatePayment($cartId: ID!) {
-  cartCreatePaymentIntent(input: { cartId: $cartId }) {
-    paymentIntentId
-    clientSecret
-    amount
-    currency
-  }
-}
-```
-
-Use the `clientSecret` with Stripe.js to collect payment on the frontend.
-
-### 6. Submit the order
-
-```graphql
-mutation SubmitOrder($cartId: ID!) {
-  orderSubmit(input: { cartId: $cartId }) {
+mutation CreatePayment($cartId: ID!, $locale: Locale!, $countryCode: CountryCode!) {
+  cartCreatePaymentIntent(id: $cartId, locale: $locale, countryCode: $countryCode) {
     id
-    status
-    bags {
+    paymentIntent {
       id
-      externalOrderId
+      externalId
+      provider
+      additionalDetails
     }
   }
 }
 ```
 
-On success, Comet places the order in Shopify. The `externalOrderId` is the Shopify order GID.
+Creating a payment intent does not confirm payment. For provider flows that use the API confirmation step, call `cartPaymentIntentConfirm` with the payment details and a redirect URL:
+
+```graphql
+mutation ConfirmPayment($cartId: ID!, $input: CartPaymentIntentConfirmInput!) {
+  cartPaymentIntentConfirm(id: $cartId, input: $input) {
+    status
+    providerStatus
+    externalId
+    action
+  }
+}
+```
+
+The confirmation response can include an `action` for the client to complete. `orderSubmit` requires a payment intent or payment session, but the backend's cart-submission check does not inspect a payment status. Handle provider-specific payment completion in the client before submitting the order. A successful `orderSubmit` does not guarantee that the order is paid.
+
+### 6. Submit the order
+
+```graphql
+mutation SubmitOrder($cartId: ID!) {
+  orderSubmit(id: $cartId) {
+    id
+    status
+    bags {
+      id
+      shopSystemOrderId
+    }
+  }
+}
+```
+
+The response includes an order ID and each bag's shop-system order ID when available. Payment settlement is a separate provider and order-processing concern.
 
 ---
 
-## Part 3: Launch your Checkout Store
+## Part 3: Launch your micro-store
 
 Now publish this campaign as a live URL using the Comet console.
 
@@ -218,7 +239,7 @@ Your storefront is now live. Share the URL in ads, email, or social posts.
 ## What's next?
 
 - **Custom domain:** Point a subdomain (e.g. `launch.yourbrand.com`) to `satellites.comet.rocks` via CNAME
-- **Styling:** The satellite storefront supports custom CSS and logo upload from the console
+- **Styling:** The micro-store storefront supports custom CSS and logo upload from the console
 - **Discount codes:** Use [`cartApplyCoupons`](/resources/checkout/cart_disc) to support promo codes
 - **Analytics:** Each storefront tracks conversion events — view them in the console under **Analytics**
 - **Multi-merchant campaigns:** Add products from multiple connected stores to the same cart

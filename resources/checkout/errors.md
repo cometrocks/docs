@@ -35,7 +35,7 @@ Let's say you're trying to add a product to your cart using the `add product` AP
 
 ```graphql
 mutation AddProductToCart($cartId: ID!, $productId: ID!, $quantity: Int!) {
-  cartAddProduct(cartId: $cartId, productId: $productId, quantity: $quantity) {
+  cartAddProducts(id: $cartId, input: { products: [{ productId: $productId, quantity: $quantity }] }) {
     id
     bags {
       id
@@ -63,7 +63,7 @@ If the product is out of stock, the response might look like:
 ```json
 {
   "data": {
-    "cartAddProduct": {
+    "cartAddProducts": {
       "id": "cart_ZMe6Bb4GqqUe3BWV",
       "bags": [
         {

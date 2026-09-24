@@ -60,8 +60,8 @@ type PageInfo {
 To fetch the first 10 products:
 
 ```graphql
-query {
-  productFind(pagination: { first: 10 }) {
+query GetProducts($organizationId: ID!) {
+  productFind(organizationId: $organizationId, pagination: { first: 10 }) {
     pageInfo {
       startCursor
       endCursor
@@ -82,8 +82,8 @@ query {
 To fetch the next 10 products after a specific cursor:
 
 ```graphql
-query {
-  productFind(pagination: { first: 10, after: "prd_ZJQXk_cZFF-LWPKt" }) {
+query GetNextProducts($organizationId: ID!, $after: String!) {
+  productFind(organizationId: $organizationId, pagination: { first: 10, after: $after }) {
     pageInfo {
       startCursor
       endCursor
@@ -102,4 +102,3 @@ query {
 ```
 
 Always ensure to use pagination effectively in the Comet API to manage data retrieval and ensure optimal performance. By understanding and implementing pagination, you can ensure efficient data retrieval and a better user experience.
-

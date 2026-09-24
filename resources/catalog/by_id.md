@@ -14,8 +14,12 @@ query GetProductByID($productID: ID!) {
   product(id: $productID) {
     id
     sku
-    name
-    description
+    name {
+      default { text }
+    }
+    description {
+      default { text }
+    }
     organizationId
     shopSystemEnvironmentId
     externalId
