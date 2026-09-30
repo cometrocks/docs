@@ -17,6 +17,8 @@ Klyfton browser → Klyfton Rust BFF → Comet Creator Publishing REST API
 
 Both the Klyfton integration and Comet routes default to disabled. The merged work does not mean an environment has been activated or a grant has been provisioned. Public URLs require a separately provisioned Comet host and route, an active published revision, and the current creator activation.
 
+For the wider division between Comet creator infrastructure and Klyfton financial features, including proposed commerce ownership and future reuse, see [Creator platform product boundaries](/resources/creator-platform/product-boundaries).
+
 ## Responsibilities
 
 | Component | Responsibility |

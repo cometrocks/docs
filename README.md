@@ -4,6 +4,8 @@ Developer documentation for [comet.rocks](https://comet.rocks) — headless ecom
 
 Built with [VitePress](https://vitepress.dev). Deployment configuration targets Vercel.
 
+For Comet/Klyfton creator features, read the [product boundaries](resources/creator-platform/product-boundaries.md) before planning an integration. It distinguishes current publishing behavior from proposed commerce and future delivery forms.
+
 ## Local development
 
 ```bash
@@ -64,6 +66,7 @@ The configured Git integration can produce preview deployments for PRs and produ
 │   ├── apps.md                     # App model overview
 │   ├── authentication/             # Auth & API keys
 │   ├── creator-publishing/         # Scoped creator-publishing REST integration
+│   ├── creator-platform/           # Product ownership and reuse boundaries
 │   ├── catalog/                    # Product catalog queries
 │   ├── checkout/                   # Cart & checkout flow
 │   └── pagination.md               # Pagination
