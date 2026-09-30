@@ -91,6 +91,7 @@ export default defineConfig({
           text: 'Creator Publishing',
           items: [
             { text: 'Overview', link: '/resources/creator-publishing/overview' },
+            { text: 'Product Boundaries', link: '/resources/creator-platform/product-boundaries' },
             { text: 'API Reference', link: '/resources/creator-publishing/api' },
             { text: 'Media Uploads', link: '/resources/creator-publishing/media' },
             { text: 'Klyfton Integration', link: '/resources/creator-publishing/klyfton' },
