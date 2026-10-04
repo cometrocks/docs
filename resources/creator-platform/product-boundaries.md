@@ -25,8 +25,30 @@ The existing `@comet-rocks/sdk` is a **microstore client**. Its existence does n
 | Publishing | Workspace access and user actions through the Klyfton gateway | Shared editor/preview, canonical content and revisions, publication, media, handles and public pages |
 | Native creator commerce (proposed) | Creator-facing composition and eligible workspace actions | Products, offers, private files, seller Connect setup, checkout, verified orders, buyer access and purchase email |
 | Booking (proposed) | Creator-facing composition and calendar/meeting consent | Booking inventory, holds, allocations and fulfillment decisions |
+| Crypto checkout and wallets (proposed, sandbox only) | Non-custodial operator of the Oomf Wallet for buyers and of creator receiving wallets; screening, ramp contracts, cash-out and financial reporting | Buyer payment methods on offers, crypto orders and quotes, chain-receipt verification and buyer access; no wallet, key, ramp or crypto role |
 
 The proposed commerce boundary keeps buyer access and purchase email independent of Klyfton uptime. Stripe commerce events are external evidence; they do not create Klyfton wallet cash. **The Klyfton ledger is the sole authority for Klyfton wallet balances and money postings.** That rule does not require an unrelated Comet checkout to post through Klyfton's ledger. Seller, payment, tax, support, and legal operator duties require their own reviewed evidence before live commerce.
+
+### Wallet and crypto payments (proposed)
+
+[Klyfton ADR 0116](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/c881fb5a290e0acd73a164c185168c62b8b9bc46/docs/decisions/0116-oomf-wallet-operating-model.md) (Proposed) sets the operating model for the sandbox Oomf wallet pilot. Nothing here is live, and no funds move under it.
+
+- **Brand:** buyers see an **Oomf Wallet**, served on an Oomf subdomain by Klyfton infrastructure with a visible "provided by Klyfton" disclosure. Creators manage receiving and cash-out in Klyfton.
+- **Commerce:** Comet keeps offers, orders, quotes, chain-receipt verification and buyer access. It grants access only when Klyfton reports `payment_cleared` **and** Comet's own finalized receipt check passes.
+- **Money:** Klyfton is the operator and is **non-custodial**. It holds no user keys, every transfer needs the user's own approval, users can exit without Klyfton, and Klyfton can decline service but never freeze funds. Buyers pay creators wallet to wallet, and regulated ramps handle fiat exchange.
+
+To keep Comet outside financial-services obligations, Comet **never**:
+
+1. creates, holds or recovers wallets, keys or key shares;
+2. initiates, approves, co-signs or sponsors crypto transfers;
+3. holds a ramp, wallet-infrastructure or blockchain-analytics contract or partner account;
+4. receives KYC data or screening results beyond a pass/hold flag;
+5. receives, holds or forwards crypto-assets, including fees, VAT or refunds;
+6. presents Oomf as providing a wallet, account or payment service in its own name;
+7. grants access on a held payment, or without its own finalized receipt verification;
+8. serves content on, or sets cookies trusted by, the Oomf Wallet origin.
+
+Any change to this list needs a new decision and a compliance assessment for Comet. Klyfton and Comet exchange only versioned server-to-server messages: the creator receiving destination, the checkout context, payment cleared/held, and sale recorded. The legal questions and pilot gates are in the [Klyfton operating model and legal analysis](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/c881fb5a290e0acd73a164c185168c62b8b9bc46/docs/plan/oomf-wallet-operating-model.md).
 
 Code provenance alone does not settle legal intellectual-property ownership, service operator responsibility, or billing ownership. Record those separately for each product and environment.
 
@@ -57,4 +79,5 @@ For now, this page changes documentation and planning only. Package a bounded mo
 - [Klyfton Creator Publishing architecture](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/main/docs/architecture/creator-publishing.md) and [Comet Creator Publishing overview](/resources/creator-publishing/overview) describe the current scoped publishing boundary.
 - [ADR 0090: purchase-access email](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/main/docs/decisions/0090-oomf-order-email-comet-owned.md) and [ADR 0091: native digital commerce](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/main/docs/decisions/0091-comet-native-digital-commerce.md) record proposed commerce ownership and activation limits.
 - [ADR 0094: storefront enrollment and plans](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/main/docs/decisions/0094-klyfton-owned-storefront-enrollment-and-plan-entitlements.md) and [ADR 0096: booking inventory](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/main/docs/decisions/0096-oomf-native-booking-authority.md) record proposed identity, entitlement and booking boundaries.
+- [ADR 0116: Oomf wallet operating model](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/c881fb5a290e0acd73a164c185168c62b8b9bc46/docs/decisions/0116-oomf-wallet-operating-model.md) records the proposed brand, commerce and non-custodial money split and Comet's never-list. It is pending review in Klyfton PR #368 and remains Proposed.
 - [Klyfton ownership map](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/main/docs/architecture/product-boundaries.md), [gradual transition plan](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/main/docs/plan/embedded-creator-platform-transition.md), and [ADR 0098: partner-composed UI](https://github.com/SafariShow/Klyfton-Creator-FinOS/blob/main/docs/decisions/0098-comet-creator-platform-and-partner-composed-ui.md) are companion documentation changes pending merge. ADR 0098 remains Proposed.
