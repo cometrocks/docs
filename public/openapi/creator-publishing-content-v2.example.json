@@ -39,10 +39,9 @@
   "sections": [
     {
       "id": "profile",
-      "type": "creator-hero",
       "showSection": true,
+      "type": "creator-hero",
       "config": {
-        "presentation": "profile",
         "media": {
           "type": "image",
           "url": "https://images.example.com/hero.jpg",
@@ -55,9 +54,7 @@
         },
         "handle": "alex",
         "displayName": "Alex Morgan",
-        "quoteLocales": {
-          "en": "Ideas for a creative life."
-        },
+        "presentation": "profile",
         "socialLinks": [
           {
             "id": "instagram",
@@ -67,19 +64,22 @@
         ],
         "partnerships": [
           "Creative Studio"
-        ]
+        ],
+        "quoteLocales": {
+          "en": "Ideas for a creative life."
+        }
       }
     },
     {
       "id": "links",
-      "type": "links",
       "showSection": true,
-      "heading": "Explore",
-      "appearance": "solid",
       "theme": {
         "mode": "custom",
         "linkColor": "#7046e8"
       },
+      "type": "links",
+      "heading": "Explore",
+      "appearance": "solid",
       "links": [
         {
           "id": "guide",
@@ -94,8 +94,8 @@
     },
     {
       "id": "story",
-      "type": "content",
       "showSection": true,
+      "type": "content",
       "config": {
         "content": {
           "en": {
@@ -117,8 +117,8 @@
     },
     {
       "id": "gallery",
-      "type": "media",
       "showSection": true,
+      "type": "media",
       "layout": "grid",
       "singleAspect": "square",
       "slides": [
@@ -137,8 +137,8 @@
     },
     {
       "id": "faq",
-      "type": "accordions",
       "showSection": true,
+      "type": "accordions",
       "expandFirst": true,
       "items": [
         {
@@ -164,13 +164,12 @@
     },
     {
       "id": "reviews",
-      "type": "testimonials",
       "showSection": true,
+      "type": "testimonials",
       "config": {
         "layout": "grid",
         "testimonials": [
           {
-            "id": "review-one",
             "rating": "5",
             "title": {
               "en": "Thoughtful and practical"
@@ -179,16 +178,16 @@
               "en": "A useful guide for my next project."
             },
             "customerName": "Jordan",
-            "customerInfo": "Reader"
+            "customerInfo": "Reader",
+            "id": "review-one"
           }
         ]
       }
     },
     {
       "id": "announcement",
-      "type": "banner",
       "showSection": true,
-      "textAnimation": "none",
+      "type": "banner",
       "text": {
         "en": {
           "blocks": [
@@ -201,7 +200,8 @@
             }
           ]
         }
-      }
+      },
+      "textAnimation": "none"
     }
   ]
 }

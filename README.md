@@ -4,8 +4,6 @@ Developer documentation for [comet.rocks](https://comet.rocks) — headless ecom
 
 Built with [VitePress](https://vitepress.dev). Deployment configuration targets Vercel.
 
-For Comet/Klyfton creator features, read the [product boundaries](resources/creator-platform/product-boundaries.md) before planning an integration. It distinguishes current publishing behavior from proposed commerce and future delivery forms.
-
 ## Local development
 
 ```bash
@@ -33,9 +31,9 @@ npm run docs:build
 
 Use Node.js 22. `docs:check` validates the OpenAPI 3.1 document, request/response fixtures, media and deletion error cases, and identity of the embedded/downloadable v2 content schema. It is an offline documentation check, not proof of live API availability. The documentation validation workflow runs these commands on pull requests and `main`; secret scanning runs separately.
 
-When updating Creator Publishing, verify the exact backend revision recorded in the OpenAPI `x-source`. Inspect its controller, store, content contract and media parser. The current spec includes 14 operations. Preserve generated v2 schema provenance; an integration head is not necessarily the artifact's original source revision.
+When updating Creator Publishing, verify the current API contract and regenerate the downloadable v2 schema from the supported content descriptor.
 
-For an additional source comparison, download that revision's `creatorPublishing.http.ts` as `http.ts` and `generated/creator-publishing-v2.ts` as `generated-v2.ts` into a temporary source directory. Obtain GitHub contents via base64 decoding to preserve source escapes. Then run:
+For an additional source comparison, provide a verified controller snapshot as `http.ts` and a matching generated content contract as `generated-v2.ts` in a temporary source directory. Then run:
 
 ```bash
 node --experimental-strip-types scripts/check-creator-publishing.mjs --source-dir /absolute/path/to/source
@@ -66,14 +64,13 @@ The configured Git integration can produce preview deployments for PRs and produ
 │   ├── apps.md                     # App model overview
 │   ├── authentication/             # Auth & API keys
 │   ├── creator-publishing/         # Scoped creator-publishing REST integration
-│   ├── creator-platform/           # Product ownership and reuse boundaries
 │   ├── catalog/                    # Product catalog queries
 │   ├── checkout/                   # Cart & checkout flow
 │   └── pagination.md               # Pagination
 ├── merchant/
 │   ├── shopify.md                  # Shopify setup guide
 │   ├── magento.md                  # Magento 2 setup guide
-│   ├── bigcommerce.md              # BigCommerce setup guide
+│   ├── bigcommerce.md              # BigCommerce availability
 │   └── salesforce.md               # SFCC setup guide
 └── .vitepress/
     └── config.mts                  # Site config & navigation

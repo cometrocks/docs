@@ -1,164 +1,35 @@
 ---
-title: Quick Start
-description: Connect your Shopify store to Comet Rocks and make your first GraphQL API call in under 5 minutes.
+title: Publisher Quick Start
+description: Set up a Comet publisher app and make your first authenticated API request.
 ---
 
-# Quick Start
+# Publisher quick start
 
-This guide walks you through connecting a Shopify store to Comet Rocks and making your first catalog query. Total time: **~5 minutes**.
+Use a publisher app to identify your server when it calls Comet. Each API also checks the access granted to that app.
 
-## Prerequisites
+## Set up your app
 
-- A Shopify store (development store is fine)
-- A Comet Rocks account — [sign up at console.comet.rocks](https://console.comet.rocks)
+1. Sign in to the [Comet console](https://console.comet.rocks) for the environment you plan to use. Open your publisher organization from the account menu. If you need a publisher organization or membership, [contact Comet Support](/support).
+2. Select an existing app in the sidebar. A publisher administrator can choose **Add new app** to create one.
+3. On **Home → App credentials**, choose **Create API key** for a new app or **Reveal key** if the app already has a revealable key. Copy it to your server's secret storage and hide it in the console.
+4. Share the **App client ID** with your Comet contact when requesting access. Keep the API key on your server.
 
----
+See [Publisher apps](/resources/apps) for credential permissions and troubleshooting.
 
-## Step 1: Create your Comet App
+## Choose your API
 
-An **App** in Comet is the entity that holds your API credentials and connects to your shop systems.
+- **Creator pages.** Ask Comet for the API origin, partner ID, creator onboarding method and grant for your environment. Then follow the [Creator Publishing setup](/resources/creator-publishing/overview) to call `GET /capabilities` for a verified creator.
+- **Catalog and checkout.** Confirm which brand catalog your publisher app can use and obtain its organization ID. Then send the GraphQL request below.
 
-1. Log in to [console.comet.rocks](https://console.comet.rocks)
-2. From the dashboard, click **Apps** in the left sidebar
-3. Click **Create New App**
-4. Give your app a name (e.g. `my-shopify-store`) and click **Create**
-5. Copy your **API Key** — it is shown only once, so save it now. You'll need it in the next step.
-
-::: warning
-Keep your API key secret. Never expose it in client-side code or public repositories.
-:::
-
-You can also mint a key programmatically with the `appClientGenerate` mutation.
-
----
-
-## Step 2: Connect your Shopify store
-
-1. In your App settings, click **Add Store**
-2. Select **Shopify** as the platform
-3. Enter your Shopify store URL (e.g. `your-store.myshopify.com`)
-4. You'll be prompted to create a **Custom App** in your Shopify admin:
-   - Go to Shopify Admin → **Settings** → **Apps and sales channels** → **Develop apps**
-   - Click **Create an app** and name it `Comet Rocks`
-   - Under **Configuration**, enable these API scopes:
-     - `read_products`
-     - `read_inventory`
-     - `read_price_rules`
-   - Click **Install app** and copy the **Admin API access token**
-5. Paste the Admin API access token into the Comet console and click **Connect**
-
-Comet will perform an initial catalog sync. This takes 30–60 seconds for small catalogs.
-
----
-
-## Step 3: Make your first API call
-
-Comet exposes a GraphQL endpoint. Your endpoint is shown in the console and is:
-
-```
-https://api.comet.rocks/graphql
-```
-
-Authenticate with your API key via the `x-api-key` header. (JWTs are also supported via `Authorization: Bearer <token>`.)
-
-### Test authentication
+## Query an authorized catalog
 
 ```bash
-curl -X POST https://api.comet.rocks/graphql \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: YOUR_API_KEY" \
-  -d '{"query": "{ __typename }"}'
+curl --fail-with-body 'https://api.comet.rocks/graphql' \
+  -H "x-api-key: ${COMET_API_KEY}" \
+  -H 'Content-Type: application/json' \
+  --data '{"query":"query GetProducts($organizationId: ID!) { productFind(organizationId: $organizationId, pagination: { first: 10 }) { nodes { id name { default { text } } } pageInfo { hasNextPage endCursor } } }","variables":{"organizationId":"YOUR_BRAND_ORGANIZATION_ID"}}'
 ```
 
-Expected response:
-```json
-{"data": {"__typename": "Query"}}
-```
+This example uses the production GraphQL endpoint. Use your environment's endpoint with a key from the same environment. Check the response's `errors` field even if the HTTP status is 200.
 
-### Query your catalog
-
-Fetch the first 10 products from your connected Shopify store:
-
-```graphql
-query GetProducts($organizationId: ID!) {
-  productFind(
-    organizationId: $organizationId
-    pagination: { first: 10 }
-  ) {
-    nodes {
-      id
-      name {
-        default { text }
-      }
-      sku
-      description {
-        default { text }
-      }
-      type
-    }
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
-
-```bash
-curl -X POST https://api.comet.rocks/graphql \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: YOUR_API_KEY" \
-  -d '{
-    "query": "query GetProducts($organizationId: ID!) { productFind(organizationId: $organizationId pagination: { first: 10 }) { nodes { id name { default { text } } sku } } }",
-    "variables": { "organizationId": "YOUR_ORG_ID" }
-  }'
-```
-
-::: tip
-Find your `organizationId` in the Comet console under **Settings → Organization**.
-:::
-
----
-
-## Step 4: Create a cart and add a product
-
-```graphql
-# 1. Create a cart
-mutation CreateCart {
-  cartCreate {
-    id
-    bags {
-      id
-    }
-  }
-}
-```
-
-```graphql
-# 2. Add a product to the cart
-mutation AddProduct($cartId: ID!, $productId: ID!) {
-  cartAddProducts(id: $cartId, input: {
-    products: [{ productId: $productId, quantity: 1 }]
-  }) {
-    id
-    bags {
-      id
-      lines {
-        product {
-          id
-        }
-        quantity
-      }
-    }
-  }
-}
-```
-
----
-
-## Next steps
-
-- [Tutorial: Launch your first micro-store](/tutorial) — build a full end-to-end flow
-- [Catalog API reference](/resources/catalog/prod_search) — full product search, filtering, and pagination
-- [Checkout flow](/resources/checkout/carts) — cart → addresses → shipping → payment → submit
-- [API Explorer](https://console.comet.rocks) — browse the live schema in the dashboard
+Continue with [product search](/resources/catalog/prod_search) or the [checkout tutorial](/tutorial). To connect a merchant's shop system, use the [Merchant Guides](/merchant/shopify).

@@ -72,7 +72,7 @@ validate('MediaList', { schemaVersion: 1, items: [], nextCursor: null })
 const operations = Object.entries(spec.paths).flatMap(([path, methods]) => Object.entries(methods)
   .filter(([method]) => ['get', 'post', 'put', 'delete', 'patch'].includes(method))
   .map(([method, operation]) => ({ path, method, operation })))
-assert.equal(operations.length, 14)
+assert.equal(operations.length, 18)
 assert.equal(new Set(operations.map(({ operation }) => operation.operationId)).size, operations.length)
 for (const { method, operation } of operations) {
   assert(operation.parameters.some((p) => p.$ref === '#/components/parameters/GrantGeneration'))
@@ -82,6 +82,18 @@ for (const { method, operation } of operations) {
   assert(operation.responses[method === 'post' ? '201' : '200'])
 }
 assert.deepEqual(spec.security, [{ CometAppKey: [] }])
+assert.equal(Object.hasOwn(spec, 'x-source'), false, 'Public OpenAPI must omit internal source metadata')
+
+const digestPage = { schemaVersion: 1, pageId: 'page_example', draftVersion: 1, digest }
+validate('PageNameCommand', { expectedDraftVersion: 1, name: 'Campaign page' })
+validate('PageNameCommand', { expectedDraftVersion: 1, name: '' }, false)
+validate('PageReadiness', { ...digestPage, state: 'ready', ready: true, reasons: [], qualifyingOffers: 0 })
+validate('MediaDeletionReceipt', { schemaVersion: 1, assetId: asset.id, deleted: true })
+validate('PublicationReceipt', {
+  schemaVersion: 1, pageId: 'page_example', draftVersion: 1, publicationVersion: 1,
+  activeRevision: 'rev_example', eventId: 'evt_example', sequence: 1,
+  name: 'Campaign page', updatedAt: '2026-11-11T00:00:00.000Z', publicationStatus: 'live'
+})
 
 // Optional exact-source check. Supply the inspected source snapshot; CI is offline
 // and does not use credentials or imply deployed API availability.
@@ -91,7 +103,12 @@ if (args.length) {
   const source = resolve(args[1])
   const controller = await readFile(resolve(source, 'http.ts'), 'utf8')
   const base = '/v1/partners/{partnerId}/creators/{externalCreatorId}'
-  const actual = [...controller.matchAll(/@(Get|Post|Put|Delete)\((?:'([^']*)')?\)/g)]
+  const routeGroup = controller.split('@Controller(').find((section) =>
+    section.startsWith("'v1/partners/:partnerId/creators/:externalCreatorId'")
+  )
+  assert(routeGroup, 'Creator Publishing controller is missing')
+  const actual = [...routeGroup.matchAll(/@(Get|Post|Put|Delete)\((?:'([^']*)')?\)/g)]
+    .filter((m) => !m[2] || /^(capabilities|events|media|pages)(?:\/|$)/.test(m[2]))
     .map((m) => `${m[1].toLowerCase()} ${base}${m[2] ? '/' + m[2].replace(/:([A-Za-z]+)/g, '{$1}') : ''}`).sort()
   assert.deepEqual(operations.map(({ method, path }) => `${method} ${path}`).sort(), actual)
   const generated = await import(pathToFileURL(resolve(source, 'generated-v2.ts')).href)
@@ -100,4 +117,4 @@ if (args.length) {
   generated.validatePublicationV2(content)
   console.log('Source check passed: controller routes, generated v2 schema, parsing and publication readiness.')
 }
-console.log('Creator Publishing passed: OpenAPI 3.1, 14 operations, content/media/deletion fixtures and schema identity.')
+console.log('Creator Publishing passed: OpenAPI 3.1, 18 operations, content and request/response fixtures and schema identity.')

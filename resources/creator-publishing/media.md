@@ -5,9 +5,9 @@ description: 'Upload and select creator-scoped images and videos through the Com
 
 # Creator media uploads
 
-Creators can upload images and videos and reuse their previous uploads through the same authorized integration server. Comet stores assets through its existing Cloudinary integration; creators do not need another hosting account. Page publication and media storage are separate operations.
+Creators can upload images and videos and reuse their previous uploads through the same authorized integration server. Comet hosts the uploaded assets. Page publication and media storage are separate operations.
 
-The paths below extend the [Creator Publishing base path and headers](/resources/creator-publishing/api#authentication-and-scope). The [OpenAPI specification](/openapi/creator-publishing.json) contains the complete schemas. These endpoints require an active verified creator binding and configured media provider; their presence in code does not establish live activation.
+The paths below extend the [Creator Publishing base path and headers](/resources/creator-publishing/api#authentication-and-scope). The [OpenAPI specification](/openapi/creator-publishing.json) contains the complete schemas. These endpoints require an active creator binding and media support in your environment.
 
 ## Discover support
 
@@ -55,7 +55,13 @@ Uploading does not insert an asset into page content or publish a page. Selectio
 
 GET `/media?limit=24` requires `page:read`. It returns **200** with `{schemaVersion:1, items:[asset], nextCursor}`. `limit` ranges from 1 to 100. Pass the exact `nextCursor` as `cursor` on the next request; null means the end. Media pagination uses `cursor`, while page listing uses `after`.
 
-Assets sort by newest ready timestamp, with descending upload ID as the tiebreaker. The library contains only ready uploads belonging to the current creator binding. It does not expose legacy organization-wide assets or another creator's uploads. There is no media deletion endpoint in this contract.
+Assets sort by newest ready timestamp, with descending upload ID as the tiebreaker. The library contains only ready uploads belonging to the current creator binding. It does not expose legacy organization-wide assets or another creator's uploads.
+
+## Delete an uploaded asset
+
+Send `DELETE /media/{assetId}` with `page:edit` and an `Idempotency-Key`. Use the asset's `id` from the library. The response is `{schemaVersion:1, assetId, deleted:true}`.
+
+Remove references from drafts and published pages before deleting the asset. Deletion removes the hosted asset and can break pages that still reference its URL. If deletion is in progress, wait and retry with the same key.
 
 ## Retry and cancellation
 
@@ -64,9 +70,3 @@ Keep the original filename, MIME type, bytes and idempotency key while an upload
 `503 MEDIA_UNAVAILABLE` covers missing provider configuration, provider failure or an unverifiable response. `413 PAYLOAD_TOO_LARGE` covers encoded/decoded size limits. No provider credentials or diagnostics are returned to the browser.
 
 Aborting a browser request stops waiting; it cannot guarantee that the provider upload was undone. Comet uses a stable provider ID to reconcile lost responses and rechecks current creator authority before finalizing or replaying a ready asset. Do not delete assets to compensate for an uncertain result.
-
-## Klyfton setup
-
-Klyfton proxies fixed workspace-authorized media routes through its existing backend. Its picker offers Upload, Library and Link, filters videos out of image-only fields, and inserts media after explicit selection. Cloudinary credentials, folders and upload signatures are not browser inputs.
-
-The Klyfton upload request deadline is 180 seconds. Provision production ingress for the media route's 28 MiB body and that request duration before enabling uploads; the content-only page request limit remains smaller. Larger or resumable uploads require separate implementation.

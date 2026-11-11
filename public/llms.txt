@@ -1,17 +1,17 @@
 # Comet Rocks Developer Docs
 
-> Comet Rocks is headless ecommerce infrastructure. It federates catalog, cart, and checkout across Shopify, Magento, and Salesforce Commerce Cloud into an Apollo Federation GraphQL API, and powers Checkout Stores (campaign storefronts, also called micro-stores). A separate, scoped REST creator-publishing API exists for approved server integrations. It is default-disabled; public pages require separately provisioned hosts/routes and current creator activation. GraphQL authentication uses an `x-api-key` header or JWT bearer token. Pagination uses Relay-style cursor connections.
+> Comet Rocks is headless ecommerce infrastructure. It federates catalog, cart, and checkout across Shopify, Magento, and Salesforce Commerce Cloud into an Apollo Federation GraphQL API, and powers Checkout Stores (campaign storefronts, also called micro-stores). The Creator Publishing REST API supports server-side page authoring for verified creators. Comet provisions API access and public hosting for each integration. GraphQL authentication uses an `x-api-key` header or JWT bearer token. Pagination uses Relay-style cursor connections.
 
 ## Getting Started
 
 - [Introduction](https://docs.comet.rocks/): What Comet is, the platform, and the GraphQL API.
-- [Quick Start](https://docs.comet.rocks/quickstart): Connect a Shopify store and make your first API call.
+- [Quick Start](https://docs.comet.rocks/quickstart): Set up a publisher app and make your first API call.
 - [Tutorial](https://docs.comet.rocks/tutorial): Launch a full Checkout Store end-to-end.
 
 ## Publisher API
 
-- [Apps](https://docs.comet.rocks/resources/apps): The App model and how API keys are minted (dashboard or `appClientGenerate`).
-- [Authentication](https://docs.comet.rocks/resources/authentication/authentication): API keys (`x-api-key`) and JWT tokens (`Authorization: Bearer`, RSA-signed, 12h).
+- [Publisher Apps](https://docs.comet.rocks/resources/apps): Create a publisher app, manage its API key and request API access.
+- [Authentication](https://docs.comet.rocks/resources/authentication/authentication): API keys (`x-api-key`) and JWT tokens (`Authorization: Bearer`).
 - [Search Products](https://docs.comet.rocks/resources/catalog/prod_search): The `productFind` query with filters and pagination.
 - [Product by ID](https://docs.comet.rocks/resources/catalog/by_id): Fetch a single product by id.
 - [Product by SKU](https://docs.comet.rocks/resources/catalog/sku): Fetch a product by SKU.
@@ -28,17 +28,15 @@
 
 ## Creator Publishing
 
-- [Overview](https://docs.comet.rocks/resources/creator-publishing/overview): Default-disabled, server-to-server REST page editing and publishing; v1 Header/Links remains compatible and v2 exposes the richer canonical palette through capability discovery.
+- [Overview](https://docs.comet.rocks/resources/creator-publishing/overview): Publisher onboarding, creator grants, capability discovery and server-side page publishing.
 - [API Reference](https://docs.comet.rocks/resources/creator-publishing/api): REST route and schema reference. Download the [OpenAPI document](https://docs.comet.rocks/openapi/creator-publishing.json).
-- [Media Uploads](https://docs.comet.rocks/resources/creator-publishing/media): Creator-scoped image/video uploads and ready-asset library; 5 MiB images, 20 MiB videos, route-specific request limits and retries.
-- [Klyfton Integration](https://docs.comet.rocks/resources/creator-publishing/klyfton): Klyfton's existing Rust backend, shared v2 editor, media picker and confirmed page deletion; rollout remains separately verified.
+- [Media Uploads](https://docs.comet.rocks/resources/creator-publishing/media): Creator-scoped image and video uploads, asset listing and deletion, request limits and retries.
 
 ## Merchant Guides
 
 - [Shopify](https://docs.comet.rocks/merchant/shopify): Connect a Shopify store.
 - [Magento 2](https://docs.comet.rocks/merchant/magento): Connect a Magento 2 store.
 - [Salesforce Commerce Cloud](https://docs.comet.rocks/merchant/salesforce): Connect an SFCC store.
-- [BigCommerce (planned)](https://docs.comet.rocks/merchant/bigcommerce): Roadmap — not yet available.
 
 ## Related
 

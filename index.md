@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Comet Rocks"
   text: "Headless Ecommerce Infrastructure"
-  tagline: Launch Checkout Stores, connect any shop system, and deliver unified checkout through GraphQL.
+  tagline: Integrate merchant catalogs and checkout, or publish creator pages from your application.
   actions:
     - theme: brand
       text: Quick Start
@@ -25,10 +25,10 @@ features:
     details: Multi-merchant carts, real-time shipping rates, discount codes, Stripe payment intents, and order submission — all in one API.
   - icon: { src: /icons/storefront.svg, width: 28, height: 28 }
     title: Checkout Stores
-    details: Launch campaign storefronts for product drops, seasonal moments, and social commerce in minutes. Powered by Comet's satellite storefront infrastructure.
+    details: Launch campaign storefronts for product drops, seasonal moments, and social commerce in minutes.
   - icon: { src: /icons/connect.svg, width: 28, height: 28 }
-    title: Any Shop System
-    details: Connect Shopify, Magento 2, or SFCC. Comet normalizes catalog, inventory, and checkout into a consistent API contract. (BigCommerce is on the roadmap.)
+    title: Shop System Integrations
+    details: Connect Shopify, Magento 2, or SFCC. Comet normalizes catalog, inventory, and checkout into a consistent API contract.
 ---
 
 ## What is Comet Rocks?
@@ -52,13 +52,13 @@ Brand Touchpoints → Apollo Router → Subgraphs → Shop System Connectors
 - **Auth:** API key (`x-api-key` header) or JWT bearer token (`Authorization: Bearer …`)
 - **Schema explorer:** the **API Explorer** in the [dashboard](https://console.comet.rocks)
 
-For approved creator integrations, Comet also provides a separate, scoped REST creator-publishing interface. It is default-disabled; its separately authorized public-reader capability requires operator-provisioned hosts/routes and current creator activation. See [Creator Publishing](/resources/creator-publishing/overview) for the current boundary.
+Use the [Creator Publishing REST API](/resources/creator-publishing/overview) to manage drafts, media and published pages for verified creators. Contact Comet to set up creator access and public hosting.
 
 ### Next steps
 
-- [Quick Start](/quickstart) — Connect your Shopify store and make your first API call in 5 minutes
+- [Quick Start](/quickstart) — Set up a publisher app and make your first API call
 - [Tutorial](/tutorial) — Launch a full Checkout Store end-to-end
-- [Apps](/resources/apps) — Understand the App model before building
+- [Apps](/resources/apps) — Manage app credentials and request access
 - [Authentication](/resources/authentication/authentication) — API keys and JWT tokens
 - [Creator Publishing](/resources/creator-publishing/overview) — Server-to-server page editing and publishing
 

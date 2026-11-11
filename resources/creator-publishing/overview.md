@@ -1,46 +1,39 @@
 ---
 title: 'Creator Publishing'
-description: 'A scoped, server-to-server REST API for creator page editing and publishing.'
+description: 'Set up server-to-server access to edit and publish pages for verified creators.'
 ---
 
 # Creator Publishing
 
-## Availability and scope
+Creator Publishing is a REST API for publishers that let creators manage pages from their own application. Your application signs in the creator and authorizes each action. Comet checks the creator's current grant and manages drafts, published revisions, media and public URLs.
 
-Creator Publishing is a separate REST interface for approved integrations that edit and publish creator pages. It is **default-disabled**; these docs do not establish live environment activation. Activation requires reviewed operator provisioning, verified IAM app ownership, a replica-set data environment, and the required server configuration. Public hosting additionally requires verified host ownership and registered routes.
+Use the [Publisher GraphQL API](/quickstart#query-an-authorized-catalog) for connected merchant catalogs and cart checkout.
 
-The content contract has two versions. Version 1 supports the original canonical **Header** and **Links** sections and remains backward compatible. Version 2 is the preferred contract and adds a canonical palette of Creator Hero, Links, Content, Media, Accordions, Testimonials, Banner, and legacy Header sections, plus snapshotted theme settings. Read `GET /capabilities` and use its content-version descriptors rather than assuming editor support.
+## Get access
 
-The current integration also supports a creator-scoped [image/video library and uploads](/resources/creator-publishing/media), and version-checked [page deletion](/resources/creator-publishing/api#delete-a-page). Deleting a page removes its current availability while retaining history and media.
+1. Set up a [publisher app](/resources/apps) in the intended environment. Send Comet your App client ID to request creator publishing access.
+2. Confirm your API origin, partner ID, onboarding method, available capabilities and public hosting setup with Comet. Keep separate credentials and creator mappings for each environment.
+3. Use a stable external creator ID from your authenticated workspace. Comet scopes access to the verified creator relationship, partner, environment and current grant.
 
-Creator Publishing includes an independently authorized public reader and route model, but this does not by itself activate a domain or make pages live. A public URL is available only after a host and route are operator-provisioned and the page is published under the creator's current activation.
+For a pre-provisioned creator relationship, bind the creator with the [bind endpoint](/resources/creator-publishing/api#endpoints) if your grant includes `creator:bind`. If Comet has enabled enrollment for your integration, follow the onboarding instructions it provides. Enrollment uses a separate server credential. Store the creator mapping and grant generation returned by enrollment and use the authoring key for page requests.
 
-Comet's established GraphQL API remains the interface for catalog, cart, and checkout. Creator Publishing adds REST page authoring; it does not replace those GraphQL operations.
+## Discover capabilities
 
-## Integration boundary
+Use the creator-specific path for authoring. From your server:
 
-An integration server calls Comet at:
-
+```bash
+curl --fail-with-body \
+  "${COMET_PUBLISHING_ORIGIN}/v1/partners/${PARTNER_ID}/creators/${EXTERNAL_CREATOR_ID}/capabilities" \
+  -H "x-api-key: ${COMET_PUBLISHING_API_KEY}" \
+  -H "x-grant-generation: ${GRANT_GENERATION}"
 ```
-/v1/partners/{partnerId}/creators/{externalCreatorId}
-```
 
-Comet owns page drafts, draft and publication version checks, immutable published revisions, idempotency records, and durable publication/lifecycle events. The authoring revision endpoint is authenticated origin access; public reads use the separately authorized public-reader boundary.
+Use the returned capabilities, grant expiry, and content descriptors to decide which controls to show. Version 1 supports Header and Links. For new pages, use the preferred content version advertised by the API. Confirm optional features such as uploads and form submissions in the response for your environment.
 
-Every authoring/event request requires these headers:
+## Publish a page
 
-- `x-api-key`: an existing IAM `APP_CLIENT` API key held by the integration server.
-- `x-grant-generation`: the generation for the operator-provisioned, scoped grant.
-- `Idempotency-Key`: required for write requests. Retry an ambiguous write with its original key and payload.
+Create or save a draft, preview that exact version, and publish it with the version checks and digest returned by Comet. Include a unique `Idempotency-Key` on each write. When a request times out, retry with the same key and payload.
 
-GraphQL JWT bearer tokens are not accepted by the Creator Publishing REST API. Do not expose the service API key or grant generation in a browser application. A verified creator binding and a current grant scoped to the partner, creator, and environment are also required.
+Read the page after publication to get its `publicUrl`. A public URL requires an active host and route for the creator. A null URL indicates that the page currently has no public URL.
 
-## Read the API contract
-
-See the [API reference](/resources/creator-publishing/api) for routes, payloads, version checks, errors, and the supported content descriptor. You can also [download the OpenAPI document](/openapi/creator-publishing.json).
-
-For the Klyfton server integration, workspace authorization, and browser boundary, see [Klyfton Integration](/resources/creator-publishing/klyfton).
-
-## Signup delivery
-
-Creator signup delivery to Klyfton Inner Circle is unavailable. The current publication/lifecycle event polling does not provide signup webhooks or a delivery receiver. That work is deferred pending a versioned delivery contract and implementation on both sides.
+See the [API reference](/resources/creator-publishing/api) for the authoring workflow and [Media uploads](/resources/creator-publishing/media) for the creator asset library.
