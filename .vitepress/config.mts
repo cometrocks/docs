@@ -8,6 +8,7 @@ export default defineConfig({
   lang: 'en-US',
   cleanUrls: true,
   lastUpdated: true,
+  srcExclude: ['**/AGENTS.md', '**/README.md'],
 
   // Generates /sitemap.xml at build time for SEO + AI-engine pickup.
   sitemap: {
@@ -58,7 +59,7 @@ export default defineConfig({
         {
           text: 'Publisher API',
           items: [
-            { text: 'Apps', link: '/resources/apps' },
+            { text: 'Publisher Apps', link: '/resources/apps' },
             { text: 'Authentication', link: '/resources/authentication/authentication' },
             {
               text: 'Catalog',
@@ -91,10 +92,8 @@ export default defineConfig({
           text: 'Creator Publishing',
           items: [
             { text: 'Overview', link: '/resources/creator-publishing/overview' },
-            { text: 'Product Boundaries', link: '/resources/creator-platform/product-boundaries' },
             { text: 'API Reference', link: '/resources/creator-publishing/api' },
             { text: 'Media Uploads', link: '/resources/creator-publishing/media' },
-            { text: 'Klyfton Integration', link: '/resources/creator-publishing/klyfton' },
           ],
         },
       ],
@@ -105,7 +104,6 @@ export default defineConfig({
             { text: 'Shopify', link: '/merchant/shopify' },
             { text: 'Magento 2', link: '/merchant/magento' },
             { text: 'Salesforce Commerce Cloud', link: '/merchant/salesforce' },
-            { text: 'BigCommerce (planned)', link: '/merchant/bigcommerce' },
             { text: 'Contact Support', link: '/support' },
           ],
         },
@@ -117,11 +115,6 @@ export default defineConfig({
       { icon: 'x', link: 'https://twitter.com/comet_rocks' },
       { icon: 'linkedin', link: 'https://www.linkedin.com/company/cometrocks/' },
     ],
-
-    editLink: {
-      pattern: 'https://github.com/cometrocks/docs/edit/main/:path',
-      text: 'Edit this page on GitHub',
-    },
 
     footer: {
       message:

@@ -5,9 +5,7 @@ description: 'Versioned content, request and response schemas, authorization, an
 
 # Creator Publishing API reference
 
-[Download OpenAPI 3.1](/openapi/creator-publishing.json). Import this document into an OpenAPI-compatible client or viewer. It describes the **Comet server-to-server authoring API**, including content versions 1 and 2. Klyfton's browser-facing API has its own [integration guide](/resources/creator-publishing/klyfton).
-
-This reference is checked against backend revision `1f595395d54980e4565df93ec3cf8a071ff66007` on 2026-09-24. It includes page deletion and the creator media library/upload routes. The API defaults disabled. Obtain the approved environment origin and scoped access from Comet before making requests; the OpenAPI server is a reserved placeholder, not a live deployment. Public-renderer reader endpoints and operator commands are separate from this authoring specification.
+[Download OpenAPI 3.1](/openapi/creator-publishing.json). Import this document into an OpenAPI-compatible client or viewer. It covers server-to-server page authoring, media and publication events. Replace the OpenAPI server placeholder with the origin Comet provided for your environment. See [Get access](/resources/creator-publishing/overview#get-access) for creator onboarding.
 
 ## Authentication and scope
 
@@ -24,9 +22,9 @@ Base path, appended to your approved Comet origin:
 | `Idempotency-Key` | Every PUT/POST/DELETE | Unique command key, 1–128 ASCII letters, digits, underscores or hyphens. |
 | `Content-Type: application/json` | Requests with a JSON body | Normally 256 KiB; POST `/media` alone permits 28 MiB JSON. |
 
-Do not send an `Authorization` header: these routes reject it, including GraphQL JWTs. App authentication alone does not grant access. Comet checks the current grant's principal, environment, partner, creator relationship, generation, expiry and required capability on each request, including retries. The environment comes from server configuration.
+Do not send an `Authorization` header: these routes reject it, including GraphQL JWTs. App authentication alone does not grant access. Comet checks the current grant's principal, environment, partner, creator relationship, generation, expiry and required capability on each request, including retries. Use the origin provisioned for your environment.
 
-Grant provisioning and creator onboarding are operator prerequisites. `PUT` on the base path materializes an already verified relationship; it does not create an app, grant or global creator identity. Capability discovery can run before binding. Page operations require an active binding.
+Comet provisions grants for verified creator relationships. Use `PUT` on the base path when your onboarding flow requires binding an already verified creator. Capability discovery can run before binding. Page and media operations require an active binding.
 
 ## Endpoints
 
@@ -35,21 +33,25 @@ All paths below are relative to the base path. GET, PUT and DELETE return **200*
 | Method | Path | Capability | Result |
 | --- | --- | --- | --- |
 | PUT | Base path | `creator:bind` | `{schemaVersion, realm, creatorId, identityId}`; no request body needed. |
-| GET | `/capabilities` | `page:read` | Current grant and supported content descriptors. |
+| GET | `/capabilities` | `page:read` or an enabled commerce read grant | Current grant and supported content descriptors. |
 | GET | `/media?cursor=…&limit=24` | `page:read` | Ready creator assets: `{schemaVersion, items, nextCursor}`. |
-| POST | `/media` | `page:edit` | Upload an image/video: `{schemaVersion, asset}`. |
+| POST | `/media` | `page:edit` | Upload an image or video. |
+| DELETE | `/media/{assetId}` | `page:edit` | Delete an uploaded asset. |
 | GET | `/pages?after=…&limit=20` | `page:read` | `{schemaVersion, pages, nextCursor}`. |
-| POST | `/pages` | `page:edit` | New draft from `{content}`. |
+| POST | `/pages` | `page:edit` | New draft from `{content}` with an optional management name. |
 | GET | `/pages/{pageId}` | `page:read` | Current draft, versions, digest and `publicUrl`. |
 | PUT | `/pages/{pageId}` | `page:edit` | Updated draft from `{expectedDraftVersion, content}`. |
+| PUT | `/pages/{pageId}/name` | `page:edit` and `page:read` | Rename using `{expectedDraftVersion, name}`. |
+| POST | `/pages/{pageId}/clone` | `page:edit` and `page:read` | Create an unpublished copy using `{expectedDraftVersion, name}`. |
 | DELETE | `/pages/{pageId}` | `page:edit`; also `page:publish` when published | Tombstone the page after checking all expected versions. |
+| GET | `/pages/{pageId}/readiness?draftVersion=N` | `page:read` | Readiness of the exact saved draft. |
 | GET | `/pages/{pageId}/preview?draftVersion=N` | `page:read` | Exact current saved draft and digest; stale versions conflict. |
 | POST | `/pages/{pageId}/publish` | `page:publish` | Publication receipt for the exact reviewed draft. |
 | POST | `/pages/{pageId}/unpublish` | `page:publish` | Receipt after clearing the active publication. |
 | GET | `/pages/{pageId}/revisions/{revisionId}` | `page:read` | Immutable content only while that revision remains current. |
 | GET | `/events?after=0` | `events:read` | Raw array of up to 100 durable realm events. |
 
-Page listing accepts `limit` from 1 to 100. Pass `nextCursor` as the next `after`; null means the end. Page IDs sort lexicographically, not by creation time. Concurrent insertions before an existing cursor require starting a fresh listing. Each summary contains `pageId`, `draftVersion`, `publicationVersion` and `activeRevision`.
+Page listing accepts `limit` from 1 to 100. Pass `nextCursor` as the next `after`; null means the end. Page IDs sort lexicographically, not by creation time. Concurrent insertions before an existing cursor require starting a fresh listing. Each summary contains `pageId`, `draftVersion`, `publicationVersion`, `activeRevision` and management fields including `name` and `publicationStatus`.
 
 ## Content versions
 
@@ -60,14 +62,15 @@ The outer API response stays `schemaVersion: 1`. The nested **content** has its 
 - `grant`: current generation, expiry and allowed operations.
 - `content`: the original v1 Header/Links descriptor for compatibility.
 - `contentVersions`: descriptors for v1 and v2. The v2 descriptor includes structural `jsonSchema`.
-- `preferredContentVersion: 2`.
+- `preferredContentVersion` selects the server's preferred version for new content.
+- `management` advertises name and clone access plus the name length limit.
 - `media`: provider availability, upload permission, accepted MIME types and decoded image/video size limits. This additive descriptor may be absent on older backends; see [Media uploads](/resources/creator-publishing/media).
 
 **Version 1** preserves `{schemaVersion: 1, sections}` with basic Header and Links. It allows up to 30 sections, 50 links per section, 10 locales, 500 UTF-16 code units per text field, and 2,048 per URL. Section and link-row IDs must be unique in their respective lists. Unsupported fields are rejected.
 
-**Version 2** uses `{schemaVersion: 2, settings, sections}`. It supports Creator Hero, Links, Content, Media, Accordions, Testimonials, Banner and legacy Header. Theme settings are stored in the same immutable content and digest. Icons, canonical media metadata and bounded rich text use the shared content contract. Commerce, signup capture, merchant references, analytics and arbitrary custom HTML remain outside this contract.
+**Version 2** uses `{schemaVersion: 2, settings, sections}`. Use the advertised section types and v2 JSON Schema for the current content palette. Theme and audience settings are part of the saved content. Availability of product placements, posts and signup forms depends on the integration's capabilities and readiness. For forms, check `forms.publicationEnabled` in the v2 descriptor before offering publication of a visible capture form.
 
-Use the [v2 JSON Schema](/openapi/creator-publishing-content-v2.schema.json) and [complete example document](/openapi/creator-publishing-content-v2.example.json), extracted from the backend's generated shared contract. Wrap the example as `{"content": ...}` when creating a page. Structural schemas do not represent every server check: unique IDs, selected-palette consistency, markup safety, public HTTPS media URLs, depth and UTF-16 length limits, and publication readiness are also enforced. Validate against the current server; do not assume that passing a generic JSON Schema validator means content can be published.
+Use the [v2 JSON Schema](/openapi/creator-publishing-content-v2.schema.json) and [complete example document](/openapi/creator-publishing-content-v2.example.json), for the v2 content contract. Wrap the example as `{"content": ...}` when creating a page. Structural schemas do not represent every server check: unique IDs, selected-palette consistency, markup safety, public HTTPS media URLs, depth and UTF-16 length limits, and publication readiness are also enforced. Validate against the current server; do not assume that passing a generic JSON Schema validator means content can be published.
 
 Draft link URLs may be incomplete. Visible links must resolve safely to HTTPS when publishing. V2 also checks visible social links and enabled countdown datetimes at publication; media URL safety is checked when parsing the draft. Authored strings remain unchanged.
 
@@ -95,9 +98,9 @@ For a minimal backward-compatible example, POST `/pages` with:
 
 The response contains `schemaVersion`, `pageId`, `draftVersion: 1`, `publicationVersion: 0`, `activeRevision: null`, `content` and a 64-character lowercase hexadecimal `digest`. Save with the last observed `expectedDraftVersion` and the complete replacement `content`. A successful save increments `draftVersion` without changing the active publication.
 
-Request `/preview?draftVersion=N` for the exact saved version. The response supplies content and digest; it is not rendered HTML or a public URL. The editor must render that exact content before offering publication. Editing after preview requires saving and previewing again.
+Request `GET /pages/{pageId}/preview?draftVersion=N` to retrieve the exact saved content and digest. Render that content for the creator's review. Use `GET /pages/{pageId}/readiness?draftVersion=N` to check `state` (`ready`, `blocked` or `unknown`) and any reason codes. If the draft changes, save, preview and check readiness again.
 
-POST `/publish` with all values from the reviewed saved state:
+POST `/pages/{pageId}/publish` with all values from the reviewed saved state:
 
 ```json
 {
@@ -108,11 +111,15 @@ POST `/publish` with all values from the reviewed saved state:
 }
 ```
 
-The digest text above is a placeholder and must be replaced. Use the server-returned digest instead of hashing differently in a client. Its algorithm recursively sorts object keys using JavaScript `localeCompare` with `en-US`, preserves array order and SHA-256 hashes UTF-8 JSON. A generic alphabetical sort may not produce the same digest.
+The digest text above is a placeholder and must be replaced. Use the digest returned by Comet for the reviewed version.
 
-Publication returns `schemaVersion`, `pageId`, `draftVersion`, the incremented `publicationVersion`, `activeRevision`, `eventId` and realm-local `sequence`. This receipt does not contain content, digest or public URL. GET the page again for current state and `publicUrl`.
+Publication returns `schemaVersion`, `pageId`, `draftVersion`, the incremented `publicationVersion`, `activeRevision`, `eventId` and realm-local `sequence`. Current responses also include the management name, update time and publication status. This receipt does not contain content, digest or public URL. GET the page again for current state and `publicUrl`.
 
-POST `/unpublish` with `expectedDraftVersion`, `expectedActiveRevision` and `expectedPublicationVersion` from current state; omit `digest`. It clears the active revision and increments the publication version while retaining immutable history. The separate publication version prevents an old command from succeeding after a publish/unpublish cycle.
+POST `/pages/{pageId}/unpublish` with `expectedDraftVersion`, `expectedActiveRevision` and `expectedPublicationVersion` from current state; omit `digest`. It clears the active revision and increments the publication version while retaining immutable history. The separate publication version prevents an old command from succeeding after a publish/unpublish cycle.
+
+## Rename or clone a page
+
+When the `management` descriptor allows it, send `name` and the current `expectedDraftVersion` to the name or clone endpoint. Names are trimmed, nonblank and limited to 120 UTF-16 code units. A rename updates the management name and increments the draft version. A clone starts at draft version 1 with no active publication, in the same creator scope.
 
 ## Delete a page
 
@@ -134,9 +141,9 @@ After an unknown outcome, retry the identical key and body. Current permissions 
 
 ## Public URLs
 
-Only the authorized **GET page** response includes `publicUrl`. It is a canonical HTTPS URL or null. Creation, save, preview, publication receipts and page lists do not include it. A URL requires an active operator-registered host/route and an eligible current publication under the creator's current activation. Reread after mutations instead of treating an idempotently replayed receipt as current state.
+Only the authorized **GET page** response includes `publicUrl`. It is a canonical HTTPS URL or null. Creation, save, preview, publication receipts and page lists do not include it. A URL requires an active host and route and an eligible current publication for the creator. Reread after mutations instead of treating an idempotently replayed receipt as current state.
 
-Public visitors use the configured public renderer. Its server uses a separate host-registered reader credential; browsers never receive an authoring key. A successful publish does not register a domain. Previously returned revision IDs and URLs do not bypass current public authorization or unpublication.
+Use the returned URL for visitors. Keep the authoring key on your server. Comet checks current publication and routing on each public read.
 
 ## Retries and conflicts
 
@@ -154,7 +161,7 @@ Application errors use `{"schemaVersion":1,"code":"VERSION_CONFLICT"}`. Ingress 
 | 401 | `UNAUTHENTICATED` | Check the app credential and remove unsupported Authorization headers. |
 | 403 | `FORBIDDEN` | Check the current scoped grant and creator authority. |
 | 404 | `NOT_FOUND` | Resource is absent or unavailable within this scope. |
-| 409 | `VERSION_CONFLICT`, `PREVIEW_CONFLICT`, `IDEMPOTENCY_CONFLICT`, `BINDING_CONFLICT`, `UPLOAD_IN_PROGRESS` | Reconcile current state; an upload in progress needs the same command retried after its lease. |
+| 409 | `VERSION_CONFLICT`, `PREVIEW_CONFLICT`, `IDEMPOTENCY_CONFLICT`, `BINDING_CONFLICT`, `UPLOAD_IN_PROGRESS` | Reconcile current state. For `UPLOAD_IN_PROGRESS` or `DELETE_IN_PROGRESS`, wait and retry the same media command. |
 | 413 | `PAYLOAD_TOO_LARGE` | Page commands: 256 KiB. Media: 5 MiB decoded images / 20 MiB videos, with a 28 MiB JSON ceiling. |
 | 422 | `CONTENT_NOT_READY` | Correct publication readiness, then save and preview again. |
 | 503 | `FEATURE_DISABLED`, `AUTHORITY_UNAVAILABLE`, `MEDIA_UNAVAILABLE` | Confirm activation/provider configuration or wait for recovery; retain the original key for an uncertain write. |
@@ -167,4 +174,4 @@ Application errors use `{"schemaVersion":1,"code":"VERSION_CONFLICT"}`. Ingress 
 
 Persist processed event IDs and the cursor atomically with the consumer's updates. Continue from the last processed sequence; there is no server acknowledgement route. A separate current `events:read` grant can retrieve terminal lifecycle events for a suspended/deleted creator without granting page access. Revoking the only event credential requires operator recovery.
 
-These events concern publication and lifecycle. Signup webhook delivery is deferred and is not part of this API.
+These events concern publication and lifecycle. Use the publication and lifecycle feed for page state changes. Confirm signup delivery separately with Comet if your integration uses forms.

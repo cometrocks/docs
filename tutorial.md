@@ -11,7 +11,7 @@ In this tutorial you'll build a working micro-store backed by your Shopify catal
 2. Create a checkout flow
 3. Launch it as a micro-store via the Comet console
 
-**Prerequisites:** Complete the [Quick Start](/quickstart) first — you need a connected Shopify store and a working API key.
+**Prerequisites:** Connect your [Shopify store](/merchant/shopify) and use an [API key](/resources/authentication/authentication) with access to its brand catalog and checkout.
 
 ---
 

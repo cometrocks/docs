@@ -1,45 +1,37 @@
 ---
 title: 'Authentication & Authorization'
-description: 'Authenticate to Comet GraphQL with API keys or JWT tokens, and understand the separate creator-publishing REST credentials.'
+description: 'Authenticate GraphQL and Creator Publishing requests from your server.'
 ---
 
-For catalog, cart, and checkout, Comet's GraphQL API supports API keys and JWT tokens. Send GraphQL requests to `https://api.comet.rocks/graphql` (also shown in the dashboard under Apps).
+# Authentication and authorization
 
-### GraphQL API keys
+## GraphQL API key
 
-API keys are a simple and effective way to authenticate requests. You can pass the API key as a header on each request:
+Send the key for your [publisher app](/resources/apps) in the `x-api-key` header. The production GraphQL endpoint is `https://api.comet.rocks/graphql`. Keep your key in server-side secret storage and use the endpoint for the environment that issued it.
 
-```bash
+```http
 x-api-key: YOUR_API_KEY
 ```
 
-You can mint an API key in the dashboard (Apps → Create App → the key is shown once), or programmatically with the `appClientGenerate(organizationId, input)` mutation, which also returns the key once at creation time.
+Authentication identifies the app. Confirm that it has access to the catalog and operations you intend to call.
 
-### GraphQL JWT tokens
+## GraphQL bearer token
 
-For longer GraphQL sessions, exchange an API key for a JWT using the GraphQL-only `tokenCreate` mutation:
+Your server can use the GraphQL `tokenCreate` mutation to exchange an API key for a bearer token. Use the returned `expiresIn` value in seconds to track expiration.
 
 ```graphql
-mutation {
-	tokenCreate(input: { authType: API_KEY, auth: { apiKey: "YOUR_API_KEY" } }) {
-		accessToken
-		expiresIn
-	}
+mutation CreateAccessToken($apiKey: String!) {
+  tokenCreate(input: { authType: API_KEY, auth: { apiKey: $apiKey } }) {
+    accessToken
+    expiresIn
+  }
 }
 ```
 
-The returned `accessToken` is an RSA-signed JWT and expires in 12 hours (`expiresIn` is the lifetime in seconds). Include it in subsequent requests in the `Authorization` header:
+Send the token on subsequent GraphQL requests as `Authorization: Bearer YOUR_ACCESS_TOKEN`. Treat it as a credential carrying the app's authority.
 
-```bash
-Authorization: Bearer YOUR_JWT_TOKEN
-```
+## Creator Publishing REST
 
-These examples document direct GraphQL access. Agent and application integrations may have their own authorization flow; do not infer their rollout status or credentials from this page.
+The [Creator Publishing API](/resources/creator-publishing/overview) requires the server-held `x-api-key` and the current creator grant generation in `x-grant-generation`. Send `Idempotency-Key` on writes. Omit the `Authorization` header on these requests.
 
-## Creator-publishing REST authorization
-
-Creator publishing is a separate, default-disabled REST integration for approved server-to-server clients. It requires an existing IAM `APP_CLIENT` API key in `x-api-key` and the operator-provisioned grant generation in `x-grant-generation`. Write requests also require `Idempotency-Key`.
-
-Do not send a GraphQL `Authorization: Bearer` JWT to these REST routes: JWTs are not accepted there. The browser must not receive the service API key or grant generation. The integration server holds those values and obtains a scoped grant for the creator, partner, and environment.
-
-Read the [Creator Publishing overview](/resources/creator-publishing/overview) before integrating.
+Use the origin, partner ID, creator identifier and grant provisioned for your integration. Keep credentials and grant values on your server and authorize each creator action in your application before calling Comet.

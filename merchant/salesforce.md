@@ -11,13 +11,6 @@ The Comet cartridge is designed to streamline the process of retrieving data (Pr
 
 The Comet cartridge is versatile and compatible with both SFRA and SiteGenesis shops. It has been thoroughly tested with SFRA 7.0 (SFCC 24.3) and offers support for versions as early as 6.3 (Compatibility mode of SFCC 22.7). This wide range of compatibility ensures that the cartridge can be seamlessly integrated into various SFCC environments.
 
-# Integration Video
-
-We take pride in the exceptionally seamless integration process with Comet. Our team has worked diligently to ensure that the integration is not only swift but also incredibly straightforward. To showcase the ease of integration, we have prepared a video demonstration using SFRA. This video provides a clear visual representation of how effortlessly the Comet cartridge can be integrated into your SFCC system.
-
-
-[By watching the integration video,](https://www.loom.com/share/30b53ce523d8430387cc15d2031b1cc3?sid=26033ce9-c2bb-4ceb-9573-c6a7cc7b0ea1) you can gain a comprehensive understanding of the steps involved and witness firsthand how smoothly the Comet cartridge integrates with SFCC. This video serves as a valuable resource for developers and stakeholders alike, providing them with the confidence to proceed with the integration process.
-
 ## Available features
 The Comet cartridge offers a comprehensive set of features to facilitate efficient data export from Salesforce Commerce Cloud (SFCC). These features include:
   1. Full & Delta Catalog export
@@ -25,9 +18,6 @@ The Comet cartridge offers a comprehensive set of features to facilitate efficie
   3. Full & Delta PriceBooks export
   4. Full & Delta Campaign & Promotion export
   5. Headless stores (Comet Satellite Stores)
-
-## Dataflow diagrams
-    ![dataflow.jpg](/images/salesforce/dataflow.png)
 
 ## Integration Guide
 
@@ -39,7 +29,7 @@ Before proceeding with the integration, it is essential to ensure that the neces
 Please follow these steps to complete the access setup:
 #### 1. Store details
 Provide the store details:
-![store-details.png](/images/salesforce/store-details.png)
+
 
   | Form Fields | meanings |
   |----|----|
@@ -49,11 +39,11 @@ Provide the store details:
 
 
 #### 2. Select your e-commerce platform
-Please choose your e-commerce platform from the following options:
-![ecommerce-platforms.png](/images/salesforce/ecommerce-platforms.png)
+Choose **Salesforce Commerce Cloud** as the ecommerce platform.
+
 #### 3. Configure catalog details
-To configure the integration between Salesforce Commerce Cloud (SFCC) and the Comet
-![configure-catalog.png](/images/salesforce/configure-catalog.png)
+Enter the catalog, price book, and inventory IDs from Business Manager.
+
 
   | Form Fields | meanings |
   |----|----|
@@ -66,7 +56,7 @@ To configure the integration between Salesforce Commerce Cloud (SFCC) and the Co
 These fields allow us to connect to your Salesforce app and display your content. More information about these fields can be found below:
 
 ##### a. API Config
-![API-configs.png](/images/salesforce/API-configs.png)
+
 
   | Form Fields: | meanings |
   |----|----|
@@ -86,7 +76,7 @@ These fields allow us to connect to your Salesforce app and display your content
 
 
 ##### b. OCAPI credentials
-![OCAPI-credentials.png](/images/salesforce/OCAPI-credentials.png)
+
 
 
   |Form fields|meanings|
@@ -97,7 +87,7 @@ These fields allow us to connect to your Salesforce app and display your content
   | Business Manager access key: | Provide the access key for your Business Manager account. This key grants access to the necessary APIs and resources required for the integration. You can generate a new access key in your Business Manager > Profile > Manage Access Keys > Agent User Login and OCAPI |
 
 ##### c. SCAPI credentials
-![SCAPI-credentials.png](/images/salesforce/SCAPI-credentials.png)
+
 The following input fields are required for the Salesforce Commerce Cloud API (SCAPI) integration:
 
   |Form fields|meanings|
@@ -109,7 +99,7 @@ The following input fields are required for the Salesforce Commerce Cloud API (S
 
 #### 4. Add these credentials to Business Manager
  Navigate to Merchant Tools > Site Preferences > Custom Site Preference > Comet Configurations and then paste the following values.
- ![add-credentials.png](/images/salesforce/add-credentials.png)
+
 
  Fields WebDAV URL, Brand Organization ID and Comet Parent Store ID will be automatically generated and prefilled. Click on "Connect Cartridge", these credentials will be pushed to SFCC under Comet custom preference. 
 
@@ -123,12 +113,12 @@ The following input fields are required for the Salesforce Commerce Cloud API (S
 
 #### 6. Connect payment processor
 To enable secure and seamless payment transactions from comet satellite store, you need to integrate a payment processor. Please choose your favourite PSP out of given list.
-![select-psp.png](/images/salesforce/select-psp.png)
+
 
 Follow these steps to connect your chosen payment processor: 
 (Adyen's example below)
 **Submit credentials**
-![connect-psp.png](/images/salesforce/connect-psp.png)
+
 
   |Form fields|meanings|
   |----|----|
@@ -138,7 +128,7 @@ Follow these steps to connect your chosen payment processor:
   |Select your environment| Select "Test" OR  "Live" based on the use case.
 
 **Configure Adyen Webhook**
-![Adyen-webhook-conf.png](/images/salesforce/Adyen-webhook-conf.png)
+
 |Form fields|meanings|
   |----|----|
   |Webhook URL|The Webhook URL is the endpoint where Adyen will send the event data when the specified event occurs. This will be prefilled and not editable field.|
@@ -159,9 +149,9 @@ To set up a webhook on the Adyen portal, follow these steps:
 
 3. Click on the **Add webhook** button to create a new webhook.
 4. Choose the **Standard webhook** from the **Recommended webhook** section.
-![adyen-standard-webhook.png](/images/salesforce/adyen-standard-webhook.png)
-![adyen-general.png](/images/salesforce/adyen-general.png)
-![adyen-server-configuration.png](/images/salesforce/adyen-server-configuration.png)
+
+
+
 5. Provide the following details for your webhook:
   - **Description**: Enter a descriptive name for your webhook. ex: "Comet-your_Brand_name"
   - **URL**: Specify the URL where Adyen should send the webhook notifications. Please copy the value from [here](/merchant/salesforce#_6-connect-payment-processor).
@@ -169,7 +159,6 @@ To set up a webhook on the Adyen portal, follow these steps:
   - **Authentication**: If required, select the authentication method and provide the necessary credentials.
   - **Generate HMAC Key**: Generate HMAC Key and add it in the [Comet console](/merchant/salesforce#_6-connect-payment-processor).
 
-![adyen-hmac-key.png](/images/salesforce/adyen-hmac-key.png)
 
 
 6. In the **Subscriptions** section, select the events you want to receive notifications for. Please see the comet recommendation [here](/merchant/salesforce#_6-connect-payment-processor).
@@ -252,7 +241,7 @@ To enable the Comet integration, the following object structures (metadata) must
 
 #### Step 3: Update custom preference
 In Business Manager, navigate to Merchant ToolsSite > Preferences Custom > Site Preference Groups. Custom preference groups with the ID “Comet Configuration” are available.
-![comet-custom-preference.png](/images/salesforce/comet-custom-preference.png)
+
 
   |Comet Attributes|Purpose|
   |----|----|

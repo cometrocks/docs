@@ -36,7 +36,7 @@ Replace `$organizationId`, `$filters`, and `$pagination` with the appropriate va
 
 ### Parameters
 
-- **organizationId**: The unique identifier for any brand or publisher in the system. This helps in narrowing down the search to products associated with a specific organization.
+- **organizationId**: The ID of the organization that owns the catalog you want to query. For a publisher app calling a merchant catalog, use the authorized brand's organization ID.
 
 ### Filters
 

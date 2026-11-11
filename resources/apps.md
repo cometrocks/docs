@@ -1,38 +1,26 @@
 ---
-title: 'Apps'
-description: 'Integrate with Comet via Apps'
+title: 'Publisher Apps'
+description: 'Create a publisher app, manage its API key, and request access to Comet APIs.'
 ---
 
-## Overview
+# Publisher apps
 
-Apps in Comet provide access to the product catalog and checkout process. By integrating with Comet's GraphQL API, you can offer customers a wide range of products without managing inventory or checkout processing yourself.
+A publisher app represents your server integration in Comet. It belongs to one publisher organization and has an app ID. Its API credential has a separate **App client ID**, which Comet uses when granting access.
 
-Apps use Comet's Apollo Federation GraphQL API for catalog, cart, and checkout. Its endpoint is `https://api.comet.rocks/graphql` (also shown in the dashboard under Apps).
+## Create and select an app
 
-Comet also has a separate, scoped REST interface for creator page publishing. It is designed for approved server integrations and is currently default-disabled; it is not a general replacement for the GraphQL API. See [Creator Publishing](/resources/creator-publishing/overview) for its authorization and availability requirements.
+In the [Comet console](https://console.comet.rocks), switch to your publisher organization. Select an app in the sidebar or have a publisher administrator choose **Add new app**. Contact [Comet Support](/support) to request a publisher organization or membership.
 
-## Creating an App
+## Manage the API key
 
-1. **Sign Up**: Begin by creating your account on [Comet Console](https://console.comet.rocks/).
+Open **App credentials** on **Home** or **Publisher integration** for the selected app. With permission to manage credentials, you can:
 
-2. **Dashboard Navigation**: Once logged in, navigate to the 'Apps' section in the dashboard.
+- Select **Create API key** when the app has no credential.
+- Select **Reveal key** to retrieve an existing revealable API key.
+- Use **Copy key** to move the key to your server's secret storage, then select **Hide key**.
 
-3. **Create New App**: Click on the 'Create App' button. Provide a name for your app and describe its purpose. This will help you identify the app later, especially if you have multiple integrations.
+Creating a credential preserves an existing key. If creation times out, refresh the credential status before trying again. Contact Support for help with incompatible credentials or key rotation. Share the **App client ID** when requesting access and keep the key confidential.
 
-4. **API Key Generation**: After creating the app, Comet generates an API key for you. The key is shown **once** at creation time, so copy it somewhere safe — this API key is essential for integrating with Comet's GraphQL API.
+## Request API access
 
-5. **Manage App**: You can always return to the dashboard to manage your app or delete it.
-
-::: tip
-You can also mint API keys programmatically with the `appClientGenerate(organizationId, input)` GraphQL mutation, which returns the key once at creation time.
-:::
-
-## Integration
-
-With the API key in hand, you can now integrate your application with Comet:
-
-1. **Authentication**: Use the API key for authentication when making requests to Comet's GraphQL API. This ensures that your requests are secure and associated with your app.
-
-2. **Fetch Products**: Access Comet’s vast product catalog and display them to your customers.
-
-3. **Checkout Process**: Complete the checkout with multiple brands using single cart and single checkout process.
+For [GraphQL catalog and checkout](/quickstart#query-an-authorized-catalog), confirm the brands and operations authorized for your app. For [Creator Publishing](/resources/creator-publishing/overview), ask Comet to provision your integration and confirm the creator grant, origin and environment. Keys and access are specific to the environment where they were issued.
