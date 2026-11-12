@@ -18,7 +18,7 @@ This pilot covers creator storefront pages. For connected merchant catalogs and 
 
 ## Install and configure
 
-Use Node.js 22 or newer and a trusted MCP client that supports local stdio servers and form elicitation. Form elicitation lets the client ask you to approve the exact draft before it goes live.
+Use Node.js 22 or newer and a trusted MCP client that supports local stdio servers and form elicitation. Run it on a machine your organization controls. The approval form identifies the page ID, draft version and digest. Review the content from the preview tool before confirming.
 
 Comet supplies a versioned archive privately to invited publishers. Verify it against the checksum provided with your invitation. In a dedicated directory, install the archive Comet supplied. The following command uses version 0.1.0 as an example.
 
@@ -36,7 +36,7 @@ Add a local stdio server in your MCP client. Use the absolute path to your Node 
 | `COMET_PUBLISHING_GRANT_GENERATION` | The current grant generation supplied by Comet. |
 | `COMET_PUBLISHING_API_KEY` | Your publisher app's API key, injected from your local secret manager. |
 
-Keep credentials out of tool arguments, chat and shared configuration. Restart the MCP server after changing its creator, credential or grant generation.
+Inject the API key into the local process from your secret manager. Share test content only with an MCP client your organization trusts. Keep credentials out of tool arguments, chat and shared configuration. Restart the MCP server after changing its creator, credential or grant generation.
 
 ## Draft, preview and publish
 
