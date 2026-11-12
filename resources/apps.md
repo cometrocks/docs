@@ -23,4 +23,4 @@ Creating a credential preserves an existing key. If creation times out, refresh 
 
 ## Request API access
 
-For [GraphQL catalog and checkout](/quickstart#query-an-authorized-catalog), confirm the brands and operations authorized for your app. For [Creator Publishing](/resources/creator-publishing/overview), ask Comet to provision your integration and confirm the creator grant, origin and environment. Keys and access are specific to the environment where they were issued.
+For [GraphQL catalog and checkout](/quickstart#query-an-authorized-catalog), confirm the brands and operations authorized for your app. For [Creator Publishing](/resources/creator-publishing/overview), ask Comet to provision your integration and confirm the creator grant, origin and environment. Keys and access are specific to the environment where they were issued. For the invite-only MCP setup, see the [Creator Publishing MCP pilot](/resources/creator-publishing/mcp).

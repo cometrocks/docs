@@ -7,6 +7,8 @@ description: 'Set up server-to-server access to edit and publish pages for verif
 
 Creator Publishing is a REST API for publishers that let creators manage pages from their own application. Your application signs in the creator and authorizes each action. Comet checks the creator's current grant and manages drafts, published revisions, media and public URLs.
 
+Invited publishers can use the [Creator Publishing MCP pilot](/resources/creator-publishing/mcp) to draft, preview and publish pages from a compatible MCP client.
+
 Use the [Publisher GraphQL API](/quickstart#query-an-authorized-catalog) for connected merchant catalogs and cart checkout.
 
 ## Get access
