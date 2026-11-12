@@ -29,6 +29,7 @@
 ## Creator Publishing
 
 - [Overview](https://docs.comet.rocks/resources/creator-publishing/overview): Publisher onboarding, creator grants, capability discovery and server-side page publishing.
+- [MCP Pilot](https://docs.comet.rocks/resources/creator-publishing/mcp): Set up an invited publisher app and verify a creator storefront from draft to public URL.
 - [API Reference](https://docs.comet.rocks/resources/creator-publishing/api): REST route and schema reference. Download the [OpenAPI document](https://docs.comet.rocks/openapi/creator-publishing.json).
 - [Media Uploads](https://docs.comet.rocks/resources/creator-publishing/media): Creator-scoped image and video uploads, asset listing and deletion, request limits and retries.
 

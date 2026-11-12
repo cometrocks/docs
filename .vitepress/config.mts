@@ -92,6 +92,7 @@ export default defineConfig({
           text: 'Creator Publishing',
           items: [
             { text: 'Overview', link: '/resources/creator-publishing/overview' },
+            { text: 'MCP Pilot', link: '/resources/creator-publishing/mcp' },
             { text: 'API Reference', link: '/resources/creator-publishing/api' },
             { text: 'Media Uploads', link: '/resources/creator-publishing/media' },
           ],
