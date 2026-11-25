@@ -163,7 +163,7 @@ Application errors use `{"schemaVersion":1,"code":"VERSION_CONFLICT"}`. Ingress 
 | 404 | `NOT_FOUND` | Resource is absent or unavailable within this scope. |
 | 409 | `VERSION_CONFLICT`, `PREVIEW_CONFLICT`, `IDEMPOTENCY_CONFLICT`, `BINDING_CONFLICT`, `UPLOAD_IN_PROGRESS` | Reconcile current state. For `UPLOAD_IN_PROGRESS` or `DELETE_IN_PROGRESS`, wait and retry the same media command. |
 | 413 | `PAYLOAD_TOO_LARGE` | Page commands: 256 KiB. Media: 5 MiB decoded images / 20 MiB videos, with a 28 MiB JSON ceiling. |
-| 422 | `CONTENT_NOT_READY` | Correct publication readiness, then save and preview again. |
+| 422 | `CONTENT_NOT_READY` | Correct publication readiness, then save and preview again. When a visible email signup form is incomplete, `field` names the first blocking field, for example `sections.1.consent.labelLocales` or `sections.1.consent.privacyUrl`. |
 | 503 | `FEATURE_DISABLED`, `AUTHORITY_UNAVAILABLE`, `MEDIA_UNAVAILABLE` | Confirm activation/provider configuration or wait for recovery; retain the original key for an uncertain write. |
 
 ## Publication and lifecycle events
